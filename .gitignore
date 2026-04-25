@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Helm
+chart/charts/
+chart/Chart.lock
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# Generated artifacts (kept on PVC, not in repo)
+project.qgs
