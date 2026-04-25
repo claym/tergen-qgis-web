@@ -1,0 +1,12 @@
+# Patterns to ignore when building helm chart packages
+.git/
+.gitignore
+.DS_Store
+*.bak
+*.swp
+*.tmp
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,0 +1,41 @@
+# Namespace for the chart.
+namespace: qgis
+createNamespace: true
+
+# Host path on the node where the gpkg files and project.qgs live.
+# This is mounted via a hostPath PV. Files outside data/ on this path are
+# never written by the chart except for project.qgs (written by the
+# project-generator Job).
+hostPath: /srv/qgis
+
+ingress:
+  className: traefik
+  # Hostname must resolve to the cluster's external IP.
+  # Wildcard *.devbox resolution is handled by the host's dnsmasq
+  # (see /srv/qgis/dnsmasq/).
+  host: qgis.devbox
+
+image:
+  qgisServer: camptocamp/qgis-server:3.34
+  viewer: nginx:1.27-alpine
+  generator: python:3.12-slim
+  pullPolicy: IfNotPresent
+
+resources:
+  qgisServer:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits:   { cpu: 500m, memory: 1Gi   }
+  viewer:
+    requests: { cpu: 10m,  memory: 32Mi  }
+    limits:   { cpu: 100m, memory: 128Mi }
+  generator:
+    requests: { cpu: 50m,  memory: 64Mi  }
+    limits:   { cpu: 500m, memory: 256Mi }
+
+# Set generator.enabled=false to keep a hand-edited project.qgs across upgrades.
+generator:
+  enabled: true
+
+# Path inside the qgis-server container where the project file lives.
+# Must match where the generator writes it.
+projectFile: /srv/qgis/project.qgs

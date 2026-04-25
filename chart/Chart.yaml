@@ -1,0 +1,13 @@
+apiVersion: v2
+name: qgis
+description: QGIS Server on k3s with thin Leaflet viewer
+type: application
+version: 0.1.0
+appVersion: "3.34"
+keywords:
+  - qgis
+  - geo
+  - wms
+maintainers:
+  - name: clay
+    email: clay@pfd.net
