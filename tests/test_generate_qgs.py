@@ -1,0 +1,139 @@
+"""Tests for chart/files/generate_qgs.py."""
+
+import sqlite3
+import textwrap
+from pathlib import Path
+from xml.etree import ElementTree as ET
+
+import pytest
+
+import generate_qgs as gen
+
+
+def _make_minimal_gpkg(path: Path, layer_name: str = "things") -> None:
+    """Create a tiny but valid GeoPackage with a single point layer.
+
+    Just enough metadata for the generator's introspection — gpkg_contents +
+    gpkg_geometry_columns + a feature table with a few attribute columns.
+    """
+    con = sqlite3.connect(path)
+    cur = con.cursor()
+    cur.executescript(
+        textwrap.dedent(
+            f"""
+            CREATE TABLE gpkg_contents (
+              table_name TEXT PRIMARY KEY,
+              data_type TEXT NOT NULL,
+              identifier TEXT,
+              description TEXT,
+              last_change DATETIME,
+              min_x DOUBLE, min_y DOUBLE, max_x DOUBLE, max_y DOUBLE,
+              srs_id INTEGER
+            );
+            CREATE TABLE gpkg_geometry_columns (
+              table_name TEXT PRIMARY KEY,
+              column_name TEXT NOT NULL,
+              geometry_type_name TEXT NOT NULL,
+              srs_id INTEGER NOT NULL,
+              z TINYINT, m TINYINT
+            );
+            CREATE TABLE "{layer_name}" (
+              fid INTEGER PRIMARY KEY,
+              geom BLOB,
+              name TEXT,
+              count INTEGER
+            );
+            INSERT INTO gpkg_contents VALUES
+              ('{layer_name}', 'features', '{layer_name}', '', '2026-01-01',
+               1000000, 500000, 1100000, 600000, 2264);
+            INSERT INTO gpkg_geometry_columns VALUES
+              ('{layer_name}', 'geom', 'POINT', 2264, 0, 0);
+            """
+        )
+    )
+    con.commit()
+    con.close()
+
+
+def test_introspect_returns_layers_with_columns(tmp_path):
+    gpkg = tmp_path / "tiny.gpkg"
+    _make_minimal_gpkg(gpkg, layer_name="things")
+
+    layers = gen.introspect_gpkg(gpkg)
+
+    assert len(layers) == 1
+    layer = layers[0]
+    assert layer.name == "things"
+    assert layer.geometry_type == "POINT"
+    assert layer.srs_id == 2264
+    assert layer.columns == ["fid", "geom", "name", "count"]
+    assert layer.bbox == (1000000, 500000, 1100000, 600000)
+    assert str(gpkg) in str(layer.source_path)
+
+
+def test_introspect_skips_non_features(tmp_path):
+    gpkg = tmp_path / "mixed.gpkg"
+    _make_minimal_gpkg(gpkg)
+    # Add a non-feature row
+    con = sqlite3.connect(gpkg)
+    con.execute(
+        "INSERT INTO gpkg_contents VALUES "
+        "('attr_only', 'attributes', 'attr_only', '', '2026-01-01',"
+        " 0, 0, 0, 0, 2264)"
+    )
+    con.commit()
+    con.close()
+
+    layers = gen.introspect_gpkg(gpkg)
+
+    assert [l.name for l in layers] == ["things"]
+
+
+def test_render_qgs_produces_valid_xml_with_one_maplayer_per_layer(tmp_path):
+    gpkg = tmp_path / "tiny.gpkg"
+    _make_minimal_gpkg(gpkg)
+    layers = gen.introspect_gpkg(gpkg)
+
+    xml_str = gen.render_qgs(layers, project_crs_authid="EPSG:3857")
+
+    root = ET.fromstring(xml_str)
+    assert root.tag == "qgis"
+    maplayers = root.findall("./projectlayers/maplayer")
+    assert len(maplayers) == 1
+
+
+def test_render_qgs_marks_territories_visible_step_layers_hidden(tmp_path):
+    main_gpkg = tmp_path / "main.gpkg"
+    debug_gpkg = tmp_path / "debug.gpkg"
+    _make_minimal_gpkg(main_gpkg, layer_name="territories")
+    _make_minimal_gpkg(debug_gpkg, layer_name="step_500_addresses")
+
+    layers = gen.introspect_gpkg(main_gpkg) + gen.introspect_gpkg(debug_gpkg)
+    xml_str = gen.render_qgs(layers, project_crs_authid="EPSG:3857")
+
+    root = ET.fromstring(xml_str)
+    # layer-tree-layer's `id` is a generated UUID; visibility is keyed by `name`
+    visible = {n.get("name") for n in root.findall(
+        "./layer-tree-group//layer-tree-layer[@checked='Qt::Checked']"
+    )}
+    hidden = {n.get("name") for n in root.findall(
+        "./layer-tree-group//layer-tree-layer[@checked='Qt::Unchecked']"
+    )}
+    assert "territories" in visible
+    assert "step_500_addresses" in hidden
+
+
+def test_main_writes_project_qgs(tmp_path, monkeypatch):
+    src = tmp_path / "data"
+    out = tmp_path / "project.qgs"
+    src.mkdir()
+    _make_minimal_gpkg(src / "a.gpkg", layer_name="alpha")
+    _make_minimal_gpkg(src / "b.gpkg", layer_name="beta")
+
+    rc = gen.main([str(src), "--output", str(out)])
+
+    assert rc == 0
+    assert out.exists()
+    root = ET.fromstring(out.read_text())
+    names = {ml.findtext("layername") for ml in root.findall("./projectlayers/maplayer")}
+    assert names == {"alpha", "beta"}
