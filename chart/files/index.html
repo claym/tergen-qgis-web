@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Territories — QGIS Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; }
+    #wrap   { display: flex; height: 100vh; }
+    #side   { width: 260px; padding: 12px; overflow-y: auto; border-right: 1px solid #ddd; background: #fafafa; }
+    #map    { flex: 1; }
+    h2      { margin: 0 0 8px; font-size: 14px; text-transform: uppercase; color: #444; }
+    .group  { margin-bottom: 12px; }
+    .group label { display: block; font-size: 13px; line-height: 1.6; cursor: pointer; }
+    .group label input { margin-right: 6px; }
+    summary { cursor: pointer; font-size: 14px; }
+    .leaflet-popup-content table { font-size: 12px; border-collapse: collapse; }
+    .leaflet-popup-content td    { padding: 2px 6px; border-bottom: 1px solid #eee; }
+    .leaflet-popup-content td:first-child { color: #666; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="side">
+      <h2>Layers</h2>
+      <div id="layer-controls"></div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script>
+    // Hostname is whatever loaded the page; we call OWS on the same origin
+    // so Traefik can route /ows to qgis-server without CORS.
+    const OWS = '/ows';
+
+    // Default visible vs hidden layers.
+    // The list of layers is discovered at runtime from GetCapabilities.
+    const VISIBLE_BY_DEFAULT = new Set(['territories']);
+
+    const map = L.map('map').setView([35.18, -80.66], 11); // approx Union County, NC
+
+    // Basemap.
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Per-layer WMS tile layers, keyed by layer name.
+    const wmsLayers = new Map();
+
+    function makeWmsLayer(name) {
+      return L.tileLayer.wms(OWS, {
+        layers: name,
+        format: 'image/png',
+        transparent: true,
+        version: '1.3.0',
+        tiled: true
+      });
+    }
+
+    function addControl(name, group) {
+      const wrap = document.getElementById('layer-controls');
+      let groupEl = document.getElementById('group-' + group);
+      if (!groupEl) {
+        const details = document.createElement('details');
+        details.id = 'group-' + group;
+        if (group === 'main') details.open = true;
+        const summary = document.createElement('summary');
+        summary.textContent = group === 'main' ? 'Main' : 'Debug';
+        details.appendChild(summary);
+        const div = document.createElement('div');
+        div.className = 'group';
+        details.appendChild(div);
+        wrap.appendChild(details);
+        groupEl = div;
+        details.dataset.body = '';
+        details._body = div;
+      }
+      const body = groupEl.classList ? groupEl : groupEl._body;
+      const label = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = VISIBLE_BY_DEFAULT.has(name);
+      cb.addEventListener('change', () => {
+        const layer = wmsLayers.get(name);
+        if (cb.checked) layer.addTo(map);
+        else map.removeLayer(layer);
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' ' + name));
+      body.appendChild(label);
+
+      const layer = makeWmsLayer(name);
+      wmsLayers.set(name, layer);
+      if (cb.checked) layer.addTo(map);
+    }
+
+    // Discover layers from QGIS Server capabilities.
+    fetch(OWS + '/?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0')
+      .then(r => r.text())
+      .then(xml => {
+        const doc = new DOMParser().parseFromString(xml, 'application/xml');
+        const layers = doc.getElementsByTagName('Layer');
+        // The top-level Layer is the project; its child Layer elements are the actual layers.
+        const named = [];
+        for (const el of layers) {
+          const nameEl = el.getElementsByTagName('Name')[0];
+          if (!nameEl) continue;
+          const name = nameEl.textContent.trim();
+          if (!name || name === 'qgis') continue;
+          named.push(name);
+        }
+        for (const name of named) {
+          const group = name.startsWith('step_') ? 'debug' : 'main';
+          addControl(name, group);
+        }
+        // Fit map to overall bounding box (use territories bbox if present).
+        const bboxEls = doc.getElementsByTagName('EX_GeographicBoundingBox');
+        if (bboxEls.length > 0) {
+          const e = bboxEls[0];
+          const w = parseFloat(e.getElementsByTagName('westBoundLongitude')[0].textContent);
+          const easting = parseFloat(e.getElementsByTagName('eastBoundLongitude')[0].textContent);
+          const s = parseFloat(e.getElementsByTagName('southBoundLatitude')[0].textContent);
+          const n = parseFloat(e.getElementsByTagName('northBoundLatitude')[0].textContent);
+          map.fitBounds([[s, w], [n, easting]]);
+        }
+      })
+      .catch(err => {
+        const msg = document.createElement('div');
+        msg.style = 'padding:8px;color:#900;font-size:12px';
+        msg.textContent = 'Could not load layer list (QGIS Server not yet ready): ' + err;
+        document.getElementById('side').appendChild(msg);
+      });
+
+    // Click → GetFeatureInfo for every visible WMS layer
+    map.on('click', async (e) => {
+      const visible = [...wmsLayers.entries()].filter(([n, l]) => map.hasLayer(l)).map(([n]) => n);
+      if (visible.length === 0) return;
+      const size = map.getSize();
+      const point = map.latLngToContainerPoint(e.latlng);
+      const bbox = map.getBounds();
+      // QGIS Server WMS 1.3.0 expects bbox in CRS-axis order; for EPSG:4326 that's lat,lon.
+      const params = new URLSearchParams({
+        SERVICE: 'WMS',
+        VERSION: '1.3.0',
+        REQUEST: 'GetFeatureInfo',
+        LAYERS: visible.join(','),
+        QUERY_LAYERS: visible.join(','),
+        CRS: 'EPSG:4326',
+        BBOX: [bbox.getSouth(), bbox.getWest(), bbox.getNorth(), bbox.getEast()].join(','),
+        WIDTH: size.x,
+        HEIGHT: size.y,
+        I: Math.round(point.x),
+        J: Math.round(point.y),
+        INFO_FORMAT: 'application/json',
+        FEATURE_COUNT: 5
+      });
+      const r = await fetch(OWS + '/?' + params);
+      if (!r.ok) return;
+      const data = await r.json();
+      if (!data.features || data.features.length === 0) return;
+      const f = data.features[0];
+      const rows = Object.entries(f.properties || {})
+        .map(([k, v]) => `<tr><td>${k}</td><td>${v ?? ''}</td></tr>`)
+        .join('');
+      const html = `<table>${rows}</table>`;
+      L.popup().setLatLng(e.latlng).setContent(html).openOn(map);
+    });
+  </script>
+</body>
+</html>
