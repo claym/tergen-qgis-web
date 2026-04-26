@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: viewer
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "qgis.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: viewer
+  template:
+    metadata:
+      labels:
+        {{- include "qgis.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: viewer
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.image.viewer }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+          readinessProbe:
+            httpGet: { path: /, port: 80 }
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /, port: 80 }
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            {{- toYaml .Values.resources.viewer | nindent 12 }}
+      volumes:
+        - name: html
+          configMap:
+            name: viewer-html

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qgis
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          # /ows is added in Phase 6 when qgis-server exists
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: viewer
+                port:
+                  number: 80
