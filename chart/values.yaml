@@ -1,6 +1,4 @@
-# Namespace for the chart.
 namespace: qgis
-createNamespace: true
 
 # Host path on the node where the gpkg files and project.qgs live.
 # This is mounted via a hostPath PV. Files outside data/ on this path are
