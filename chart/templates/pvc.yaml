@@ -1,0 +1,39 @@
+# Statically-provisioned PV bound to /srv/qgis on the node.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qgis-data-pv
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  hostPath:
+    path: {{ .Values.hostPath }}
+    type: Directory
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: Exists
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qgis-data
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+  volumeName: qgis-data-pv
