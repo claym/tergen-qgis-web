@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qgis-server
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "qgis.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: qgis-server
+  template:
+    metadata:
+      labels:
+        {{- include "qgis.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: qgis-server
+    spec:
+      containers:
+        - name: qgis-server
+          image: {{ .Values.image.qgisServer }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: QGIS_SERVER_LOG_LEVEL
+              value: "0"
+            - name: QGIS_PROJECT_FILE
+              value: {{ .Values.projectFile | quote }}
+          volumeMounts:
+            - name: data
+              mountPath: /srv/qgis
+              readOnly: true
+          # Probes hit the pod directly (bypassing Traefik / stripPrefix),
+          # so they use the in-pod path "/", not "/ows/".
+          readinessProbe:
+            httpGet:
+              path: /?SERVICE=WMS&REQUEST=GetCapabilities
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /?SERVICE=WMS&REQUEST=GetCapabilities
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources.qgisServer | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: qgis-data
+            readOnly: true

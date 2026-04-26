@@ -5,13 +5,25 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "qgis.labels" . | nindent 4 }}
+  annotations:
+    # Apply strip-ows ONLY for the /ows path. Per-path middlewares aren't
+    # supported in stock k8s Ingress, but Traefik's annotation lets us
+    # attach middlewares globally to this Ingress; strip-ows only matches
+    # paths starting with /ows so it leaves the viewer alone.
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.namespace }}-strip-ows@kubernetescrd
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          # /ows is added in Phase 6 when qgis-server exists
+          - path: /ows
+            pathType: Prefix
+            backend:
+              service:
+                name: qgis-server
+                port:
+                  number: 80
           - path: /
             pathType: Prefix
             backend:
