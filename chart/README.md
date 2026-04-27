@@ -5,7 +5,7 @@ QGIS Server + thin Leaflet viewer for the GeoPackage files at `/srv/qgis/data/`.
 ## Prerequisites
 
 - k3s with Traefik ingress (already on this host).
-- Host-level dnsmasq configured per `/srv/qgis/dnsmasq/` so `*.devbox` resolves
+- Host-level dnsmasq configured per `/srv/gis/tergen-qgis-web/dnsmasq/` so `*.devbox` resolves
   to `192.168.1.70`.
 - helm 3.x.
 

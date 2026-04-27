@@ -10,7 +10,7 @@ ingress:
   className: traefik
   # Hostname must resolve to the cluster's external IP.
   # Wildcard *.devbox resolution is handled by the host's dnsmasq
-  # (see /srv/qgis/dnsmasq/).
+  # (see /srv/gis/tergen-qgis-web/dnsmasq/).
   host: qgis.devbox
 
 image:
