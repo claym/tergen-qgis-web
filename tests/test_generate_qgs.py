@@ -331,3 +331,22 @@ def test_regen_all_prunes_orphaned_qgs_files(tmp_path):
 
     assert (projects / "alpha.qgs").exists()
     assert not (projects / "ghost.qgs").exists()
+
+
+def test_regen_all_skips_when_no_regen_marker_present(tmp_path):
+    # Layout matches /srv/qgis/{.no-regen, data/, projects/, web/}
+    root = tmp_path
+    data = root / "data"
+    projects = root / "projects"
+    web = root / "web"
+    data.mkdir(); projects.mkdir(); web.mkdir()
+    _make_minimal_gpkg(data / "alpha.gpkg", layer_name="alpha")
+
+    (root / ".no-regen").touch()
+
+    report = gen.regen_all(data, projects, web, default_theme=None)
+
+    assert report.skipped is True
+    assert report.written_projects == 0
+    assert list(projects.iterdir()) == []
+    assert not (web / "themesConfig.json").exists()
