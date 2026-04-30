@@ -699,6 +699,45 @@ def _gpkg_wgs84_bbox(
     return (w, s, e, n)
 
 
+# Curated search-provider heuristics. Add new entries here as more layers
+# gain user-meaningful searchable columns. Keys are layer names; values are
+# lists of (title, column_name) pairs.
+_SEARCH_PROVIDER_HEURISTICS: dict[str, list[tuple[str, str]]] = {
+    "territories": [
+        ("Territory ID", "terr_id"),
+        ("Municipality", "muni_name"),
+        ("Subdivision", "subdiv"),
+    ],
+}
+
+
+def _search_providers_for(gpkg: Path) -> list[dict]:
+    """Return a list of qwc2 search providers for layers in *gpkg*.
+
+    Emits providers only when (a) the layer name is in the curated heuristic
+    table and (b) the named columns actually exist in the layer.
+    """
+    layers = introspect_gpkg(gpkg)
+    providers: list[dict] = []
+    for layer in layers:
+        spec = _SEARCH_PROVIDER_HEURISTICS.get(layer.name)
+        if not spec:
+            continue
+        present = set(layer.columns)
+        for title, column in spec:
+            if column not in present:
+                continue
+            providers.append({
+                "provider": "qgis",
+                "params": {
+                    "title": title,
+                    "layerName": layer.name,
+                    "expression": f'"{column}" ILIKE :value || \'%\'',
+                },
+            })
+    return providers
+
+
 def write_themes_config(
     gpkgs: list[Path],
     projects_dir: Path,
@@ -725,7 +764,7 @@ def write_themes_config(
                 4000000, 2000000, 1000000, 500000, 250000, 100000,
                 50000, 25000, 10000, 5000, 2500, 1000, 500, 250, 100,
             ],
-            "searchProviders": [],
+            "searchProviders": _search_providers_for(gpkg),
             "backgroundLayers": [{"name": "osm", "visibility": True}],
             "thumbnail": "img/mapthumbs/default.jpg",
         })

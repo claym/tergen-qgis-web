@@ -206,3 +206,86 @@ def test_write_themes_config_emits_one_theme_per_gpkg(tmp_path):
     assert by_id["territories_draft"]["mapCrs"] == "EPSG:3857"
     assert by_id["territories_draft"]["bbox"]["crs"] == "EPSG:4326"
     assert len(by_id["territories_draft"]["bbox"]["bounds"]) == 4
+
+
+def _make_territories_gpkg(path: Path) -> None:
+    """Make a gpkg with a layer named 'territories' and the curated columns."""
+    con = sqlite3.connect(path)
+    cur = con.cursor()
+    cur.executescript(
+        textwrap.dedent(
+            """
+            CREATE TABLE gpkg_contents (
+              table_name TEXT PRIMARY KEY,
+              data_type TEXT NOT NULL,
+              identifier TEXT,
+              description TEXT,
+              last_change DATETIME,
+              min_x DOUBLE, min_y DOUBLE, max_x DOUBLE, max_y DOUBLE,
+              srs_id INTEGER
+            );
+            CREATE TABLE gpkg_geometry_columns (
+              table_name TEXT PRIMARY KEY,
+              column_name TEXT NOT NULL,
+              geometry_type_name TEXT NOT NULL,
+              srs_id INTEGER NOT NULL,
+              z TINYINT, m TINYINT
+            );
+            CREATE TABLE territories (
+              fid INTEGER PRIMARY KEY,
+              geom BLOB,
+              terr_id TEXT,
+              muni_name TEXT,
+              subdiv TEXT,
+              type TEXT
+            );
+            INSERT INTO gpkg_contents VALUES
+              ('territories', 'features', 'territories', '', '2026-01-01',
+               1000000, 500000, 1100000, 600000, 2264);
+            INSERT INTO gpkg_geometry_columns VALUES
+              ('territories', 'geom', 'POLYGON', 2264, 0, 0);
+            """
+        )
+    )
+    con.commit()
+    con.close()
+
+
+def test_themes_config_includes_search_providers_for_territories(tmp_path):
+    gpkg = tmp_path / "territories_draft.gpkg"
+    _make_territories_gpkg(gpkg)
+    out = tmp_path / "themesConfig.json"
+
+    gen.write_themes_config(
+        gpkgs=[gpkg],
+        projects_dir=Path("/srv/qgis/projects"),
+        out=out,
+        default_theme="territories_draft",
+    )
+
+    cfg = json.loads(out.read_text())
+    providers = cfg["themes"]["items"][0]["searchProviders"]
+    titles = [p["params"]["title"] for p in providers]
+    fields = [p["params"]["expression"] for p in providers]
+
+    assert "Territory ID" in titles
+    assert "Municipality" in titles
+    assert "Subdivision" in titles
+    assert any("terr_id" in expr for expr in fields)
+    assert any("muni_name" in expr for expr in fields)
+
+
+def test_themes_config_no_search_providers_when_layer_missing(tmp_path):
+    gpkg = tmp_path / "debug.gpkg"
+    _make_minimal_gpkg(gpkg, layer_name="step_500_addresses")
+    out = tmp_path / "themesConfig.json"
+
+    gen.write_themes_config(
+        gpkgs=[gpkg],
+        projects_dir=Path("/srv/qgis/projects"),
+        out=out,
+        default_theme=None,
+    )
+
+    cfg = json.loads(out.read_text())
+    assert cfg["themes"]["items"][0]["searchProviders"] == []
