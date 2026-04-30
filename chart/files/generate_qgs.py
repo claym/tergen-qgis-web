@@ -33,6 +33,17 @@ from typing import Iterable
 from xml.etree import ElementTree as ET
 
 
+def atomic_write_text(path: Path, contents: str) -> None:
+    """Write *contents* to *path* atomically.
+
+    Writes to a sibling tempfile then os.rename, which is atomic on POSIX.
+    Readers (qgis-server) never see a half-written file.
+    """
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(contents)
+    tmp.replace(path)
+
+
 # ---------------------------------------------------------------------------
 # CRS metadata — hardcoded for EPSG:2264 (source) and EPSG:3857 (project).
 # QGIS Server needs the full spatialrefsys block (wkt, proj4, srsid, etc.)

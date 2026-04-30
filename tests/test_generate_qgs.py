@@ -137,3 +137,15 @@ def test_main_writes_project_qgs(tmp_path, monkeypatch):
     root = ET.fromstring(out.read_text())
     names = {ml.findtext("layername") for ml in root.findall("./projectlayers/maplayer")}
     assert names == {"alpha", "beta"}
+
+
+def test_atomic_write_text_replaces_target_atomically(tmp_path):
+    target = tmp_path / "out.txt"
+    target.write_text("old contents")
+
+    gen.atomic_write_text(target, "new contents")
+
+    assert target.read_text() == "new contents"
+    # No leftover .tmp files
+    leftovers = [p.name for p in tmp_path.iterdir() if p.name != "out.txt"]
+    assert leftovers == []
