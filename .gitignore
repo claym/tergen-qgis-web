@@ -18,3 +18,8 @@ chart/Chart.lock
 
 # Generated artifacts (kept on PVC, not in repo)
 project.qgs
+
+# qwc2 client build artefacts
+client/qwc2-demo-app/dist/
+client/qwc2-demo-app/node_modules/
+client/qwc2-demo-app/.cache/
