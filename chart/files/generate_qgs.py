@@ -789,6 +789,64 @@ def write_themes_config(
     atomic_write_text(out, _json.dumps(config, indent=2) + "\n")
 
 
+@dataclass
+class RegenReport:
+    written_projects: int
+    pruned_projects: int
+    skipped: bool = False  # True if .no-regen marker present
+
+
+def _prune_orphans(projects_dir: Path, current_stems: set[str]) -> int:
+    """Delete any *.qgs in projects_dir whose stem is not in current_stems."""
+    pruned = 0
+    for qgs in projects_dir.glob("*.qgs"):
+        if qgs.stem not in current_stems:
+            qgs.unlink()
+            pruned += 1
+    return pruned
+
+
+def regen_all(
+    data_dir: Path,
+    projects_dir: Path,
+    web_dir: Path,
+    default_theme: str | None,
+) -> RegenReport:
+    """Idempotently rebuild all per-gpkg .qgs files and themesConfig.json.
+
+    Honors a /srv/qgis/.no-regen marker (computed as data_dir.parent / ".no-regen"):
+    if present, returns a RegenReport with skipped=True and writes nothing.
+    """
+    no_regen = data_dir.parent / ".no-regen"
+    if no_regen.exists():
+        return RegenReport(written_projects=0, pruned_projects=0, skipped=True)
+
+    projects_dir.mkdir(parents=True, exist_ok=True)
+    web_dir.mkdir(parents=True, exist_ok=True)
+
+    gpkgs = discover_gpkgs(data_dir)
+    current_stems = {gpkg.stem for gpkg in gpkgs}
+
+    written = 0
+    for gpkg in gpkgs:
+        try:
+            write_project(gpkg, projects_dir / f"{gpkg.stem}.qgs")
+            written += 1
+        except Exception as exc:
+            print(f"failed to render {gpkg.name}: {exc}", file=sys.stderr)
+
+    pruned = _prune_orphans(projects_dir, current_stems)
+
+    write_themes_config(
+        gpkgs=gpkgs,
+        projects_dir=projects_dir,
+        out=web_dir / "themesConfig.json",
+        default_theme=default_theme,
+    )
+
+    return RegenReport(written_projects=written, pruned_projects=pruned)
+
+
 # ---------------------------------------------------------------------------
 # Discovery + CLI
 # ---------------------------------------------------------------------------

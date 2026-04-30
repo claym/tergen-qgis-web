@@ -289,3 +289,45 @@ def test_themes_config_no_search_providers_when_layer_missing(tmp_path):
 
     cfg = json.loads(out.read_text())
     assert cfg["themes"]["items"][0]["searchProviders"] == []
+
+
+def test_regen_all_writes_projects_and_themes_config_idempotent(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    _make_territories_gpkg(data / "territories_draft.gpkg")
+    _make_minimal_gpkg(data / "debug.gpkg", layer_name="step_500")
+
+    projects = tmp_path / "projects"
+    web = tmp_path / "web"
+    projects.mkdir()
+    web.mkdir()
+
+    report1 = gen.regen_all(data, projects, web, default_theme="territories_draft")
+
+    assert sorted(p.name for p in projects.iterdir()) == \
+        ["debug.qgs", "territories_draft.qgs"]
+    assert (web / "themesConfig.json").exists()
+    assert report1.written_projects == 2
+
+    # Re-running with no changes should still succeed (idempotent).
+    report2 = gen.regen_all(data, projects, web, default_theme="territories_draft")
+    assert report2.written_projects == 2
+
+
+def test_regen_all_prunes_orphaned_qgs_files(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    _make_minimal_gpkg(data / "alpha.gpkg", layer_name="alpha")
+
+    projects = tmp_path / "projects"
+    web = tmp_path / "web"
+    projects.mkdir()
+    web.mkdir()
+
+    # Pre-populate a stale .qgs that has no source gpkg
+    (projects / "ghost.qgs").write_text("<qgis></qgis>")
+
+    gen.regen_all(data, projects, web, default_theme=None)
+
+    assert (projects / "alpha.qgs").exists()
+    assert not (projects / "ghost.qgs").exists()
