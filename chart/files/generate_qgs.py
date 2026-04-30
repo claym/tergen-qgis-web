@@ -22,6 +22,7 @@ with `step_` are emitted but hidden. Anything else is visible.
 from __future__ import annotations
 
 import argparse
+import json as _json
 import math
 import sqlite3
 import struct
@@ -655,6 +656,98 @@ def write_project(gpkg: Path, out: Path,
     if not layers:
         raise ValueError(f"no feature-table layers in {gpkg}")
     atomic_write_text(out, render_qgs(layers, project_crs_authid))
+
+
+# ---------------------------------------------------------------------------
+# QWC2 themesConfig.json generation
+# ---------------------------------------------------------------------------
+
+
+def _theme_id(gpkg: Path) -> str:
+    """The theme id is the gpkg filename without extension."""
+    return gpkg.stem
+
+
+def _theme_title(gpkg: Path) -> str:
+    """Title-case the gpkg stem for display: territories_draft → Territories Draft."""
+    return gpkg.stem.replace("_", " ").replace("-", " ").title()
+
+
+def _gpkg_wgs84_bbox(
+    gpkg: Path,
+) -> tuple[float, float, float, float]:
+    """Compute the WGS84 envelope across all feature tables in *gpkg*.
+
+    Reads gpkg_contents.min/max_x/y per layer, projects each layer's bbox
+    to WGS84 (using the static SRS lookup in _bbox_to_wgs84), unions them.
+    Returns (west, south, east, north). Falls back to a global envelope
+    [-180, -85, 180, 85] if no layer can be projected.
+    """
+    layers = introspect_gpkg(gpkg)
+    proj_bboxes: list[tuple[float, float, float, float]] = []
+    for layer in layers:
+        mnx, mny, mxx, mxy = layer.bbox
+        wgs = _bbox_to_wgs84(mnx, mny, mxx, mxy, layer.srs_id)
+        if wgs is not None:
+            proj_bboxes.append(wgs)
+    if not proj_bboxes:
+        return (-180.0, -85.0, 180.0, 85.0)
+    w = min(b[0] for b in proj_bboxes)
+    s = min(b[1] for b in proj_bboxes)
+    e = max(b[2] for b in proj_bboxes)
+    n = max(b[3] for b in proj_bboxes)
+    return (w, s, e, n)
+
+
+def write_themes_config(
+    gpkgs: list[Path],
+    projects_dir: Path,
+    out: Path,
+    default_theme: str | None = None,
+) -> None:
+    """Write the qwc2 themesConfig.json from a list of gpkgs."""
+    items = []
+    for gpkg in sorted(gpkgs, key=lambda p: p.stem):
+        tid = _theme_id(gpkg)
+        w, s, e, n = _gpkg_wgs84_bbox(gpkg)
+        items.append({
+            "id": tid,
+            "title": _theme_title(gpkg),
+            "url": f"/ows/?MAP={projects_dir}/{tid}.qgs",
+            "default": (default_theme == tid),
+            "format": "image/png",
+            "tiled": True,
+            "attribution": "",
+            "mapCrs": "EPSG:3857",
+            "additionalMouseCrs": ["EPSG:2264"],
+            "bbox": {"crs": "EPSG:4326", "bounds": [w, s, e, n]},
+            "scales": [
+                4000000, 2000000, 1000000, 500000, 250000, 100000,
+                50000, 25000, 10000, 5000, 2500, 1000, 500, 250, 100,
+            ],
+            "searchProviders": [],
+            "backgroundLayers": [{"name": "osm", "visibility": True}],
+            "thumbnail": "img/mapthumbs/default.jpg",
+        })
+
+    config = {
+        "themes": {"title": "Themes", "items": items},
+        "backgroundLayers": [
+            {
+                "name": "osm",
+                "title": "OpenStreetMap",
+                "type": "osm",
+                "source": "osm",
+                "thumbnail": "img/mapthumbs/mapnik.png",
+            }
+        ],
+        "defaultMapCrs": "EPSG:3857",
+        "defaultBackgroundLayers": ["osm"],
+        "defaultSearchProviders": [],
+        "pluginData": {},
+    }
+
+    atomic_write_text(out, _json.dumps(config, indent=2) + "\n")
 
 
 # ---------------------------------------------------------------------------

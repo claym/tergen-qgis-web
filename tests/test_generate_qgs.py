@@ -1,5 +1,6 @@
 """Tests for chart/files/generate_qgs.py."""
 
+import json
 import sqlite3
 import textwrap
 from pathlib import Path
@@ -175,3 +176,33 @@ def test_write_project_writes_one_qgs_per_gpkg(tmp_path):
 
     assert main_names == {"territories"}
     assert debug_names == {"step_500_addresses"}
+
+
+def test_write_themes_config_emits_one_theme_per_gpkg(tmp_path):
+    main_gpkg = tmp_path / "territories_draft.gpkg"
+    debug_gpkg = tmp_path / "debug.gpkg"
+    _make_minimal_gpkg(main_gpkg, layer_name="territories")
+    _make_minimal_gpkg(debug_gpkg, layer_name="step_500_addresses")
+
+    out = tmp_path / "themesConfig.json"
+
+    gen.write_themes_config(
+        gpkgs=[main_gpkg, debug_gpkg],
+        projects_dir=Path("/srv/qgis/projects"),
+        out=out,
+        default_theme="territories_draft",
+    )
+
+    cfg = json.loads(out.read_text())
+    items = cfg["themes"]["items"]
+    ids = {it["id"] for it in items}
+    assert ids == {"territories_draft", "debug"}
+
+    by_id = {it["id"]: it for it in items}
+    assert by_id["territories_draft"]["default"] is True
+    assert by_id["debug"]["default"] is False
+    assert by_id["territories_draft"]["url"] == \
+        "/ows/?MAP=/srv/qgis/projects/territories_draft.qgs"
+    assert by_id["territories_draft"]["mapCrs"] == "EPSG:3857"
+    assert by_id["territories_draft"]["bbox"]["crs"] == "EPSG:4326"
+    assert len(by_id["territories_draft"]["bbox"]["bounds"]) == 4
