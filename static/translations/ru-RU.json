@@ -1,0 +1,788 @@
+{
+  "locale": "ru-RU",
+  "messages": {
+    "appmenu": {
+      "items": {
+        "ExternalLink": "",
+        "Bookmark": "",
+        "Compare3D": "",
+        "Editing": "Правка",
+        "ExportObjects3D": "",
+        "Help": "Помощь",
+        "HideObjects3D": "",
+        "LayerTree": "Слои и легенда",
+        "LayerTree3D": "",
+        "MapExport": "экспортировать карту",
+        "MapExport3D": "",
+        "MapFilter": "",
+        "MapLight3D": "",
+        "ObjectList": "",
+        "PlotInfoTool": "",
+        "Print": "Печать",
+        "Reports": "",
+        "Settings": "",
+        "Settings3D": "",
+        "Share": "Поделиться ссылкой",
+        "ThemeSwitcher": "Тема",
+        "AttributeTable": "",
+        "AuthenticationLogin": "",
+        "AuthenticationLogout": "",
+        "Cyclomedia": "",
+        "Draw3D": "",
+        "FeatureForm": "",
+        "FeatureSearch": "",
+        "GeometryDigitizer": "",
+        "IdentifyPoint": "",
+        "IdentifyRegion": "Определить регион",
+        "LayerCatalog": "",
+        "Login": "",
+        "Logout": "",
+        "MapLegend": "",
+        "Measure": "Измерения",
+        "Measure3D": "",
+        "MeasureLineString": "измерить линию",
+        "MeasurePolygon": "измерить многоугольник",
+        "NewsPopup": "",
+        "ObliqueView": "",
+        "Panoramax": "",
+        "Portal": "",
+        "PrintScreen3D": "",
+        "Redlining": "Обводка",
+        "Routing": "",
+        "Tools": "Средства картографии",
+        "TourGuide": "",
+        "TimeManager": "",
+        "View3D": ""
+      },
+      "filter": "",
+      "menulabel": "Карта и инструменты"
+    },
+    "search": {
+      "coordinates": "",
+      "circleradius": "",
+      "existinglayer": "",
+      "filter": "",
+      "layers": "",
+      "limittoarea": "",
+      "more": "",
+      "nodescription": "",
+      "none": "",
+      "placeholder": "",
+      "places": "",
+      "providerselection": "",
+      "recent": "",
+      "search": "Поиск",
+      "tasks": "",
+      "themelayers": "",
+      "themes": "",
+      "unknownmore": ""
+    },
+    "colorschemes": {
+      "default": "",
+      "dark": "",
+      "highcontrast": ""
+    },
+    "app": {
+      "missingbg": "",
+      "missingdefaulttheme": "",
+      "missinglayers": "",
+      "missingpermalink": "",
+      "missingprojection": "",
+      "missingtheme": ""
+    },
+    "attribtable": {
+      "addfeature": "",
+      "calculatedfield": "",
+      "commit": "",
+      "csvexport": "",
+      "deletefailed": "",
+      "deletefeatures": "",
+      "deleting": "",
+      "discard": "",
+      "formeditmode": "",
+      "fulldatasetload": "",
+      "geomnoadd": "",
+      "limittoextent": "",
+      "loadfailed": "",
+      "nodelete": "",
+      "nogeomnoform": "",
+      "pleasereload": "",
+      "reload": "",
+      "title": "",
+      "zoomtoselection": ""
+    },
+    "bgswitcher": {
+      "nobg": "Фон отсутствует"
+    },
+    "bookmark": {
+      "add": "",
+      "addfailed": "",
+      "lastUpdate": "",
+      "manage": "",
+      "newbookmark": "",
+      "nobookmarks": "",
+      "notloggedin": "",
+      "open": "",
+      "openTab": "",
+      "removefailed": "",
+      "savefailed": "",
+      "update": "",
+      "zoomToExtent": ""
+    },
+    "bottombar": {
+      "mousepos_label": "Координаты",
+      "scale_label": "Масштаб",
+      "terms_label": "Условия использования",
+      "viewertitle_label": "Домашняя страница"
+    },
+    "common": {
+      "add": "",
+      "all": "",
+      "cancel": "",
+      "circle": "",
+      "clear": "",
+      "clone": "",
+      "close": "",
+      "delete": "",
+      "download": "",
+      "ellipse": "",
+      "export": "",
+      "format": "Формат бумаги:",
+      "line": "Линия",
+      "loading": "",
+      "lock2dview": "",
+      "noresults": "",
+      "pick": "",
+      "point": "Точка",
+      "polygon": "Полигон",
+      "rectangle": "",
+      "rename": "",
+      "resolution": "Разрешение:",
+      "save": "",
+      "select": "Выберите...",
+      "selectlayer": "",
+      "square": "",
+      "sync2dview": "",
+      "text": "Текст",
+      "wait": "",
+      "zoomin": "Увеличить",
+      "zoomout": "Уменьшить"
+    },
+    "compare3d": {
+      "clipplane": "",
+      "compare_objects": "",
+      "info_message": "",
+      "modify": "",
+      "toggleall": ""
+    },
+    "cookiepopup": {
+      "accept": "",
+      "message": ""
+    },
+    "copybtn": {
+      "click_to_copy": "Копировать",
+      "copied": "Скопировано",
+      "copyfailed": ""
+    },
+    "cyclomedia": {
+      "clickonmap": "",
+      "initializing": "",
+      "loaderror": "",
+      "loading": "",
+      "login": "",
+      "scalehint": "",
+      "title": ""
+    },
+    "draw3d": {
+      "cone": "",
+      "cuboid": "",
+      "cylinder": "",
+      "drawings": "",
+      "intersect": "",
+      "label": "",
+      "newgroupprompt": "",
+      "numericinput": "",
+      "position": "",
+      "pyramid": "",
+      "rotate": "",
+      "rotation": "",
+      "scale": "",
+      "sphere": "",
+      "subtract": "",
+      "thescale": "",
+      "thesize": "",
+      "translate": "",
+      "undoBool": "",
+      "union": "",
+      "wedge": ""
+    },
+    "editdataset3d": {
+      "moveobj": "",
+      "zoomto": ""
+    },
+    "editing": {
+      "attrtable": "",
+      "canceldelete": "Не удалять",
+      "clone_all": "",
+      "clone_copy": "",
+      "clone_defaulted": "",
+      "clone_dontcopy": "",
+      "clone_hidden": "",
+      "clone_none": "",
+      "clone_select_attrs": "",
+      "clone_visible": "",
+      "commit": "Подтвердить изменения",
+      "commitfailed": "",
+      "contraintviolation": "",
+      "create": "",
+      "discard": "Отменить изменения",
+      "draw": "Нарисовать",
+      "feature": "",
+      "geomnonzeroz": "",
+      "geomreadonly": "",
+      "invalidform": "",
+      "noeditablelayers": "Отсутствуют доступные для редактирования слои.",
+      "paint": "",
+      "pickdrawfeature": "",
+      "reallydelete": "Удалить",
+      "relationcommitfailed": "",
+      "takepicture": "",
+      "unsavedchanged": ""
+    },
+    "featureattributes": {
+      "name": "",
+      "nofeatureormultiple": "",
+      "value": "",
+      "windowtitle": ""
+    },
+    "featureform": {
+      "feature": "",
+      "querying": "",
+      "title": ""
+    },
+    "featuresearch": {
+      "query": "",
+      "title": ""
+    },
+    "fileselector": {
+      "files": "",
+      "placeholder": "Выберите файл..."
+    },
+    "geomdigitizer": {
+      "applink": "",
+      "bufferlayername": "",
+      "chooselink": "",
+      "clear": "",
+      "identifypick": "",
+      "identifypickregion": "",
+      "layername": "",
+      "line_buffer": "",
+      "point_buffer": "",
+      "selfinter": "",
+      "send": ""
+    },
+    "heightprofile": {
+      "asl": "над у.м.",
+      "dhmdefaultname": "",
+      "distance": "Дистанция",
+      "drawnodes": "",
+      "error": "",
+      "export": "",
+      "height": "Высота",
+      "loading": "Расчет высоты профиля...",
+      "loadingimage": "",
+      "print": "",
+      "title": ""
+    },
+    "hideobjects3d": {
+      "clickonmap": "",
+      "object": "",
+      "restore": "",
+      "restoreall": ""
+    },
+    "identify": {
+      "aggregatedreport": "",
+      "clipboard": "",
+      "compare": "",
+      "comparing": "",
+      "featureReport": "Отчёт об объекте",
+      "featurecount": "",
+      "layerall": "",
+      "link": "гиперссылка",
+      "multiview": "",
+      "noattributes": "Аттрибуты отсутствуют",
+      "noresults": "Для выбранной точки нет доступной информации",
+      "querying": "Выполняется запрос...",
+      "reportfail": "",
+      "results": "",
+      "selectforcompare": "",
+      "selectreport": "",
+      "title": "Информация об объекте"
+    },
+    "imageeditor": {
+      "confirmclose": "",
+      "title": ""
+    },
+    "import3d": {
+      "importing": "",
+      "noprocessesserver": ""
+    },
+    "importlayer": {
+      "addfailed": "",
+      "addlayer": "Добавить слой",
+      "asgroup": "",
+      "connect": "Подключиться",
+      "filter": "Фильтровать...",
+      "localfile": "",
+      "nofeatures": "Нет объектов, доступных для импорта",
+      "noresults": "",
+      "notgeopdf": "",
+      "shpreprojectionerror": "",
+      "supportedformats": "",
+      "unknownproj": "",
+      "unsupportedfile": "",
+      "url": "",
+      "urlplaceholder": "Введите URL для WMS, WMTS, WFS..."
+    },
+    "infotool": {
+      "clickhelpPoint": "",
+      "clickhelpPolygon": "Для получения информации обведите регион многоугольником...",
+      "clickhelpRadius": "",
+      "radius": ""
+    },
+    "layercatalog": {
+      "windowtitle": ""
+    },
+    "layerinfo": {
+      "abstract": "Abstract",
+      "attribution": "Автор",
+      "dataUrl": "URL данных",
+      "keywords": "Ключевые слова",
+      "legend": "Легенда",
+      "maxscale": "",
+      "metadataUrl": "URL метаданных",
+      "minscale": "",
+      "title": "Информация о слое"
+    },
+    "layertree": {
+      "compare": "Сравнить верхний слой",
+      "deletealllayers": "",
+      "hidealllayers": "",
+      "importlayer": "Импортировать слой",
+      "maptip": "Показывать подписи",
+      "printlegend": "Распечатать легенду",
+      "separator": "",
+      "separatortooltip": "",
+      "togglegroup": "",
+      "transparency": "",
+      "visiblefilter": "",
+      "zoomtolayer": ""
+    },
+    "layertree3d": {
+      "customheight": "",
+      "import": "",
+      "importobjects": "",
+      "layers": "",
+      "objects": "",
+      "supportedformats": "",
+      "zoomtoobject": ""
+    },
+    "linkfeatureform": {
+      "drawhint": "",
+      "pickhint": ""
+    },
+    "locate": {
+      "feetUnit": "футов",
+      "metersUnit": "метров",
+      "popup": "Вы на расстоянии {distance} {unit} от этой точки",
+      "statustooltip": {
+        "DISABLED": "Геолокация: отключена",
+        "ENABLED": "Геолокация: включена",
+        "FOLLOWING": "Геолокация: следование",
+        "LOCATING": "Геолокация: определение местоположения...",
+        "PERMISSION_DENIED": "Геолокация: доступ воспрещен"
+      }
+    },
+    "locationrecorder": {
+      "record": "",
+      "stop": ""
+    },
+    "map": {
+      "loading": "Загрузка...",
+      "resetrotation": ""
+    },
+    "map3d": {
+      "terrain": "",
+      "title": ""
+    },
+    "mapexport": {
+      "configuration": "",
+      "projection": "",
+      "scale": "",
+      "size": "",
+      "usersize": ""
+    },
+    "mapfilter": {
+      "addcustomfilter": "",
+      "brokenrendering": "",
+      "geomfilter": "",
+      "hidefiltergeom": "",
+      "invalidfilter": "",
+      "timefilter": "",
+      "timefrom": "",
+      "timeto": ""
+    },
+    "mapinfotooltip": {
+      "elevation": "Высота над уровнем моря",
+      "title": "Позиция"
+    },
+    "maplegend": {
+      "bboxdependent": "",
+      "onlyvisible": "",
+      "scaledependent": "",
+      "windowtitle": ""
+    },
+    "maplight3d": {
+      "animationstep": "",
+      "date": "",
+      "dayspersec": "",
+      "helpersVisible": "",
+      "minspersec": "",
+      "moonLightIntensity": "",
+      "normalBias": "",
+      "shadowBias": "",
+      "shadowMapSize": "",
+      "shadowType": "",
+      "shadowVolumeFar": "",
+      "shadowVolumeNear": "",
+      "shadowintensity": "",
+      "shadows": "",
+      "showadvanced": "",
+      "sunLightIntensity": "",
+      "time": "",
+      "zFactor": ""
+    },
+    "measureComponent": {
+      "absolute": "",
+      "areaLabel": "Площадь",
+      "bearingLabel": "Пеленг",
+      "ground": "",
+      "heightDiffLabel": "",
+      "imperial": "",
+      "lengthLabel": "Длина",
+      "metric": "",
+      "pointLabel": "Позиция",
+      "showmeasurements": ""
+    },
+    "misc": {
+      "ctrlclickhint": ""
+    },
+    "navbar": {
+      "next": "",
+      "perpage": "",
+      "prev": ""
+    },
+    "newspopup": {
+      "dontshowagain": "",
+      "title": ""
+    },
+    "numericinput": {
+      "angle": "",
+      "featureunsupported": "",
+      "height": "",
+      "nofeatureormultiple": "",
+      "side": "",
+      "width": "",
+      "windowtitle": ""
+    },
+    "obliqueview": {
+      "nodataset": "",
+      "title": ""
+    },
+    "oereb": {
+      "concernedThemes": "",
+      "fundationdatastate": "",
+      "fundations": "",
+      "generalInformation": "",
+      "generalinfo": "",
+      "hidefulllegend": "",
+      "hints": "",
+      "legalbasis": "",
+      "notConcernedThemes": "",
+      "nrpoints": "",
+      "perc": "",
+      "regulations": "",
+      "responsibleauthority": "",
+      "responsibleoffice": "",
+      "share": "",
+      "showfulllegend": "",
+      "themeWithoutData": "",
+      "type": "",
+      "title": "",
+      "failed": ""
+    },
+    "panoramax": {
+      "notfound": "",
+      "title": ""
+    },
+    "pickfeature": {
+      "querying": ""
+    },
+    "plotinfotool": {
+      "failed": "",
+      "loading": ""
+    },
+    "portal": {
+      "filter": "",
+      "menulabel": ""
+    },
+    "print": {
+      "atlasfeature": "",
+      "download_as_onepdf": "",
+      "download_as_onezip": "",
+      "download_as_single": "",
+      "grid": "Сетка",
+      "layout": "Формат бумаги",
+      "legend": "",
+      "nolayouts": "Выбранная тема не поддерживает печать",
+      "notheme": "Тема не выбрана",
+      "output": "",
+      "overlap": "",
+      "pickatlasfeature": "",
+      "rotation": "Поворот",
+      "scale": "Масштаб",
+      "series": "",
+      "submit": "Печать"
+    },
+    "qtdesignerform": {
+      "loading": ""
+    },
+    "redlining": {
+      "attributes": "",
+      "buffer": "",
+      "buffercompute": "",
+      "bufferdistance": "",
+      "bufferlayer": "",
+      "bufferlayername": "",
+      "bufferselectfeature": "",
+      "ctrlhint": "",
+      "draw": "",
+      "edit": "",
+      "freehand": "",
+      "label": "Надпись",
+      "layer": "",
+      "layertitle": "",
+      "markers": "",
+      "numericinput": "",
+      "size": "Размер",
+      "transform": ""
+    },
+    "reports": {
+      "region": "",
+      "selectlayer": ""
+    },
+    "routing": {
+      "add": "",
+      "addlayer": "",
+      "addviapoint": "",
+      "arriveat": "",
+      "computefailed": "",
+      "computing": "",
+      "excludepolygons": "",
+      "fastest": "",
+      "fromhere": "",
+      "importerror": "",
+      "importhint": "",
+      "importpoints": "",
+      "iso_intervals": "",
+      "iso_mode": "",
+      "iso_mode_distance": "",
+      "iso_mode_time": "",
+      "isocenter": "",
+      "isoextracenter": "",
+      "leaveat": "",
+      "leavenow": "",
+      "maxspeed": "",
+      "method": "",
+      "mode_auto": "",
+      "mode_bicycle": "",
+      "mode_heavyvehicle": "",
+      "mode_transit": "",
+      "mode_walking": "",
+      "optimized_route": "",
+      "reachability": "",
+      "roundtrip": "",
+      "route": "",
+      "shortest": "",
+      "tohere": "",
+      "useferries": "",
+      "usehighways": "",
+      "usetollways": "",
+      "windowtitle": ""
+    },
+    "scratchdrawing": {
+      "finish": ""
+    },
+    "serviceinfo": {
+      "abstract": "",
+      "contactEmail": "",
+      "contactOrganization": "",
+      "contactPerson": "",
+      "contactPhone": "",
+      "contactPosition": "",
+      "keywords": "",
+      "onlineResource": "",
+      "title": ""
+    },
+    "settings": {
+      "bookmarks": "",
+      "colorscheme": "",
+      "confirmlang": "",
+      "default": "",
+      "defaulttheme": "",
+      "defaultthemefailed": "",
+      "language": "",
+      "systemlang": "",
+      "themes": ""
+    },
+    "settings3d": {
+      "fov": "",
+      "quality": ""
+    },
+    "share": {
+      "QRCodeLinkTitle": "QR-код",
+      "directLinkTitle": "По прямой ссылке",
+      "expires": "",
+      "norestriction": "",
+      "refresh": "",
+      "restricttogroup": "",
+      "shareTitle": "QWC2",
+      "showpin": "",
+      "socialIntro": "В Вашей любимой соцсети"
+    },
+    "snapping": {
+      "edge": "",
+      "loading": "",
+      "snappingenabled": "",
+      "vertex": ""
+    },
+    "themelayerslist": {
+      "addanyway": "",
+      "addlayer": "",
+      "addlayerstotheme": "",
+      "addselectedlayers": "",
+      "existinglayers": ""
+    },
+    "themeswitcher": {
+      "addlayerstotheme": "",
+      "addtotheme": "",
+      "changedefaulttheme": "",
+      "confirmswitch": "",
+      "filter": "Фильтр...",
+      "match": {
+        "abstract": "",
+        "keywords": "",
+        "title": ""
+      },
+      "openintab": "",
+      "restrictedthemeinfo": ""
+    },
+    "timemanager": {
+      "animationinterval": "",
+      "classify": "",
+      "classifynone": "",
+      "displayfeatures": "",
+      "displaylayers": "",
+      "displayminimal": "",
+      "edit": "",
+      "endtime": "",
+      "filterwarning": "",
+      "future": "",
+      "group": "",
+      "groupnone": "",
+      "home": "",
+      "loop": "",
+      "markers": "",
+      "notemporaldata": "",
+      "now": "",
+      "past": "",
+      "play": "",
+      "playrev": "",
+      "rewind": "",
+      "starttime": "",
+      "stepback": "",
+      "stepfwd": "",
+      "stepsize": "",
+      "stop": "",
+      "timeline": "",
+      "timeline_fixed": "",
+      "timeline_infinite": "",
+      "timelinedisplay": "",
+      "timelinescale": "",
+      "title": "",
+      "toggle": "",
+      "unit": {
+        "century": "",
+        "days": "",
+        "decade": "",
+        "hours": "",
+        "milliseconds": "",
+        "minutes": "",
+        "months": "",
+        "seconds": "",
+        "years": ""
+      }
+    },
+    "tooltip": {
+      "background": "Сменить фон",
+      "fullscreendisable": "",
+      "fullscreenenable": "",
+      "home": "Показать всю карту"
+    },
+    "tourguide": {
+      "done": "",
+      "next": "",
+      "previous": ""
+    },
+    "valuetool": {
+      "allbands": "",
+      "alllayers": "",
+      "bands": "",
+      "graph": "",
+      "layer": "",
+      "nodata": "",
+      "options": "",
+      "selectedbands": "",
+      "selectedlayers": "",
+      "selectlayersbands": "",
+      "showbands": "",
+      "showlayers": "",
+      "table": "",
+      "title": "",
+      "visiblelayers": "",
+      "ymax": "",
+      "ymin": ""
+    },
+    "vectorlayerpicker": {
+      "none": "",
+      "prompt": ""
+    },
+    "view3d": {
+      "storingstate": ""
+    },
+    "window": {
+      "detach": "",
+      "dock": "",
+      "embed": "",
+      "maximize": "",
+      "minimize": "",
+      "undock": "",
+      "unmaximize": "",
+      "unminimize": ""
+    },
+    "plotdescr": {
+      "title": "",
+      "requestPdf": ""
+    }
+  }
+}
