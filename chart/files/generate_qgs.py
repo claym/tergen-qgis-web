@@ -858,43 +858,92 @@ def discover_gpkgs(root: Path) -> list[Path]:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        description="Generate a QGIS Server project.qgs from GeoPackage files."
+        description="Generate QGIS Server project files and qwc2 themesConfig.json from GeoPackages.",
     )
-    p.add_argument(
-        "data_dir",
-        help="Directory to scan recursively for *.gpkg files",
-    )
-    p.add_argument(
-        "--output",
-        required=True,
-        help="Path where project.qgs should be written",
-    )
+    mode = p.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--once", action="store_true",
+                      help="Regenerate once and exit.")
+    mode.add_argument("--watch", action="store_true",
+                      help="Regenerate, then watch for changes (inotify).")
+    p.add_argument("--data-dir", required=True,
+                   help="Directory containing *.gpkg (scanned recursively).")
+    p.add_argument("--projects-dir", required=True,
+                   help="Directory where per-gpkg .qgs files are written.")
+    p.add_argument("--web-dir", required=True,
+                   help="Directory where themesConfig.json is written.")
+    p.add_argument("--default-theme", default=None,
+                   help="Theme id (gpkg stem) marked as default in themesConfig.")
+    p.add_argument("--debounce-seconds", type=float, default=1.0,
+                   help="Watch-mode debounce window (default 1.0).")
     args = p.parse_args(argv)
 
     data_dir = Path(args.data_dir)
-    output = Path(args.output)
+    projects_dir = Path(args.projects_dir)
+    web_dir = Path(args.web_dir)
 
     if not data_dir.is_dir():
         print(f"data_dir not found or not a directory: {data_dir}",
               file=sys.stderr)
         return 2
 
-    gpkgs = discover_gpkgs(data_dir)
-    if not gpkgs:
-        print(f"no .gpkg files found under {data_dir}", file=sys.stderr)
-        return 1
+    report = regen_all(data_dir, projects_dir, web_dir, args.default_theme)
+    if report.skipped:
+        print(".no-regen marker present; skipped initial regen", file=sys.stderr)
+    else:
+        print(f"regen: wrote {report.written_projects} project(s), "
+              f"pruned {report.pruned_projects}, themesConfig OK")
 
-    layers: list[Layer] = []
-    for gpkg in gpkgs:
-        layers.extend(introspect_gpkg(gpkg))
+    if args.once:
+        return 0
 
-    if not layers:
-        print("no feature-table layers discovered in any .gpkg", file=sys.stderr)
-        return 1
+    # --watch: enter the watch loop. Lazy-import watchdog so --once mode
+    # works in environments without watchdog installed (the test suite).
+    return _watch_loop(data_dir, projects_dir, web_dir,
+                      args.default_theme, args.debounce_seconds)
 
-    output.write_text(render_qgs(layers))
-    print(f"wrote {output} with {len(layers)} layer(s) "
-          f"from {len(gpkgs)} gpkg file(s)")
+
+def _watch_loop(data_dir: Path, projects_dir: Path, web_dir: Path,
+                default_theme: str | None, debounce_seconds: float) -> int:
+    from watchdog.events import PatternMatchingEventHandler
+    from watchdog.observers import Observer
+    import threading
+    import time
+
+    pending = threading.Event()
+
+    class Handler(PatternMatchingEventHandler):
+        def on_any_event(self, event):
+            pending.set()
+
+    handler = Handler(patterns=["*.gpkg"], ignore_directories=True)
+    observer = Observer()
+    observer.schedule(handler, str(data_dir), recursive=True)
+    observer.start()
+    print(f"watching {data_dir} for *.gpkg changes "
+          f"(debounce={debounce_seconds}s)")
+
+    # Heartbeat for liveness probe
+    heartbeat = Path("/tmp/heartbeat")
+    ready = Path("/tmp/ready")
+    ready.touch()
+
+    try:
+        while True:
+            if pending.wait(timeout=30.0):
+                # Debounce: wait until events settle
+                while pending.is_set():
+                    pending.clear()
+                    time.sleep(debounce_seconds)
+                report = regen_all(data_dir, projects_dir, web_dir, default_theme)
+                if report.skipped:
+                    print(".no-regen present; skipped")
+                else:
+                    print(f"regen: wrote {report.written_projects} "
+                          f"project(s), pruned {report.pruned_projects}")
+            heartbeat.touch()
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
     return 0
 
 

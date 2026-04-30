@@ -124,20 +124,47 @@ def test_render_qgs_marks_territories_visible_step_layers_hidden(tmp_path):
     assert "step_500_addresses" in hidden
 
 
-def test_main_writes_project_qgs(tmp_path, monkeypatch):
-    src = tmp_path / "data"
-    out = tmp_path / "project.qgs"
-    src.mkdir()
-    _make_minimal_gpkg(src / "a.gpkg", layer_name="alpha")
-    _make_minimal_gpkg(src / "b.gpkg", layer_name="beta")
+def test_main_writes_project_qgs(tmp_path):
+    root = tmp_path
+    data = root / "data"
+    projects = root / "projects"
+    web = root / "web"
+    data.mkdir(); projects.mkdir(); web.mkdir()
+    _make_minimal_gpkg(data / "a.gpkg", layer_name="alpha")
+    _make_minimal_gpkg(data / "b.gpkg", layer_name="beta")
 
-    rc = gen.main([str(src), "--output", str(out)])
+    rc = gen.main([
+        "--once",
+        "--data-dir", str(data),
+        "--projects-dir", str(projects),
+        "--web-dir", str(web),
+    ])
 
     assert rc == 0
-    assert out.exists()
-    root = ET.fromstring(out.read_text())
-    names = {ml.findtext("layername") for ml in root.findall("./projectlayers/maplayer")}
-    assert names == {"alpha", "beta"}
+    assert sorted(p.name for p in projects.iterdir()) == ["a.qgs", "b.qgs"]
+    assert (web / "themesConfig.json").exists()
+
+
+def test_main_once_with_default_theme_marks_default(tmp_path):
+    root = tmp_path
+    data = root / "data"; projects = root / "projects"; web = root / "web"
+    data.mkdir(); projects.mkdir(); web.mkdir()
+    _make_minimal_gpkg(data / "a.gpkg", layer_name="alpha")
+    _make_minimal_gpkg(data / "b.gpkg", layer_name="beta")
+
+    rc = gen.main([
+        "--once",
+        "--data-dir", str(data),
+        "--projects-dir", str(projects),
+        "--web-dir", str(web),
+        "--default-theme", "b",
+    ])
+    assert rc == 0
+
+    cfg = json.loads((web / "themesConfig.json").read_text())
+    by_id = {it["id"]: it for it in cfg["themes"]["items"]}
+    assert by_id["b"]["default"] is True
+    assert by_id["a"]["default"] is False
 
 
 def test_atomic_write_text_replaces_target_atomically(tmp_path):
