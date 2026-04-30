@@ -1,0 +1,788 @@
+{
+  "locale": "pt-BR",
+  "messages": {
+    "appmenu": {
+      "items": {
+        "ExternalLink": "",
+        "Bookmark": "Bookmark",
+        "Compare3D": "",
+        "Editing": "Edição",
+        "ExportObjects3D": "",
+        "Help": "Ajuda",
+        "HideObjects3D": "",
+        "LayerTree": "Camadas & Legendas",
+        "LayerTree3D": "",
+        "MapExport": "Exportar mapa",
+        "MapExport3D": "",
+        "MapFilter": "",
+        "MapLight3D": "",
+        "ObjectList": "",
+        "PlotInfoTool": "",
+        "Print": "Imprimir",
+        "Reports": "",
+        "Settings": "Configurações",
+        "Settings3D": "",
+        "Share": "Compartilhar link",
+        "ThemeSwitcher": "Tema",
+        "AttributeTable": "Tabela de atributos",
+        "AuthenticationLogin": "Inicio da sessão",
+        "AuthenticationLogout": "Fim da sessão - {0}",
+        "Cyclomedia": "Cyclomedia",
+        "Draw3D": "",
+        "FeatureForm": "Atributos da feição",
+        "FeatureSearch": "Procurar feição",
+        "GeometryDigitizer": "",
+        "IdentifyPoint": "Identificar ponto",
+        "IdentifyRegion": "Identificar região",
+        "LayerCatalog": "Catálogo de camadas",
+        "Login": "Inicio da sessão",
+        "Logout": "Fim da sessão",
+        "MapLegend": "Legenda do mapa",
+        "Measure": "Medir",
+        "Measure3D": "",
+        "MeasureLineString": "Medir uma linha",
+        "MeasurePolygon": "Medir um polígono",
+        "NewsPopup": "",
+        "ObliqueView": "",
+        "Panoramax": "",
+        "Portal": "",
+        "PrintScreen3D": "",
+        "Redlining": "Linha de demarcação",
+        "Routing": "Roteamento",
+        "Tools": "Ferramentas de mapa",
+        "TourGuide": "",
+        "TimeManager": "Gerenciador de tempo",
+        "View3D": ""
+      },
+      "filter": "Filtro",
+      "menulabel": "Mapas & Ferramentas"
+    },
+    "search": {
+      "coordinates": "",
+      "circleradius": "",
+      "existinglayer": "A camada já existe no mapa",
+      "filter": "Refinar a procura",
+      "layers": "",
+      "limittoarea": "",
+      "more": "{0} mais resultados",
+      "nodescription": "Não há descrição disponível",
+      "none": "",
+      "placeholder": "Procurar local ou adicionar mapa...",
+      "places": "",
+      "providerselection": "Escolher o provedor",
+      "recent": "Pesquisas recentes",
+      "search": "Pesquisa",
+      "tasks": "",
+      "themelayers": "",
+      "themes": "Temas",
+      "unknownmore": ""
+    },
+    "colorschemes": {
+      "default": "",
+      "dark": "",
+      "highcontrast": ""
+    },
+    "app": {
+      "missingbg": "Faltando fundo",
+      "missingdefaulttheme": "",
+      "missinglayers": "Faltando camadas",
+      "missingpermalink": "Faltando link permanente",
+      "missingprojection": "",
+      "missingtheme": "Faltando tema"
+    },
+    "attribtable": {
+      "addfeature": "Adicionar feição",
+      "calculatedfield": "",
+      "commit": "Commit",
+      "csvexport": "",
+      "deletefailed": "Falha ao deletar",
+      "deletefeatures": "Deletar feições",
+      "deleting": "Deletando",
+      "discard": "Descartar",
+      "formeditmode": "Modo de edição de forma",
+      "fulldatasetload": "",
+      "geomnoadd": "Geometria não adicionada",
+      "limittoextent": "",
+      "loadfailed": "Falha ao carregar",
+      "nodelete": "Não excluir",
+      "nogeomnoform": "",
+      "pleasereload": "Por favor recarregue",
+      "reload": "Recarregar",
+      "title": "Título",
+      "zoomtoselection": "Zoom para a seleção"
+    },
+    "bgswitcher": {
+      "nobg": "Sem fundo"
+    },
+    "bookmark": {
+      "add": "Adicionar",
+      "addfailed": "Falha ao adicionar",
+      "lastUpdate": "Última atualização",
+      "manage": "Gerenciar",
+      "newbookmark": "",
+      "nobookmarks": "Sem favoritos",
+      "notloggedin": "Não logado",
+      "open": "Abrir",
+      "openTab": "Abrir aba",
+      "removefailed": "Falha ao remover",
+      "savefailed": "Falha ao salvar",
+      "update": "Atualizar",
+      "zoomToExtent": ""
+    },
+    "bottombar": {
+      "mousepos_label": "Coordenadas",
+      "scale_label": "Escala",
+      "terms_label": "Termos de uso",
+      "viewertitle_label": "Home page"
+    },
+    "common": {
+      "add": "Adicionar",
+      "all": "Todos",
+      "cancel": "Cancelar",
+      "circle": "Círculo",
+      "clear": "Limpar",
+      "clone": "Clonar",
+      "close": "Fechar diálogo",
+      "delete": "Eliminar",
+      "download": "Descarregar",
+      "ellipse": "Elipse",
+      "export": "Enviar",
+      "format": "Formato:",
+      "line": "Línha",
+      "loading": "Carregando",
+      "lock2dview": "",
+      "noresults": "Sem resultados",
+      "pick": "Escolha",
+      "point": "Ponto",
+      "polygon": "Polígono",
+      "rectangle": "Retângulo",
+      "rename": "",
+      "resolution": "Resolução:",
+      "save": "Salvar",
+      "select": "Selecione...",
+      "selectlayer": "Selecionar camada...",
+      "square": "Praça",
+      "sync2dview": "",
+      "text": "Texto",
+      "wait": "Aguarde",
+      "zoomin": "Mais zoom",
+      "zoomout": "Reduzir o zoom"
+    },
+    "compare3d": {
+      "clipplane": "",
+      "compare_objects": "",
+      "info_message": "",
+      "modify": "",
+      "toggleall": ""
+    },
+    "cookiepopup": {
+      "accept": "",
+      "message": ""
+    },
+    "copybtn": {
+      "click_to_copy": "Clique para copiar",
+      "copied": "Copiado",
+      "copyfailed": ""
+    },
+    "cyclomedia": {
+      "clickonmap": "Clique no mapa",
+      "initializing": "",
+      "loaderror": "Erro ao carregar",
+      "loading": "Carregando",
+      "login": "Login",
+      "scalehint": "Indicação de escala",
+      "title": "Titulo"
+    },
+    "draw3d": {
+      "cone": "",
+      "cuboid": "",
+      "cylinder": "",
+      "drawings": "",
+      "intersect": "",
+      "label": "",
+      "newgroupprompt": "",
+      "numericinput": "",
+      "position": "",
+      "pyramid": "",
+      "rotate": "",
+      "rotation": "",
+      "scale": "",
+      "sphere": "",
+      "subtract": "",
+      "thescale": "",
+      "thesize": "",
+      "translate": "",
+      "undoBool": "",
+      "union": "",
+      "wedge": ""
+    },
+    "editdataset3d": {
+      "moveobj": "",
+      "zoomto": ""
+    },
+    "editing": {
+      "attrtable": "Tabela de atributos",
+      "canceldelete": "Não apagar",
+      "clone_all": "",
+      "clone_copy": "",
+      "clone_defaulted": "",
+      "clone_dontcopy": "",
+      "clone_hidden": "",
+      "clone_none": "",
+      "clone_select_attrs": "",
+      "clone_visible": "",
+      "commit": "Commit",
+      "commitfailed": "Falha de confirmação",
+      "contraintviolation": "",
+      "create": "Criar",
+      "discard": "Descartar",
+      "draw": "Desenhar",
+      "feature": "Feição",
+      "geomnonzeroz": "Geometria somente de leitura",
+      "geomreadonly": "",
+      "invalidform": "Formulário inválido",
+      "noeditablelayers": "Sem camadas editadas.",
+      "paint": "Pintar",
+      "pickdrawfeature": "Clique para desenhar uma feição",
+      "reallydelete": "Excluir",
+      "relationcommitfailed": "Falha na confirmação",
+      "takepicture": "Selecionar imagem",
+      "unsavedchanged": "Alterações não salvas"
+    },
+    "featureattributes": {
+      "name": "",
+      "nofeatureormultiple": "",
+      "value": "",
+      "windowtitle": ""
+    },
+    "featureform": {
+      "feature": "Feiçao",
+      "querying": "Consultando...",
+      "title": "Título"
+    },
+    "featuresearch": {
+      "query": "Consulta",
+      "title": "Título"
+    },
+    "fileselector": {
+      "files": "Arquivos",
+      "placeholder": "Selecione pasta"
+    },
+    "geomdigitizer": {
+      "applink": "",
+      "bufferlayername": "",
+      "chooselink": "",
+      "clear": "",
+      "identifypick": "",
+      "identifypickregion": "",
+      "layername": "",
+      "line_buffer": "",
+      "point_buffer": "",
+      "selfinter": "",
+      "send": ""
+    },
+    "heightprofile": {
+      "asl": "a.s.l.",
+      "dhmdefaultname": "",
+      "distance": "Distância",
+      "drawnodes": "Desenhar nós",
+      "error": "Erro",
+      "export": "Exportar",
+      "height": "Altura",
+      "loading": "Calcular o perfil de altura",
+      "loadingimage": "",
+      "print": "Imprimir",
+      "title": "Título"
+    },
+    "hideobjects3d": {
+      "clickonmap": "",
+      "object": "",
+      "restore": "",
+      "restoreall": ""
+    },
+    "identify": {
+      "aggregatedreport": "",
+      "clipboard": "",
+      "compare": "",
+      "comparing": "",
+      "featureReport": "Relatório de recurso",
+      "featurecount": "",
+      "layerall": "",
+      "link": "Link",
+      "multiview": "",
+      "noattributes": "Sem atributos",
+      "noresults": "Nenhuma informação disponível para o ponto selecionado",
+      "querying": "Consultando...",
+      "reportfail": "",
+      "results": "",
+      "selectforcompare": "",
+      "selectreport": "",
+      "title": "Informação do recurso"
+    },
+    "imageeditor": {
+      "confirmclose": "Confirmar fechamento",
+      "title": "Título"
+    },
+    "import3d": {
+      "importing": "",
+      "noprocessesserver": ""
+    },
+    "importlayer": {
+      "addfailed": "Falha ao adicionar",
+      "addlayer": "Adicionar camada",
+      "asgroup": "",
+      "connect": "Conectar",
+      "filter": "Filtro...",
+      "localfile": "Arquivo local",
+      "nofeatures": "Nenhum recurso poder ser importado.",
+      "noresults": "Sem resultados ou URL inválido",
+      "notgeopdf": "",
+      "shpreprojectionerror": "",
+      "supportedformats": "",
+      "unknownproj": "",
+      "unsupportedfile": "",
+      "url": "URL",
+      "urlplaceholder": "Insira o endereço URL do WMS, WMTS, WFS..."
+    },
+    "infotool": {
+      "clickhelpPoint": "Clique numa localização para identificar no mapa",
+      "clickhelpPolygon": "Desenhe um polígono em torno das feiçoes para identificar",
+      "clickhelpRadius": "Desenhe um raio em torno das feiçoes para identificar",
+      "radius": "Raio"
+    },
+    "layercatalog": {
+      "windowtitle": "Titulo da janela"
+    },
+    "layerinfo": {
+      "abstract": "Resumo",
+      "attribution": "Atribuição",
+      "dataUrl": "URL de dados",
+      "keywords": "Palavras-chave",
+      "legend": "Legenda",
+      "maxscale": "Escala de exibição máxima",
+      "metadataUrl": "Endereço URL de metadatos",
+      "minscale": "Escala de exibição mínima. ",
+      "title": "Informação da camada"
+    },
+    "layertree": {
+      "compare": "Compare a camada superior",
+      "deletealllayers": "Remover todas as camadas",
+      "hidealllayers": "",
+      "importlayer": "Camada de importação",
+      "maptip": "Mostrar dicas de mapa de camadas",
+      "printlegend": "Legenda da impressão",
+      "separator": "Separador",
+      "separatortooltip": "Adicionar separador",
+      "togglegroup": "",
+      "transparency": "Transparência",
+      "visiblefilter": "Filtrar camadas invisíveis",
+      "zoomtolayer": "Ampliar a camada"
+    },
+    "layertree3d": {
+      "customheight": "",
+      "import": "",
+      "importobjects": "",
+      "layers": "",
+      "objects": "",
+      "supportedformats": "",
+      "zoomtoobject": ""
+    },
+    "linkfeatureform": {
+      "drawhint": "Mostrar dica",
+      "pickhint": "Escolher dica"
+    },
+    "locate": {
+      "feetUnit": "pés",
+      "metersUnit": "metros",
+      "popup": "Está a uma distância de {unit} a partir deste ponto",
+      "statustooltip": {
+        "DISABLED": "Posição: desativada",
+        "ENABLED": "Posição: ativada",
+        "FOLLOWING": "Posição: seguinte",
+        "LOCATING": "Posição: localização...",
+        "PERMISSION_DENIED": "Posição: permissão negada"
+      }
+    },
+    "locationrecorder": {
+      "record": "",
+      "stop": ""
+    },
+    "map": {
+      "loading": "Carregar...",
+      "resetrotation": "Redefinir rotação"
+    },
+    "map3d": {
+      "terrain": "",
+      "title": ""
+    },
+    "mapexport": {
+      "configuration": "Configuração",
+      "projection": "",
+      "scale": "Escala",
+      "size": "Tamanho",
+      "usersize": "Usar tamanho"
+    },
+    "mapfilter": {
+      "addcustomfilter": "",
+      "brokenrendering": "",
+      "geomfilter": "",
+      "hidefiltergeom": "",
+      "invalidfilter": "",
+      "timefilter": "",
+      "timefrom": "",
+      "timeto": ""
+    },
+    "mapinfotooltip": {
+      "elevation": "Elevação",
+      "title": "Posição"
+    },
+    "maplegend": {
+      "bboxdependent": "Caixa da legenda",
+      "onlyvisible": "Apenas visíveis",
+      "scaledependent": "Escala da legenda",
+      "windowtitle": "Titulo da janela"
+    },
+    "maplight3d": {
+      "animationstep": "",
+      "date": "",
+      "dayspersec": "",
+      "helpersVisible": "",
+      "minspersec": "",
+      "moonLightIntensity": "",
+      "normalBias": "",
+      "shadowBias": "",
+      "shadowMapSize": "",
+      "shadowType": "",
+      "shadowVolumeFar": "",
+      "shadowVolumeNear": "",
+      "shadowintensity": "",
+      "shadows": "",
+      "showadvanced": "",
+      "sunLightIntensity": "",
+      "time": "",
+      "zFactor": ""
+    },
+    "measureComponent": {
+      "absolute": "",
+      "areaLabel": "Área",
+      "bearingLabel": "Direção",
+      "ground": "",
+      "heightDiffLabel": "",
+      "imperial": "Imperial",
+      "lengthLabel": "Distância",
+      "metric": "Métrica",
+      "pointLabel": "Posição",
+      "showmeasurements": "Medidas"
+    },
+    "misc": {
+      "ctrlclickhint": ""
+    },
+    "navbar": {
+      "next": "",
+      "perpage": "Por página",
+      "prev": ""
+    },
+    "newspopup": {
+      "dontshowagain": "Não mostrar de novo",
+      "title": "Título"
+    },
+    "numericinput": {
+      "angle": "ângulo",
+      "featureunsupported": "Feição não suportada",
+      "height": "Altura",
+      "nofeatureormultiple": "",
+      "side": "Margem",
+      "width": "Largura",
+      "windowtitle": "Título da janela"
+    },
+    "obliqueview": {
+      "nodataset": "",
+      "title": ""
+    },
+    "oereb": {
+      "concernedThemes": "",
+      "fundationdatastate": "",
+      "fundations": "",
+      "generalInformation": "",
+      "generalinfo": "",
+      "hidefulllegend": "",
+      "hints": "",
+      "legalbasis": "",
+      "notConcernedThemes": "",
+      "nrpoints": "",
+      "perc": "",
+      "regulations": "",
+      "responsibleauthority": "",
+      "responsibleoffice": "",
+      "share": "",
+      "showfulllegend": "",
+      "themeWithoutData": "",
+      "type": "",
+      "title": "",
+      "failed": ""
+    },
+    "panoramax": {
+      "notfound": "",
+      "title": ""
+    },
+    "pickfeature": {
+      "querying": ""
+    },
+    "plotinfotool": {
+      "failed": "",
+      "loading": ""
+    },
+    "portal": {
+      "filter": "",
+      "menulabel": ""
+    },
+    "print": {
+      "atlasfeature": "Feições do atlas",
+      "download_as_onepdf": "",
+      "download_as_onezip": "",
+      "download_as_single": "",
+      "grid": "Grade",
+      "layout": "Layout",
+      "legend": "Legenda",
+      "nolayouts": "O tema selecionado não suporta impressão",
+      "notheme": "Nenhum tema selecionado",
+      "output": "Saída de impressão",
+      "overlap": "",
+      "pickatlasfeature": "",
+      "rotation": "Rotação",
+      "scale": "Escala",
+      "series": "",
+      "submit": "Imprimir"
+    },
+    "qtdesignerform": {
+      "loading": "Carregando"
+    },
+    "redlining": {
+      "attributes": "",
+      "buffer": "Buffer",
+      "buffercompute": "Compute",
+      "bufferdistance": "Distância",
+      "bufferlayer": "Camada do buffer",
+      "bufferlayername": "Nome do buffer",
+      "bufferselectfeature": "Selecione uma característica para o buffer...",
+      "ctrlhint": "",
+      "draw": "Traçar",
+      "edit": "Editar",
+      "freehand": "Desenho à mão livre ",
+      "label": "Etiqueta",
+      "layer": "Camada",
+      "layertitle": "",
+      "markers": "",
+      "numericinput": "Entrada numérica",
+      "size": "Tamanho",
+      "transform": "Transformar"
+    },
+    "reports": {
+      "region": "",
+      "selectlayer": ""
+    },
+    "routing": {
+      "add": "Adcionar",
+      "addlayer": "",
+      "addviapoint": "Adicionar ponto de via",
+      "arriveat": "Chegada",
+      "computefailed": "Falha de processamento",
+      "computing": "Processando...",
+      "excludepolygons": "Excluir polígonos",
+      "fastest": "Mais rápido",
+      "fromhere": "Daqui",
+      "importerror": "Erro de importação",
+      "importhint": "Dica de importação",
+      "importpoints": "Imporntar pontos",
+      "iso_intervals": "",
+      "iso_mode": "",
+      "iso_mode_distance": "",
+      "iso_mode_time": "",
+      "isocenter": "",
+      "isoextracenter": "",
+      "leaveat": "Sair às",
+      "leavenow": "Sair agora",
+      "maxspeed": "Velocidade máxima",
+      "method": "Método",
+      "mode_auto": "Modo automóvel",
+      "mode_bicycle": "Modo bicicleta",
+      "mode_heavyvehicle": "Modo veículo pesado",
+      "mode_transit": "Modo trânsito",
+      "mode_walking": "Modo andando",
+      "optimized_route": "Rota otimizada",
+      "reachability": "Acessibilidade",
+      "roundtrip": "Ida e volta",
+      "route": "Rota",
+      "shortest": "Mais próximo",
+      "tohere": "Para cá",
+      "useferries": "Usar ferrovias",
+      "usehighways": "Usar rodovias",
+      "usetollways": "Use para todos",
+      "windowtitle": "Título da janela"
+    },
+    "scratchdrawing": {
+      "finish": "Terminar"
+    },
+    "serviceinfo": {
+      "abstract": "Resumo",
+      "contactEmail": "Email",
+      "contactOrganization": "Organização",
+      "contactPerson": "Pessoa de contato",
+      "contactPhone": "Telefone",
+      "contactPosition": "Posição",
+      "keywords": "Palavras-chave",
+      "onlineResource": "Recurso online",
+      "title": "Título"
+    },
+    "settings": {
+      "bookmarks": "Favoritos",
+      "colorscheme": "Esquema de cores",
+      "confirmlang": "Confirmar o idioma",
+      "default": "Padrão",
+      "defaulttheme": "Tema padrão",
+      "defaultthemefailed": "O tema padrão falhou",
+      "language": "Idioma",
+      "systemlang": "Idioma do sistema",
+      "themes": "Temas"
+    },
+    "settings3d": {
+      "fov": "",
+      "quality": ""
+    },
+    "share": {
+      "QRCodeLinkTitle": "Código QR",
+      "directLinkTitle": "Link direto",
+      "expires": "Expira",
+      "norestriction": "",
+      "refresh": "Atualizar",
+      "restricttogroup": "",
+      "shareTitle": "QWC2",
+      "showpin": "Mostrar pin",
+      "socialIntro": "Sua rede social favorita"
+    },
+    "snapping": {
+      "edge": "",
+      "loading": "Carregando...",
+      "snappingenabled": "Ajuste ativado",
+      "vertex": ""
+    },
+    "themelayerslist": {
+      "addanyway": "",
+      "addlayer": "Adicionar camada",
+      "addlayerstotheme": "Adicionar camadas ao mapa atual",
+      "addselectedlayers": "Adicionar camadas selecionadas",
+      "existinglayers": ""
+    },
+    "themeswitcher": {
+      "addlayerstotheme": "Adicionar camadas ao mapa atual",
+      "addtotheme": "Adicione ao tema atual",
+      "changedefaulttheme": "",
+      "confirmswitch": "",
+      "filter": "Filtro...",
+      "match": {
+        "abstract": "Resumo",
+        "keywords": "Palavras-chave",
+        "title": "Título"
+      },
+      "openintab": "Aberto em separador",
+      "restrictedthemeinfo": "Não está autorizado a ver o tema ou a iniciar sessão"
+    },
+    "timemanager": {
+      "animationinterval": "Intervalo da animação",
+      "classify": "Classificar",
+      "classifynone": "Não classificar",
+      "displayfeatures": "Mostrar feições",
+      "displaylayers": "Mostrar camadas",
+      "displayminimal": "Exibição mínima",
+      "edit": "",
+      "endtime": "Fim do tempo",
+      "filterwarning": "",
+      "future": "Feição",
+      "group": "Grupo",
+      "groupnone": "Nenhum grupo",
+      "home": "Home",
+      "loop": "Loop",
+      "markers": "Marcadores",
+      "notemporaldata": "Sem dados temporais",
+      "now": "Agora",
+      "past": "Passado",
+      "play": "Acionar",
+      "playrev": "Revisar a ação",
+      "rewind": "Voltar",
+      "starttime": "Hora do início",
+      "stepback": "Ação anterior",
+      "stepfwd": "Ação posterior",
+      "stepsize": "Tamanho da ação",
+      "stop": "Parar",
+      "timeline": "Linha do tempo",
+      "timeline_fixed": "Linha do tempo fixa",
+      "timeline_infinite": "Linha do tempo infinita",
+      "timelinedisplay": "Mostrar linha do tempo",
+      "timelinescale": "Escala da linha do tempo",
+      "title": "Título",
+      "toggle": "",
+      "unit": {
+        "century": "Século",
+        "days": "Dias",
+        "decade": "Década",
+        "hours": "Horas",
+        "milliseconds": "Milisegundos",
+        "minutes": "Minutos",
+        "months": "Meses",
+        "seconds": "Segundos",
+        "years": "Anos"
+      }
+    },
+    "tooltip": {
+      "background": "Mudar de fundo",
+      "fullscreendisable": "Desativar tela cheia",
+      "fullscreenenable": "Ativar tela cheia",
+      "home": "Mostrar mapa inteiro"
+    },
+    "tourguide": {
+      "done": "",
+      "next": "",
+      "previous": ""
+    },
+    "valuetool": {
+      "allbands": "",
+      "alllayers": "",
+      "bands": "",
+      "graph": "",
+      "layer": "",
+      "nodata": "",
+      "options": "",
+      "selectedbands": "",
+      "selectedlayers": "",
+      "selectlayersbands": "",
+      "showbands": "",
+      "showlayers": "",
+      "table": "",
+      "title": "",
+      "visiblelayers": "",
+      "ymax": "",
+      "ymin": ""
+    },
+    "vectorlayerpicker": {
+      "none": "",
+      "prompt": "Insira o nome da camada"
+    },
+    "view3d": {
+      "storingstate": ""
+    },
+    "window": {
+      "detach": "",
+      "dock": "Encaixar",
+      "embed": "",
+      "maximize": "Maximizar",
+      "minimize": "Minimizar",
+      "undock": "Desencaixar",
+      "unmaximize": "Desmaximizar",
+      "unminimize": "Desminimizar"
+    },
+    "plotdescr": {
+      "title": "",
+      "requestPdf": ""
+    }
+  }
+}

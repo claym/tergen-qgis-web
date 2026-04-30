@@ -1,0 +1,788 @@
+{
+  "locale": "sv-SE",
+  "messages": {
+    "appmenu": {
+      "items": {
+        "ExternalLink": "",
+        "Bookmark": "",
+        "Compare3D": "",
+        "Editing": "Redigera",
+        "ExportObjects3D": "",
+        "Help": "Hjälp",
+        "HideObjects3D": "",
+        "LayerTree": "Lager & teckenförklaring",
+        "LayerTree3D": "",
+        "MapExport": "Exportera karta",
+        "MapExport3D": "",
+        "MapFilter": "",
+        "MapLight3D": "",
+        "ObjectList": "",
+        "PlotInfoTool": "",
+        "Print": "Skriv ut",
+        "Reports": "",
+        "Settings": "",
+        "Settings3D": "",
+        "Share": "Dela länk",
+        "ThemeSwitcher": "Tema",
+        "AttributeTable": "",
+        "AuthenticationLogin": "Logga in",
+        "AuthenticationLogout": "Logga ut - {0}",
+        "Cyclomedia": "",
+        "Draw3D": "",
+        "FeatureForm": "",
+        "FeatureSearch": "",
+        "GeometryDigitizer": "",
+        "IdentifyPoint": "",
+        "IdentifyRegion": "Identifiera med område",
+        "LayerCatalog": "",
+        "Login": "Logga in",
+        "Logout": "Logga ut",
+        "MapLegend": "",
+        "Measure": "Mät",
+        "Measure3D": "",
+        "MeasureLineString": "Mäta en linje",
+        "MeasurePolygon": "Mäta en polygon",
+        "NewsPopup": "",
+        "ObliqueView": "",
+        "Panoramax": "",
+        "Portal": "",
+        "PrintScreen3D": "",
+        "Redlining": "Rita",
+        "Routing": "",
+        "Tools": "Kartverktyg",
+        "TourGuide": "",
+        "TimeManager": "",
+        "View3D": ""
+      },
+      "filter": "",
+      "menulabel": "Karta & Verktyg"
+    },
+    "search": {
+      "coordinates": "",
+      "circleradius": "",
+      "existinglayer": "",
+      "filter": "",
+      "layers": "",
+      "limittoarea": "",
+      "more": "",
+      "nodescription": "",
+      "none": "",
+      "placeholder": "",
+      "places": "",
+      "providerselection": "",
+      "recent": "",
+      "search": "",
+      "tasks": "",
+      "themelayers": "",
+      "themes": "",
+      "unknownmore": ""
+    },
+    "colorschemes": {
+      "default": "",
+      "dark": "",
+      "highcontrast": ""
+    },
+    "app": {
+      "missingbg": "",
+      "missingdefaulttheme": "",
+      "missinglayers": "",
+      "missingpermalink": "",
+      "missingprojection": "",
+      "missingtheme": ""
+    },
+    "attribtable": {
+      "addfeature": "",
+      "calculatedfield": "",
+      "commit": "",
+      "csvexport": "",
+      "deletefailed": "",
+      "deletefeatures": "",
+      "deleting": "",
+      "discard": "",
+      "formeditmode": "",
+      "fulldatasetload": "",
+      "geomnoadd": "",
+      "limittoextent": "",
+      "loadfailed": "",
+      "nodelete": "",
+      "nogeomnoform": "",
+      "pleasereload": "",
+      "reload": "",
+      "title": "",
+      "zoomtoselection": ""
+    },
+    "bgswitcher": {
+      "nobg": "Ingen bakgrund"
+    },
+    "bookmark": {
+      "add": "",
+      "addfailed": "",
+      "lastUpdate": "",
+      "manage": "",
+      "newbookmark": "",
+      "nobookmarks": "",
+      "notloggedin": "",
+      "open": "",
+      "openTab": "",
+      "removefailed": "",
+      "savefailed": "",
+      "update": "",
+      "zoomToExtent": ""
+    },
+    "bottombar": {
+      "mousepos_label": "Koordinater",
+      "scale_label": "Skala",
+      "terms_label": "Villkor",
+      "viewertitle_label": ""
+    },
+    "common": {
+      "add": "",
+      "all": "",
+      "cancel": "",
+      "circle": "",
+      "clear": "",
+      "clone": "",
+      "close": "",
+      "delete": "",
+      "download": "",
+      "ellipse": "",
+      "export": "",
+      "format": "Format:",
+      "line": "Linje",
+      "loading": "",
+      "lock2dview": "",
+      "noresults": "",
+      "pick": "",
+      "point": "Punkt",
+      "polygon": "Yta",
+      "rectangle": "",
+      "rename": "",
+      "resolution": "Upplösning:",
+      "save": "",
+      "select": "Välj...",
+      "selectlayer": "",
+      "square": "",
+      "sync2dview": "",
+      "text": "Text",
+      "wait": "",
+      "zoomin": "Zooma in",
+      "zoomout": "Zooma ut"
+    },
+    "compare3d": {
+      "clipplane": "",
+      "compare_objects": "",
+      "info_message": "",
+      "modify": "",
+      "toggleall": ""
+    },
+    "cookiepopup": {
+      "accept": "",
+      "message": ""
+    },
+    "copybtn": {
+      "click_to_copy": "Klicka för att kopiera",
+      "copied": "Kopierade",
+      "copyfailed": ""
+    },
+    "cyclomedia": {
+      "clickonmap": "",
+      "initializing": "",
+      "loaderror": "",
+      "loading": "",
+      "login": "",
+      "scalehint": "",
+      "title": ""
+    },
+    "draw3d": {
+      "cone": "",
+      "cuboid": "",
+      "cylinder": "",
+      "drawings": "",
+      "intersect": "",
+      "label": "",
+      "newgroupprompt": "",
+      "numericinput": "",
+      "position": "",
+      "pyramid": "",
+      "rotate": "",
+      "rotation": "",
+      "scale": "",
+      "sphere": "",
+      "subtract": "",
+      "thescale": "",
+      "thesize": "",
+      "translate": "",
+      "undoBool": "",
+      "union": "",
+      "wedge": ""
+    },
+    "editdataset3d": {
+      "moveobj": "",
+      "zoomto": ""
+    },
+    "editing": {
+      "attrtable": "",
+      "canceldelete": "Radera inte",
+      "clone_all": "",
+      "clone_copy": "",
+      "clone_defaulted": "",
+      "clone_dontcopy": "",
+      "clone_hidden": "",
+      "clone_none": "",
+      "clone_select_attrs": "",
+      "clone_visible": "",
+      "commit": "Skicka",
+      "commitfailed": "",
+      "contraintviolation": "",
+      "create": "",
+      "discard": "Förkasta",
+      "draw": "Rita",
+      "feature": "Objekt",
+      "geomnonzeroz": "",
+      "geomreadonly": "",
+      "invalidform": "",
+      "noeditablelayers": "Inga redigerbara lager",
+      "paint": "",
+      "pickdrawfeature": "",
+      "reallydelete": "Verkligen radera",
+      "relationcommitfailed": "",
+      "takepicture": "",
+      "unsavedchanged": ""
+    },
+    "featureattributes": {
+      "name": "",
+      "nofeatureormultiple": "",
+      "value": "",
+      "windowtitle": ""
+    },
+    "featureform": {
+      "feature": "",
+      "querying": "",
+      "title": ""
+    },
+    "featuresearch": {
+      "query": "",
+      "title": ""
+    },
+    "fileselector": {
+      "files": "",
+      "placeholder": "Välj fil..."
+    },
+    "geomdigitizer": {
+      "applink": "",
+      "bufferlayername": "",
+      "chooselink": "",
+      "clear": "",
+      "identifypick": "",
+      "identifypickregion": "",
+      "layername": "",
+      "line_buffer": "",
+      "point_buffer": "",
+      "selfinter": "",
+      "send": ""
+    },
+    "heightprofile": {
+      "asl": "m.ö.h.",
+      "dhmdefaultname": "",
+      "distance": "Avstånd",
+      "drawnodes": "",
+      "error": "",
+      "export": "",
+      "height": "Höjd",
+      "loading": "Beräknar höjdprofil...",
+      "loadingimage": "",
+      "print": "",
+      "title": ""
+    },
+    "hideobjects3d": {
+      "clickonmap": "",
+      "object": "",
+      "restore": "",
+      "restoreall": ""
+    },
+    "identify": {
+      "aggregatedreport": "",
+      "clipboard": "",
+      "compare": "",
+      "comparing": "",
+      "featureReport": "Objektrapport",
+      "featurecount": "",
+      "layerall": "",
+      "link": "Länk",
+      "multiview": "",
+      "noattributes": "Inga attribut",
+      "noresults": "Ingen information för vald punkt",
+      "querying": "Frågar...",
+      "reportfail": "",
+      "results": "",
+      "selectforcompare": "",
+      "selectreport": "",
+      "title": "Objektinformation"
+    },
+    "imageeditor": {
+      "confirmclose": "",
+      "title": ""
+    },
+    "import3d": {
+      "importing": "",
+      "noprocessesserver": ""
+    },
+    "importlayer": {
+      "addfailed": "",
+      "addlayer": "Lägg till lager",
+      "asgroup": "",
+      "connect": "Anslut",
+      "filter": "Filter...",
+      "localfile": "Lokal fil",
+      "nofeatures": "Inga objekt kunde importeras",
+      "noresults": "Inget svar eller ogiltig URL",
+      "notgeopdf": "",
+      "shpreprojectionerror": "",
+      "supportedformats": "",
+      "unknownproj": "",
+      "unsupportedfile": "",
+      "url": "URL",
+      "urlplaceholder": "Skriv in URL till WMS, WMTS, WFS..."
+    },
+    "infotool": {
+      "clickhelpPoint": "",
+      "clickhelpPolygon": "Rita en polygon runt objektn som ska identifieras",
+      "clickhelpRadius": "",
+      "radius": ""
+    },
+    "layercatalog": {
+      "windowtitle": ""
+    },
+    "layerinfo": {
+      "abstract": "Sammanfattning",
+      "attribution": "Källa",
+      "dataUrl": "Datalänk",
+      "keywords": "Nyckelord",
+      "legend": "Teckenförklaring",
+      "maxscale": "",
+      "metadataUrl": "Metadatalänk",
+      "minscale": "",
+      "title": "Information om lager"
+    },
+    "layertree": {
+      "compare": "Jämför översta lagret",
+      "deletealllayers": "Ta bort alla lager",
+      "hidealllayers": "",
+      "importlayer": "Importera lager",
+      "maptip": "Visa karttips för lager",
+      "printlegend": "Skriv ut teckenförklaring",
+      "separator": "",
+      "separatortooltip": "",
+      "togglegroup": "",
+      "transparency": "",
+      "visiblefilter": "",
+      "zoomtolayer": ""
+    },
+    "layertree3d": {
+      "customheight": "",
+      "import": "",
+      "importobjects": "",
+      "layers": "",
+      "objects": "",
+      "supportedformats": "",
+      "zoomtoobject": ""
+    },
+    "linkfeatureform": {
+      "drawhint": "",
+      "pickhint": ""
+    },
+    "locate": {
+      "feetUnit": "fot",
+      "metersUnit": "meter",
+      "popup": "Du är inom {distance} {unit} från denna punkt",
+      "statustooltip": {
+        "DISABLED": "Position: avaktiverat",
+        "ENABLED": "Position: aktiverat",
+        "FOLLOWING": "Position: följer gps",
+        "LOCATING": "Position: bestäms...",
+        "PERMISSION_DENIED": "Position: tillåts inte"
+      }
+    },
+    "locationrecorder": {
+      "record": "",
+      "stop": ""
+    },
+    "map": {
+      "loading": "Laddar...",
+      "resetrotation": ""
+    },
+    "map3d": {
+      "terrain": "",
+      "title": ""
+    },
+    "mapexport": {
+      "configuration": "",
+      "projection": "",
+      "scale": "",
+      "size": "",
+      "usersize": ""
+    },
+    "mapfilter": {
+      "addcustomfilter": "",
+      "brokenrendering": "",
+      "geomfilter": "",
+      "hidefiltergeom": "",
+      "invalidfilter": "",
+      "timefilter": "",
+      "timefrom": "",
+      "timeto": ""
+    },
+    "mapinfotooltip": {
+      "elevation": "Höjd",
+      "title": "Position"
+    },
+    "maplegend": {
+      "bboxdependent": "",
+      "onlyvisible": "",
+      "scaledependent": "",
+      "windowtitle": ""
+    },
+    "maplight3d": {
+      "animationstep": "",
+      "date": "",
+      "dayspersec": "",
+      "helpersVisible": "",
+      "minspersec": "",
+      "moonLightIntensity": "",
+      "normalBias": "",
+      "shadowBias": "",
+      "shadowMapSize": "",
+      "shadowType": "",
+      "shadowVolumeFar": "",
+      "shadowVolumeNear": "",
+      "shadowintensity": "",
+      "shadows": "",
+      "showadvanced": "",
+      "sunLightIntensity": "",
+      "time": "",
+      "zFactor": ""
+    },
+    "measureComponent": {
+      "absolute": "",
+      "areaLabel": "Area",
+      "bearingLabel": "Bäring",
+      "ground": "",
+      "heightDiffLabel": "",
+      "imperial": "",
+      "lengthLabel": "Längd",
+      "metric": "",
+      "pointLabel": "Position",
+      "showmeasurements": ""
+    },
+    "misc": {
+      "ctrlclickhint": ""
+    },
+    "navbar": {
+      "next": "",
+      "perpage": "",
+      "prev": ""
+    },
+    "newspopup": {
+      "dontshowagain": "",
+      "title": ""
+    },
+    "numericinput": {
+      "angle": "",
+      "featureunsupported": "",
+      "height": "",
+      "nofeatureormultiple": "",
+      "side": "",
+      "width": "",
+      "windowtitle": ""
+    },
+    "obliqueview": {
+      "nodataset": "",
+      "title": ""
+    },
+    "oereb": {
+      "concernedThemes": "",
+      "fundationdatastate": "",
+      "fundations": "",
+      "generalInformation": "",
+      "generalinfo": "",
+      "hidefulllegend": "",
+      "hints": "",
+      "legalbasis": "",
+      "notConcernedThemes": "",
+      "nrpoints": "",
+      "perc": "",
+      "regulations": "",
+      "responsibleauthority": "",
+      "responsibleoffice": "",
+      "share": "",
+      "showfulllegend": "",
+      "themeWithoutData": "",
+      "type": "",
+      "title": "",
+      "failed": ""
+    },
+    "panoramax": {
+      "notfound": "",
+      "title": ""
+    },
+    "pickfeature": {
+      "querying": ""
+    },
+    "plotinfotool": {
+      "failed": "",
+      "loading": ""
+    },
+    "portal": {
+      "filter": "",
+      "menulabel": ""
+    },
+    "print": {
+      "atlasfeature": "",
+      "download_as_onepdf": "",
+      "download_as_onezip": "",
+      "download_as_single": "",
+      "grid": "Rutnät",
+      "layout": "Layout:",
+      "legend": "",
+      "nolayouts": "Valt tema stöder inte utskrift",
+      "notheme": "Inget tema valt",
+      "output": "Utskrift",
+      "overlap": "",
+      "pickatlasfeature": "",
+      "rotation": "Rotation",
+      "scale": "Skala",
+      "series": "",
+      "submit": "Skriv ut"
+    },
+    "qtdesignerform": {
+      "loading": ""
+    },
+    "redlining": {
+      "attributes": "",
+      "buffer": "Buffert",
+      "buffercompute": "Beräkna",
+      "bufferdistance": "Avstånd",
+      "bufferlayer": "Mållager",
+      "bufferlayername": "Buffert",
+      "bufferselectfeature": "Välj ett objekt att buffra",
+      "ctrlhint": "",
+      "draw": "Rita",
+      "edit": "Redigera",
+      "freehand": "",
+      "label": "Etikett",
+      "layer": "Lager",
+      "layertitle": "",
+      "markers": "",
+      "numericinput": "",
+      "size": "Storlek",
+      "transform": ""
+    },
+    "reports": {
+      "region": "",
+      "selectlayer": ""
+    },
+    "routing": {
+      "add": "",
+      "addlayer": "",
+      "addviapoint": "",
+      "arriveat": "",
+      "computefailed": "",
+      "computing": "",
+      "excludepolygons": "",
+      "fastest": "",
+      "fromhere": "",
+      "importerror": "",
+      "importhint": "",
+      "importpoints": "",
+      "iso_intervals": "",
+      "iso_mode": "",
+      "iso_mode_distance": "",
+      "iso_mode_time": "",
+      "isocenter": "",
+      "isoextracenter": "",
+      "leaveat": "",
+      "leavenow": "",
+      "maxspeed": "",
+      "method": "",
+      "mode_auto": "",
+      "mode_bicycle": "",
+      "mode_heavyvehicle": "",
+      "mode_transit": "",
+      "mode_walking": "",
+      "optimized_route": "",
+      "reachability": "",
+      "roundtrip": "",
+      "route": "",
+      "shortest": "",
+      "tohere": "",
+      "useferries": "",
+      "usehighways": "",
+      "usetollways": "",
+      "windowtitle": ""
+    },
+    "scratchdrawing": {
+      "finish": ""
+    },
+    "serviceinfo": {
+      "abstract": "",
+      "contactEmail": "",
+      "contactOrganization": "",
+      "contactPerson": "",
+      "contactPhone": "",
+      "contactPosition": "",
+      "keywords": "",
+      "onlineResource": "",
+      "title": ""
+    },
+    "settings": {
+      "bookmarks": "",
+      "colorscheme": "",
+      "confirmlang": "",
+      "default": "",
+      "defaulttheme": "",
+      "defaultthemefailed": "",
+      "language": "",
+      "systemlang": "",
+      "themes": ""
+    },
+    "settings3d": {
+      "fov": "",
+      "quality": ""
+    },
+    "share": {
+      "QRCodeLinkTitle": "QR kod",
+      "directLinkTitle": "Via en direktlänk",
+      "expires": "",
+      "norestriction": "",
+      "refresh": "",
+      "restricttogroup": "",
+      "shareTitle": "QWC2",
+      "showpin": "",
+      "socialIntro": "I ditt favoritnätverk"
+    },
+    "snapping": {
+      "edge": "",
+      "loading": "",
+      "snappingenabled": "",
+      "vertex": ""
+    },
+    "themelayerslist": {
+      "addanyway": "",
+      "addlayer": "",
+      "addlayerstotheme": "",
+      "addselectedlayers": "",
+      "existinglayers": ""
+    },
+    "themeswitcher": {
+      "addlayerstotheme": "",
+      "addtotheme": "Lägg till aktuellt tema",
+      "changedefaulttheme": "",
+      "confirmswitch": "",
+      "filter": "Filtrera...",
+      "match": {
+        "abstract": "",
+        "keywords": "",
+        "title": ""
+      },
+      "openintab": "",
+      "restrictedthemeinfo": ""
+    },
+    "timemanager": {
+      "animationinterval": "",
+      "classify": "",
+      "classifynone": "",
+      "displayfeatures": "",
+      "displaylayers": "",
+      "displayminimal": "",
+      "edit": "",
+      "endtime": "",
+      "filterwarning": "",
+      "future": "",
+      "group": "",
+      "groupnone": "",
+      "home": "",
+      "loop": "",
+      "markers": "",
+      "notemporaldata": "",
+      "now": "",
+      "past": "",
+      "play": "",
+      "playrev": "",
+      "rewind": "",
+      "starttime": "",
+      "stepback": "",
+      "stepfwd": "",
+      "stepsize": "",
+      "stop": "",
+      "timeline": "",
+      "timeline_fixed": "",
+      "timeline_infinite": "",
+      "timelinedisplay": "",
+      "timelinescale": "",
+      "title": "",
+      "toggle": "",
+      "unit": {
+        "century": "",
+        "days": "",
+        "decade": "",
+        "hours": "",
+        "milliseconds": "",
+        "minutes": "",
+        "months": "",
+        "seconds": "",
+        "years": ""
+      }
+    },
+    "tooltip": {
+      "background": "Byt bakgrund",
+      "fullscreendisable": "",
+      "fullscreenenable": "",
+      "home": "Visa hela kartan"
+    },
+    "tourguide": {
+      "done": "",
+      "next": "",
+      "previous": ""
+    },
+    "valuetool": {
+      "allbands": "",
+      "alllayers": "",
+      "bands": "",
+      "graph": "",
+      "layer": "",
+      "nodata": "",
+      "options": "",
+      "selectedbands": "",
+      "selectedlayers": "",
+      "selectlayersbands": "",
+      "showbands": "",
+      "showlayers": "",
+      "table": "",
+      "title": "",
+      "visiblelayers": "",
+      "ymax": "",
+      "ymin": ""
+    },
+    "vectorlayerpicker": {
+      "none": "",
+      "prompt": ""
+    },
+    "view3d": {
+      "storingstate": ""
+    },
+    "window": {
+      "detach": "",
+      "dock": "",
+      "embed": "",
+      "maximize": "",
+      "minimize": "",
+      "undock": "",
+      "unmaximize": "",
+      "unminimize": ""
+    },
+    "plotdescr": {
+      "title": "",
+      "requestPdf": ""
+    }
+  }
+}

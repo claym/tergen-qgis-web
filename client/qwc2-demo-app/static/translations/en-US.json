@@ -1,0 +1,788 @@
+{
+  "locale": "en-US",
+  "messages": {
+    "appmenu": {
+      "items": {
+        "ExternalLink": "",
+        "Bookmark": "Bookmarks",
+        "Compare3D": "Compare",
+        "Editing": "Editing",
+        "ExportObjects3D": "Export Objects",
+        "Help": "Help",
+        "HideObjects3D": "Hide Objects",
+        "LayerTree": "Layers & Legend",
+        "LayerTree3D": "Layers",
+        "MapExport": "Export Map",
+        "MapExport3D": "Export Map",
+        "MapFilter": "Map Filter",
+        "MapLight3D": "Light and Shadows",
+        "ObjectList": "Object list",
+        "PlotInfoTool": "Real Estate Information",
+        "Print": "Print",
+        "Reports": "Reports",
+        "Settings": "Settings",
+        "Settings3D": "3D Settings",
+        "Share": "Share Link",
+        "ThemeSwitcher": "Theme",
+        "AttributeTable": "Attribute Table",
+        "AuthenticationLogin": "Login",
+        "AuthenticationLogout": "Logout - {0}",
+        "Cyclomedia": "Cyclomedia",
+        "Draw3D": "Draw",
+        "FeatureForm": "Feature Form",
+        "FeatureSearch": "Feature Search",
+        "GeometryDigitizer": "Geometry digitizer",
+        "IdentifyPoint": "Identify Point",
+        "IdentifyRegion": "Identify Region",
+        "LayerCatalog": "Layer catalog",
+        "Login": "Login",
+        "Logout": "Logout",
+        "MapLegend": "Legend",
+        "Measure": "Measure",
+        "Measure3D": "Measure",
+        "MeasureLineString": "Measure a line",
+        "MeasurePolygon": "Measure a polygon",
+        "NewsPopup": "News",
+        "ObliqueView": "Oblique Aerial View",
+        "Panoramax": "Panoramax",
+        "Portal": "Portal",
+        "PrintScreen3D": "Raster Export",
+        "Redlining": "Redlining",
+        "Routing": "Routing",
+        "Tools": "Map Tools",
+        "TourGuide": "Tour Guide",
+        "TimeManager": "Time Manager",
+        "View3D": "3D View"
+      },
+      "filter": "Filter menu...",
+      "menulabel": "Map & Tools"
+    },
+    "search": {
+      "coordinates": "Coordinates",
+      "circleradius": "Circle radius",
+      "existinglayer": "The layer already exists in the map",
+      "filter": "Refine search",
+      "layers": "Layers",
+      "limittoarea": "Limit to area",
+      "more": "{0} more results",
+      "nodescription": "No description available",
+      "none": "None",
+      "placeholder": "Search place or add map...",
+      "places": "Places",
+      "providerselection": "Search providers",
+      "recent": "Recent searches",
+      "search": "Search",
+      "tasks": "Menu tasks",
+      "themelayers": "Theme layers",
+      "themes": "Themes",
+      "unknownmore": "More results"
+    },
+    "colorschemes": {
+      "default": "Default",
+      "dark": "Dark",
+      "highcontrast": "High contrast"
+    },
+    "app": {
+      "missingbg": "Unable to find the background \"{0}\", displaying the default background.",
+      "missingdefaulttheme": "Unable to load the default theme.",
+      "missinglayers": "Unable to find the following layers: {0}.",
+      "missingpermalink": "The specified permalink or bookmark is invalid or expired.",
+      "missingprojection": "Unable to load the theme \"{0}\": the projection {1} is not defined.",
+      "missingtheme": "Unable to find the theme \"{0}\", loading the default theme."
+    },
+    "attribtable": {
+      "addfeature": "Add feature",
+      "calculatedfield": "Calculated field",
+      "commit": "Commit changed row",
+      "csvexport": "CSV export",
+      "deletefailed": "One or more features could not be deleted",
+      "deletefeatures": "Delete selected features",
+      "deleting": "Deleting features...",
+      "discard": "Discard changed row",
+      "formeditmode": "Open the edit form for the selected feature",
+      "fulldatasetload": "Filtering or sorting by virtual fields will trigger a full dataset load.",
+      "geomnoadd": "Please use the edit form for adding new features to this layer",
+      "limittoextent": "Limit to map extent",
+      "loadfailed": "Failed to load the feature data",
+      "nodelete": "Don't delete",
+      "nogeomnoform": "The edit form is not available for geometryless layers",
+      "pleasereload": "Press 'Reload' to load the attribute table...",
+      "reload": "Reload",
+      "title": "Attribute Table",
+      "zoomtoselection": "Zoom to selected features"
+    },
+    "bgswitcher": {
+      "nobg": "No background"
+    },
+    "bookmark": {
+      "add": "Create new bookmark",
+      "addfailed": "Failed to create bookmark",
+      "lastUpdate": "Last saved",
+      "manage": "Manage bookmarks",
+      "newbookmark": "New bookmark",
+      "nobookmarks": "No bookmarks",
+      "notloggedin": "You need to be logged in to store bookmarks",
+      "open": "Open bookmark in current tab",
+      "openTab": "Open bookmark in tab",
+      "removefailed": "Failed to remove bookmark",
+      "savefailed": "Failed to update bookmark",
+      "update": "Update bookmark",
+      "zoomToExtent": "Zoom to extent"
+    },
+    "bottombar": {
+      "mousepos_label": "Coordinates",
+      "scale_label": "Scale",
+      "terms_label": "Terms of use",
+      "viewertitle_label": "Homepage"
+    },
+    "common": {
+      "add": "Add",
+      "all": "All",
+      "cancel": "Cancel",
+      "circle": "Circle",
+      "clear": "Clear",
+      "clone": "Clone",
+      "close": "Close",
+      "delete": "Delete",
+      "download": "Download",
+      "ellipse": "Ellipse",
+      "export": "Export",
+      "format": "Format",
+      "line": "Line",
+      "loading": "Loading...",
+      "lock2dview": "Move with 2D view",
+      "noresults": "No results",
+      "pick": "Pick",
+      "point": "Point",
+      "polygon": "Polygon",
+      "rectangle": "Rectangle",
+      "rename": "Rename",
+      "resolution": "Resolution",
+      "save": "Save",
+      "select": "Select...",
+      "selectlayer": "Select layer...",
+      "square": "Square",
+      "sync2dview": "Synchronize with 2D view",
+      "text": "Text",
+      "wait": "Please wait...",
+      "zoomin": "Zoom in",
+      "zoomout": "Zoom out"
+    },
+    "compare3d": {
+      "clipplane": "Clipping plane",
+      "compare_objects": "Compare objects",
+      "info_message": "Object comparison is active",
+      "modify": "Modify",
+      "toggleall": "Toggle all"
+    },
+    "cookiepopup": {
+      "accept": "Accept",
+      "message": "This website uses cookies."
+    },
+    "copybtn": {
+      "click_to_copy": "Click to copy",
+      "copied": "Copied",
+      "copyfailed": "Copy failed"
+    },
+    "cyclomedia": {
+      "clickonmap": "Click on a recording on the map",
+      "initializing": "Initializing Cyclomedia...",
+      "loaderror": "Failed to initialize Cyclomedia",
+      "loading": "Loading view...",
+      "login": "Login",
+      "scalehint": "The recordings are only visible on the map below scale 1:{0}.",
+      "title": "Cyclomedia Viewer"
+    },
+    "draw3d": {
+      "cone": "Cone",
+      "cuboid": "Cuboid",
+      "cylinder": "Cylinder",
+      "drawings": "Drawings",
+      "intersect": "Intersect",
+      "label": "Label",
+      "newgroupprompt": "New drawing group",
+      "numericinput": "Numeric input",
+      "position": "Position",
+      "pyramid": "Pyramid",
+      "rotate": "Rotate",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "sphere": "Sphere",
+      "subtract": "Subtract",
+      "thescale": "Scale",
+      "thesize": "Size",
+      "translate": "Translate",
+      "undoBool": "Undo operation",
+      "union": "Union",
+      "wedge": "Wedge"
+    },
+    "editdataset3d": {
+      "moveobj": "Move object into view",
+      "zoomto": "Zoom to object"
+    },
+    "editing": {
+      "attrtable": "Table",
+      "canceldelete": "Don't delete",
+      "clone_all": "All",
+      "clone_copy": "Copy selected",
+      "clone_defaulted": "(default value)",
+      "clone_dontcopy": "Don't copy",
+      "clone_hidden": "(hidden)",
+      "clone_none": "None",
+      "clone_select_attrs": "Select attributes to copy:",
+      "clone_visible": "Visible without default value",
+      "commit": "Commit",
+      "commitfailed": "Commit failed",
+      "contraintviolation": "Constraint violation",
+      "create": "Create",
+      "discard": "Discard",
+      "draw": "Draw",
+      "feature": "Feature",
+      "geomnonzeroz": "The geometry contains non-zero Z values and is therefore read only.",
+      "geomreadonly": "The geometry is read only.",
+      "invalidform": "Invalid form",
+      "noeditablelayers": "No editable layers.",
+      "paint": "Modify",
+      "pickdrawfeature": "Clone existing geometry",
+      "reallydelete": "Delete",
+      "relationcommitfailed": "Some relation values could not be committed, check the icon tooltips for details",
+      "takepicture": "Take picture",
+      "unsavedchanged": "There are unsaved changes. Do you want to leave the page anyway?"
+    },
+    "featureattributes": {
+      "name": "Name",
+      "nofeatureormultiple": "No or multiple active features",
+      "value": "Value",
+      "windowtitle": "Feature attributes"
+    },
+    "featureform": {
+      "feature": "Feature",
+      "querying": "Querying...",
+      "title": "Feature form"
+    },
+    "featuresearch": {
+      "query": "Query",
+      "title": "Feature search"
+    },
+    "fileselector": {
+      "files": "files",
+      "placeholder": "Select file..."
+    },
+    "geomdigitizer": {
+      "applink": "Application",
+      "bufferlayername": "Digitization buffer",
+      "chooselink": "Choose...",
+      "clear": "Clear layer",
+      "identifypick": "Pick feature",
+      "identifypickregion": "Pick features in region",
+      "layername": "Digitization",
+      "line_buffer": "Line (to buffer)",
+      "point_buffer": "Point (to buffer)",
+      "selfinter": "One or more polygons contain self-intersections",
+      "send": "Send"
+    },
+    "heightprofile": {
+      "asl": "a.s.l.",
+      "dhmdefaultname": "Dataset",
+      "distance": "Distance",
+      "drawnodes": "Draw nodes",
+      "error": "Failed to compute height profile",
+      "export": "Export profile",
+      "height": "Height",
+      "loading": "Calculating height profile...",
+      "loadingimage": "Loading map image...",
+      "print": "Print height profile",
+      "title": "Height profile"
+    },
+    "hideobjects3d": {
+      "clickonmap": "Click on objects to hide them...",
+      "object": "Object",
+      "restore": "Restore object",
+      "restoreall": "Restore all"
+    },
+    "identify": {
+      "aggregatedreport": "Aggregated report",
+      "clipboard": "Copy to clipboard",
+      "compare": "Compare selected objects",
+      "comparing": "Comparing {0} features",
+      "featureReport": "Feature report",
+      "featurecount": "{0} feature(s)",
+      "layerall": "All layers",
+      "link": "Link",
+      "multiview": "Multi-view",
+      "noattributes": "No attributes",
+      "noresults": "No information available for the selected point",
+      "querying": "Querying...",
+      "reportfail": "Failed to generate report",
+      "results": "Results",
+      "selectforcompare": "Select for comparison",
+      "selectreport": "Select report..",
+      "title": "Feature Info"
+    },
+    "imageeditor": {
+      "confirmclose": "Close without saving?",
+      "title": "Image editor"
+    },
+    "import3d": {
+      "importing": "Importing {0}...",
+      "noprocessesserver": "No import service configured"
+    },
+    "importlayer": {
+      "addfailed": "Failed to add layer.",
+      "addlayer": "Add layer",
+      "asgroup": "Add as group",
+      "connect": "Connect",
+      "filter": "Filter...",
+      "localfile": "Local file",
+      "nofeatures": "No features could be imported.",
+      "noresults": "No results or invalid URL",
+      "notgeopdf": "The selected file does not seem to be a GeoPDF.",
+      "shpreprojectionerror": "The Shapefile geometry could not be reprojected, and may be misplaced.",
+      "supportedformats": "Supported formats: KML, GeoJSON, GeoPDF, SHP (in zip)",
+      "unknownproj": "The selected GeoPDF uses an unknown projection: {0}.",
+      "unsupportedfile": "Unsupported file format.",
+      "url": "URL",
+      "urlplaceholder": "Enter URL to WMS, WMTS, WFS..."
+    },
+    "infotool": {
+      "clickhelpPoint": "Click a location to identify in the map...",
+      "clickhelpPolygon": "Draw a polygon around the features to identify...",
+      "clickhelpRadius": "Set a radius and click a location to identify features around the point...",
+      "radius": "Radius"
+    },
+    "layercatalog": {
+      "windowtitle": "Layer catalog"
+    },
+    "layerinfo": {
+      "abstract": "Abstract",
+      "attribution": "Attribution",
+      "dataUrl": "Data URL",
+      "keywords": "Keywords",
+      "legend": "Legend",
+      "maxscale": "Max. displayscale",
+      "metadataUrl": "Metadata URL",
+      "minscale": "Min. displayscale",
+      "title": "Layer Info"
+    },
+    "layertree": {
+      "compare": "Compare top layer",
+      "deletealllayers": "Remove all layers",
+      "hidealllayers": "Hide all layers",
+      "importlayer": "Import layer",
+      "maptip": "Show layer map tips",
+      "printlegend": "Print legend",
+      "separator": "Separator",
+      "separatortooltip": "Add separator",
+      "togglegroup": "Toggle group and all sublayers",
+      "transparency": "Trasparency",
+      "visiblefilter": "Filter invisible layers",
+      "zoomtolayer": "Zoom to layer"
+    },
+    "layertree3d": {
+      "customheight": "Value",
+      "import": "Import",
+      "importobjects": "Import objects",
+      "layers": "Layers",
+      "objects": "Objects",
+      "supportedformats": "Supported formats: GLTF",
+      "zoomtoobject": "Zoom to object"
+    },
+    "linkfeatureform": {
+      "drawhint": "Draw the feature on the map...",
+      "pickhint": "Pick a feature on the map..."
+    },
+    "locate": {
+      "feetUnit": "feet",
+      "metersUnit": "meters",
+      "popup": "You are within {distance} {unit} from this point",
+      "statustooltip": {
+        "DISABLED": "Position: disabled",
+        "ENABLED": "Position: enabled",
+        "FOLLOWING": "Position: following",
+        "LOCATING": "Position: locating...",
+        "PERMISSION_DENIED": "Position: permission denied"
+      }
+    },
+    "locationrecorder": {
+      "record": "Record location",
+      "stop": "Stop recording"
+    },
+    "map": {
+      "loading": "Loading...",
+      "resetrotation": "Reset rotation"
+    },
+    "map3d": {
+      "terrain": "Terrain",
+      "title": "3D View"
+    },
+    "mapexport": {
+      "configuration": "Configuration",
+      "projection": "Projection",
+      "scale": "Scale",
+      "size": "Size",
+      "usersize": "Select on map..."
+    },
+    "mapfilter": {
+      "addcustomfilter": "Add custom filter",
+      "brokenrendering": "Map rendering may be broken due to an invalid filter expression",
+      "geomfilter": "Geometry",
+      "hidefiltergeom": "Hide filter geometry",
+      "invalidfilter": "Invalid filter expression",
+      "timefilter": "Time",
+      "timefrom": "From",
+      "timeto": "To"
+    },
+    "mapinfotooltip": {
+      "elevation": "Elevation",
+      "title": "Position"
+    },
+    "maplegend": {
+      "bboxdependent": "Map extent dependent legend",
+      "onlyvisible": "Only visibile layers",
+      "scaledependent": "Map scale depdendent legend",
+      "windowtitle": "Legend"
+    },
+    "maplight3d": {
+      "animationstep": "Animation step",
+      "date": "Date",
+      "dayspersec": "days / second",
+      "helpersVisible": "Show helpers",
+      "minspersec": "mins / second",
+      "moonLightIntensity": "Moonlight intensity",
+      "normalBias": "Normal bias",
+      "shadowBias": "Shadow bias",
+      "shadowMapSize": "Shadowmap size",
+      "shadowType": "Shadow type",
+      "shadowVolumeFar": "Shadow volume near",
+      "shadowVolumeNear": "Shadow volume far",
+      "shadowintensity": "Shadow intensity",
+      "shadows": "Enable shadows",
+      "showadvanced": "Show advanced",
+      "sunLightIntensity": "Sunlight intensity",
+      "time": "Time",
+      "zFactor": "Z-factor"
+    },
+    "measureComponent": {
+      "absolute": "m AMSL",
+      "areaLabel": "Area",
+      "bearingLabel": "Bearing",
+      "ground": "m AGL",
+      "heightDiffLabel": "Height diff.",
+      "imperial": "Imperial",
+      "lengthLabel": "Length",
+      "metric": "Metric",
+      "pointLabel": "Position",
+      "showmeasurements": "Show measurements"
+    },
+    "misc": {
+      "ctrlclickhint": "Open with Ctrl+Click"
+    },
+    "navbar": {
+      "next": "Next page",
+      "perpage": "per page",
+      "prev": "Previous page"
+    },
+    "newspopup": {
+      "dontshowagain": "Don't show again",
+      "title": "News"
+    },
+    "numericinput": {
+      "angle": "Angle",
+      "featureunsupported": "Numeric input unavailable for this geometry",
+      "height": "Height",
+      "nofeatureormultiple": "No or multiple active features",
+      "side": "Side",
+      "width": "Width",
+      "windowtitle": "Numeric input"
+    },
+    "obliqueview": {
+      "nodataset": "No oblique imagery available",
+      "title": "Oblique Aerial View"
+    },
+    "oereb": {
+      "concernedThemes": "Concerned themes",
+      "fundationdatastate": "Cadastral surveying data. Status of the cadastral survey:",
+      "fundations": "Fundations",
+      "generalInformation": "General and legal information",
+      "generalinfo": "General information",
+      "hidefulllegend": "Hide full legend",
+      "hints": "Additional information and hints",
+      "legalbasis": "Legal bases",
+      "notConcernedThemes": "Not concerned themes",
+      "nrpoints": "point(s)",
+      "perc": "Share in %",
+      "regulations": "Regulations",
+      "responsibleauthority": "Responsible authority",
+      "responsibleoffice": "Responsible office",
+      "share": "Share",
+      "showfulllegend": "Show full legend",
+      "themeWithoutData": "Themes without data",
+      "type": "Type",
+      "title": "ÖREB cadastre",
+      "failed": "Failed to load OEREB extract"
+    },
+    "panoramax": {
+      "notfound": "There is no image available for this location.",
+      "title": "Panoramax Viewer"
+    },
+    "pickfeature": {
+      "querying": "Querying..."
+    },
+    "plotinfotool": {
+      "failed": "Failed to load data",
+      "loading": "Loading data..."
+    },
+    "portal": {
+      "filter": "Filter themes...",
+      "menulabel": "Menu"
+    },
+    "print": {
+      "atlasfeature": "Atlas feature",
+      "download_as_onepdf": "as one PDF document",
+      "download_as_onezip": "as one ZIP file",
+      "download_as_single": "as single files",
+      "grid": "Grid",
+      "layout": "Layout",
+      "legend": "Legend",
+      "nolayouts": "The selected theme does not support printing",
+      "notheme": "No theme selected",
+      "output": "Print output",
+      "overlap": "Overlap",
+      "pickatlasfeature": "Pick in layer {0}...",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "series": "Print series",
+      "submit": "Print"
+    },
+    "qtdesignerform": {
+      "loading": "Loading form..."
+    },
+    "redlining": {
+      "attributes": "Feature attributes",
+      "buffer": "Buffer",
+      "buffercompute": "Compute",
+      "bufferdistance": "Distance",
+      "bufferlayer": "Destination",
+      "bufferlayername": "Buffer",
+      "bufferselectfeature": "Select a feature to buffer...",
+      "ctrlhint": "Use Ctrl for multiselection...",
+      "draw": "Draw",
+      "edit": "Edit",
+      "freehand": "Freehand drawing",
+      "label": "Label",
+      "layer": "Layer",
+      "layertitle": "Redlining",
+      "markers": "Markers",
+      "numericinput": "Numeric input",
+      "size": "Size",
+      "transform": "Transform"
+    },
+    "reports": {
+      "region": "Select region",
+      "selectlayer": "Select report layer..."
+    },
+    "routing": {
+      "add": "Add point",
+      "addlayer": "Export as layer",
+      "addviapoint": "Via here",
+      "arriveat": "Arrive at",
+      "computefailed": "Failed to compute",
+      "computing": "Computing...",
+      "excludepolygons": "Exclude areas",
+      "fastest": "Fastest",
+      "fromhere": "From here",
+      "importerror": "Import failed. The file contents must be a GeoJSON FeatureCollection of Point features.",
+      "importhint": "File with a GeoJSON FeatureCollection of Point features",
+      "importpoints": "Import",
+      "iso_intervals": "Intervals",
+      "iso_mode": "Mode",
+      "iso_mode_distance": "Distance",
+      "iso_mode_time": "Time",
+      "isocenter": "Center",
+      "isoextracenter": "Additional center",
+      "leaveat": "Leave at",
+      "leavenow": "Leave now",
+      "maxspeed": "Max speed",
+      "method": "Method",
+      "mode_auto": "Car",
+      "mode_bicycle": "Bicycle",
+      "mode_heavyvehicle": "Heavy vehicle",
+      "mode_transit": "Transit",
+      "mode_walking": "Walking",
+      "optimized_route": "Optimized route",
+      "reachability": "Reachability",
+      "roundtrip": "Roundtrip",
+      "route": "Route",
+      "shortest": "Shortest",
+      "tohere": "To here",
+      "useferries": "Use ferries",
+      "usehighways": "Use highways",
+      "usetollways": "Use tollways",
+      "windowtitle": "Routing"
+    },
+    "scratchdrawing": {
+      "finish": "Finish"
+    },
+    "serviceinfo": {
+      "abstract": "Abstract",
+      "contactEmail": "Email",
+      "contactOrganization": "Organization",
+      "contactPerson": "Contact person",
+      "contactPhone": "Phone",
+      "contactPosition": "Position",
+      "keywords": "Keywords",
+      "onlineResource": "Online resource",
+      "title": "Theme Information"
+    },
+    "settings": {
+      "bookmarks": "Bookmarks",
+      "colorscheme": "Color scheme",
+      "confirmlang": "The application will be reloaded to change the language. Proceed?",
+      "default": "Default",
+      "defaulttheme": "Default theme",
+      "defaultthemefailed": "Failed to set the default theme: {0}",
+      "language": "Language",
+      "systemlang": "System language",
+      "themes": "Themes"
+    },
+    "settings3d": {
+      "fov": "Field of view",
+      "quality": "Quality"
+    },
+    "share": {
+      "QRCodeLinkTitle": "QR Code",
+      "directLinkTitle": "Via a direct link",
+      "expires": "This permalink is valid until {0}.",
+      "norestriction": "No restriction",
+      "refresh": "Generate permalink",
+      "restricttogroup": "Restrict to group",
+      "shareTitle": "QWC2",
+      "showpin": "Show pin",
+      "socialIntro": "In your favourite social network"
+    },
+    "snapping": {
+      "edge": "Snap to edges",
+      "loading": "Loading snapping geometries...",
+      "snappingenabled": "Snapping",
+      "vertex": "Snap to vertices"
+    },
+    "themelayerslist": {
+      "addanyway": "Add anyway",
+      "addlayer": "Add layer",
+      "addlayerstotheme": "Add layers to current map",
+      "addselectedlayers": "Add selected layer(s)",
+      "existinglayers": "The following layers already exists in the map"
+    },
+    "themeswitcher": {
+      "addlayerstotheme": "Add layers to current map",
+      "addtotheme": "Add to current theme",
+      "changedefaulttheme": "Select this theme as default theme",
+      "confirmswitch": "Non-theme layers will be lost when switching theme. Proceed?",
+      "filter": "Filter...",
+      "match": {
+        "abstract": "Abstract",
+        "keywords": "Keywords",
+        "title": "Title"
+      },
+      "openintab": "Open in Tab",
+      "restrictedthemeinfo": "You are not permitted to view the theme or not logged in"
+    },
+    "timemanager": {
+      "animationinterval": "Animation interval",
+      "classify": "Classification attribute",
+      "classifynone": "None",
+      "displayfeatures": "Timeline with features",
+      "displaylayers": "Timeline with layers",
+      "displayminimal": "Timeline only",
+      "edit": "Edit",
+      "endtime": "End",
+      "filterwarning": "Map filters are active",
+      "future": "Future",
+      "group": "Grouping attribute",
+      "groupnone": "None",
+      "home": "Reset timeline",
+      "loop": "Loop",
+      "markers": "Markers",
+      "notemporaldata": "No temporal layers are visible in the map.",
+      "now": "Now",
+      "past": "Past",
+      "play": "Play",
+      "playrev": "Play backwards",
+      "rewind": "Rewind",
+      "starttime": "Start",
+      "stepback": "Step back",
+      "stepfwd": "Step forward",
+      "stepsize": "Step size",
+      "stop": "Stop",
+      "timeline": "Timeline",
+      "timeline_fixed": "Fixed",
+      "timeline_infinite": "Infinite",
+      "timelinedisplay": "Display",
+      "timelinescale": "Timescale (non-linearity)",
+      "title": "Time manager",
+      "toggle": "Temporal navigation",
+      "unit": {
+        "century": "centuries",
+        "days": "days",
+        "decade": "decades",
+        "hours": "hours",
+        "milliseconds": "milliseconds",
+        "minutes": "minutes",
+        "months": "months",
+        "seconds": "seconds",
+        "years": "years"
+      }
+    },
+    "tooltip": {
+      "background": "Switch background",
+      "fullscreendisable": "Disable full screen mode",
+      "fullscreenenable": "Enable full screen mode",
+      "home": "Show entire map"
+    },
+    "tourguide": {
+      "done": "Done",
+      "next": "Next",
+      "previous": "Previous"
+    },
+    "valuetool": {
+      "allbands": "All bands",
+      "alllayers": "All layers",
+      "bands": "Bands",
+      "graph": "Graph",
+      "layer": "Layer",
+      "nodata": "No data",
+      "options": "Options",
+      "selectedbands": "Selected bands",
+      "selectedlayers": "Selected layers",
+      "selectlayersbands": "Select layers / bands",
+      "showbands": "Show bands",
+      "showlayers": "Show layers",
+      "table": "Table",
+      "title": "Value Tool",
+      "visiblelayers": "Visible",
+      "ymax": "Max Y",
+      "ymin": "Min Y"
+    },
+    "vectorlayerpicker": {
+      "none": "None",
+      "prompt": "Enter layer name"
+    },
+    "view3d": {
+      "storingstate": "Storing 3D state..."
+    },
+    "window": {
+      "detach": "Detach",
+      "dock": "Dock",
+      "embed": "Embed",
+      "maximize": "Maximize",
+      "minimize": "Minimize",
+      "undock": "Undock",
+      "unmaximize": "Restore",
+      "unminimize": "Unminimize"
+    },
+    "plotdescr": {
+      "title": "Plot description",
+      "requestPdf": "Create land register plan (PDF)"
+    }
+  }
+}

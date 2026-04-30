@@ -1,0 +1,788 @@
+{
+  "locale": "tr-TR",
+  "messages": {
+    "appmenu": {
+      "items": {
+        "ExternalLink": "",
+        "Bookmark": "Yer işaretleri",
+        "Compare3D": "Karşılaştır",
+        "Editing": "Düzenleme",
+        "ExportObjects3D": "",
+        "Help": "Yardım",
+        "HideObjects3D": "",
+        "LayerTree": "Katmanlar & Gösterim",
+        "LayerTree3D": "Katmanlar",
+        "MapExport": "Dışarıya ver",
+        "MapExport3D": "",
+        "MapFilter": "Harita Filtresi",
+        "MapLight3D": "Tarih Zaman",
+        "ObjectList": "",
+        "PlotInfoTool": "",
+        "Print": "Yazdır",
+        "Reports": "Raporlar",
+        "Settings": "Ayarlar",
+        "Settings3D": "",
+        "Share": "Bağlantı Paylaş",
+        "ThemeSwitcher": "Tema",
+        "AttributeTable": "Öznitelik Tablosu",
+        "AuthenticationLogin": "Giriş",
+        "AuthenticationLogout": "Çıkış - {0}",
+        "Cyclomedia": "Siklomedya",
+        "Draw3D": "Çizim",
+        "FeatureForm": "Obje Formu",
+        "FeatureSearch": "Obje Arama",
+        "GeometryDigitizer": "Geometri Sayısallaştırıcı",
+        "IdentifyPoint": "Nokta bilgisi al",
+        "IdentifyRegion": "Bölgeden Bilgi Al",
+        "LayerCatalog": "Katman Kataloğu",
+        "Login": "Giriş",
+        "Logout": "Çıkış",
+        "MapLegend": "Harita Lejandı",
+        "Measure": "Ölç",
+        "Measure3D": "Ölç",
+        "MeasureLineString": "Çizgi Ölç",
+        "MeasurePolygon": "Alan Ölç",
+        "NewsPopup": "",
+        "ObliqueView": "",
+        "Panoramax": "",
+        "Portal": "Portal",
+        "PrintScreen3D": "Görüntüyü ver",
+        "Redlining": "Serbest Çizim",
+        "Routing": "Navigasyon",
+        "Tools": "Harita Araçları",
+        "TourGuide": "",
+        "TimeManager": "Zaman Yöneticisi",
+        "View3D": "3 Boyutlu Görünüm"
+      },
+      "filter": "Filtre menüsü...",
+      "menulabel": "Harita & Araçlar"
+    },
+    "search": {
+      "coordinates": "",
+      "circleradius": "Daire yarıçapı",
+      "existinglayer": "Katman zaten haritada mevcut",
+      "filter": "Gelişmiş arama",
+      "layers": "Katmanlar",
+      "limittoarea": "Bölgeyle sınırla",
+      "more": "{0} daha fazla sonuç",
+      "nodescription": "Açıklama yok",
+      "none": "Yok",
+      "placeholder": "Bir yer ara ya da harita ekle...",
+      "places": "Yerler",
+      "providerselection": "Arama sağlayıcılar",
+      "recent": "Son aramalar",
+      "search": "Ara",
+      "tasks": "",
+      "themelayers": "Tema katmanları",
+      "themes": "Temalar",
+      "unknownmore": ""
+    },
+    "colorschemes": {
+      "default": "",
+      "dark": "",
+      "highcontrast": ""
+    },
+    "app": {
+      "missingbg": "Arkaplan bulunamadı \"{0}\", varsayılan arkaplan gösteriliyor.",
+      "missingdefaulttheme": "",
+      "missinglayers": "Bu katmanlar bulunamıyor: {0}.",
+      "missingpermalink": "Belirtilen yer işareti ya da bağlantı geçerli değil.",
+      "missingprojection": "Tema yüklenemedi \"{0}\": projeksiyon {1} tanımlı değil.",
+      "missingtheme": "Tema bulunamadı \"{0}\", varsayılan tema yükleniyor."
+    },
+    "attribtable": {
+      "addfeature": "Obje ekle",
+      "calculatedfield": "",
+      "commit": "Değişen satırı kaydet",
+      "csvexport": "CSV olarak ver",
+      "deletefailed": "Bir ya da daha fazla obje silinemedi",
+      "deletefeatures": "Seçili objeleri sil",
+      "deleting": "Objeler siliniyor",
+      "discard": "Değişiklikleri iptal et",
+      "formeditmode": "Seçilen objenin düzenleme formunu aç",
+      "fulldatasetload": "",
+      "geomnoadd": "Bu katmana yeni objeler eklemek için düzenleme formunu kullanın",
+      "limittoextent": "Harita sınırlarına getir",
+      "loadfailed": "Obje verisi yüklenemedi",
+      "nodelete": "Silme!",
+      "nogeomnoform": "geometrisi olmayan katmanlar için düzenleme formu kullanılamaz",
+      "pleasereload": "Öznitelik tablosunu yüklemek için 'Yeniden yükle' butonuna basınız...",
+      "reload": "Yeniden yükle",
+      "title": "Öznitelik Tablosu",
+      "zoomtoselection": "Seçili objelere yaklaş"
+    },
+    "bgswitcher": {
+      "nobg": "Arkaplan Yok"
+    },
+    "bookmark": {
+      "add": "Yeni yer işareti oluştur",
+      "addfailed": "Yer işareti oluşturulamadı",
+      "lastUpdate": "Son kaydedilen",
+      "manage": "Yer işaretlerini yönet",
+      "newbookmark": "",
+      "nobookmarks": "Yer işareti yok",
+      "notloggedin": "Yer işaretlerini kaydedebilmek için giriş yapmalısınız",
+      "open": "Yer işaretini geçerli sekmede aç",
+      "openTab": "Yer işaretini yeni sekmede aç",
+      "removefailed": "Yer işareti silinemedi",
+      "savefailed": "Yer işareti kaydedilemedi",
+      "update": "Yer işaretini güncelle",
+      "zoomToExtent": "Kapsama yaklaş"
+    },
+    "bottombar": {
+      "mousepos_label": "Koordinatlar",
+      "scale_label": "Ölçek",
+      "terms_label": "Kullanım Şartları",
+      "viewertitle_label": "QWC"
+    },
+    "common": {
+      "add": "Ekle",
+      "all": "Tümü",
+      "cancel": "İptal",
+      "circle": "Daire",
+      "clear": "Temizle",
+      "clone": "",
+      "close": "Kapat",
+      "delete": "Sil",
+      "download": "İndir",
+      "ellipse": "Elips",
+      "export": "Ver",
+      "format": "Format:",
+      "line": "Çizgi",
+      "loading": "Yükleniyor...",
+      "lock2dview": "",
+      "noresults": "Sonuç yok",
+      "pick": "Seç",
+      "point": "Nokta",
+      "polygon": "Poligon",
+      "rectangle": "Dikdörtgen",
+      "rename": "",
+      "resolution": "Çözünürlük:",
+      "save": "Kayıt",
+      "select": "Seçim...",
+      "selectlayer": "Katman seçiniz...",
+      "square": "Kare",
+      "sync2dview": "Görünümü senkronize et",
+      "text": "Metin",
+      "wait": "Lütfen bekleyiniz...",
+      "zoomin": "Yaklaş",
+      "zoomout": "Uzaklaş"
+    },
+    "compare3d": {
+      "clipplane": "Kırpma düzlemi",
+      "compare_objects": "Objeleri karşılaştır",
+      "info_message": "",
+      "modify": "",
+      "toggleall": "Tümünü aç-kapat"
+    },
+    "cookiepopup": {
+      "accept": "Kabul",
+      "message": "Bu web sitesi çerez kullanıyor."
+    },
+    "copybtn": {
+      "click_to_copy": "Kopyalamak için tıkla",
+      "copied": "Kopyalandı",
+      "copyfailed": "Kopyalanamadı"
+    },
+    "cyclomedia": {
+      "clickonmap": "Haritadaki bir kayda tıklayın",
+      "initializing": "Cyclomedia başlatılıyor...",
+      "loaderror": "Cyclomedia yüklenemedi",
+      "loading": "Görünüm yükleniyor...",
+      "login": "Giriş",
+      "scalehint": "Kayıtlar ancak 1:{0} ölçeğin altında görüntülenebilir",
+      "title": "Cyclomedia Görüntüleyici"
+    },
+    "draw3d": {
+      "cone": "Koni",
+      "cuboid": "Kübik",
+      "cylinder": "Silindir",
+      "drawings": "Çizimler",
+      "intersect": "",
+      "label": "",
+      "newgroupprompt": "Yeni çizim grubu",
+      "numericinput": "Sayısal giriş",
+      "position": "Yerleşim",
+      "pyramid": "Piramit",
+      "rotate": "Döndür",
+      "rotation": "Dönüklük",
+      "scale": "Ölçek",
+      "sphere": "Küre",
+      "subtract": "",
+      "thescale": "Ölçek",
+      "thesize": "",
+      "translate": "Çevir",
+      "undoBool": "",
+      "union": "",
+      "wedge": "Kama"
+    },
+    "editdataset3d": {
+      "moveobj": "",
+      "zoomto": ""
+    },
+    "editing": {
+      "attrtable": "Tablo",
+      "canceldelete": "Silme",
+      "clone_all": "",
+      "clone_copy": "",
+      "clone_defaulted": "",
+      "clone_dontcopy": "",
+      "clone_hidden": "",
+      "clone_none": "",
+      "clone_select_attrs": "",
+      "clone_visible": "",
+      "commit": "Onayla",
+      "commitfailed": "Kayıt başarısız",
+      "contraintviolation": "Kısıtlama ihlali",
+      "create": "Yeni oluştur",
+      "discard": "İptal",
+      "draw": "Çiz",
+      "feature": "Obje",
+      "geomnonzeroz": "Geometri, sıfır olmayan yükseklik değeri içerdiğinden salt okunur",
+      "geomreadonly": "",
+      "invalidform": "Geçersiz form",
+      "noeditablelayers": "Düzenlenebilir katman yok.",
+      "paint": "Değiştir",
+      "pickdrawfeature": "Mevcut geometriyi kopyala",
+      "reallydelete": "Sil",
+      "relationcommitfailed": "Bazı ilişkili kayıtlar güncellenemedi, detay için ipucu ikonunu kontrol ediniz",
+      "takepicture": "Fotoğraf çek",
+      "unsavedchanged": "Kaydedilmemiş değişiklikler mevcut. Yine de sayfadan ayrılmak istiyor musunuz?"
+    },
+    "featureattributes": {
+      "name": "",
+      "nofeatureormultiple": "",
+      "value": "",
+      "windowtitle": ""
+    },
+    "featureform": {
+      "feature": "Obje",
+      "querying": "Sorgulanıyor...",
+      "title": "Qgis Obje Formu"
+    },
+    "featuresearch": {
+      "query": "Sorgu",
+      "title": "Obje arama"
+    },
+    "fileselector": {
+      "files": "dosyalar",
+      "placeholder": "Dosya seç..."
+    },
+    "geomdigitizer": {
+      "applink": "Uygulama",
+      "bufferlayername": "Sayısallaştırma tamponu",
+      "chooselink": "Seçiniz...",
+      "clear": "Katman temizle",
+      "identifypick": "Obje seç",
+      "identifypickregion": "Bölgeden obje seç",
+      "layername": "Sayısallaştırma",
+      "line_buffer": "Çizgi (Tampon)",
+      "point_buffer": "Nokta (Tampon)",
+      "selfinter": "Bir ya da daha fazla poligon kendini kesiyor",
+      "send": "Gönder"
+    },
+    "heightprofile": {
+      "asl": "a.s.l.",
+      "dhmdefaultname": "",
+      "distance": "Mesafe",
+      "drawnodes": "Düğüm noktası çiz",
+      "error": "Yükseklik profili hesaplama başarısız",
+      "export": "Profili ver",
+      "height": "Yükseklik",
+      "loading": "Yükseklik profili hesaplanıyor...",
+      "loadingimage": "Harita görüntüsü yükleniyor",
+      "print": "Yükseklik profili yazdır",
+      "title": "Yükseklik profili"
+    },
+    "hideobjects3d": {
+      "clickonmap": "",
+      "object": "",
+      "restore": "",
+      "restoreall": ""
+    },
+    "identify": {
+      "aggregatedreport": "Toplu rapor",
+      "clipboard": "Panoya kopyala",
+      "compare": "",
+      "comparing": "",
+      "featureReport": "Obje raporu",
+      "featurecount": "Obje sayısı",
+      "layerall": "Tüm katmanlar",
+      "link": "Bağlantı",
+      "multiview": "",
+      "noattributes": "Öznitelik yok",
+      "noresults": "Seçilen nokta için geçerli bilgi yok",
+      "querying": "Sorgulanıyor...",
+      "reportfail": "Rapor üretilemedi",
+      "results": "",
+      "selectforcompare": "",
+      "selectreport": "",
+      "title": "Obje Bilgisi"
+    },
+    "imageeditor": {
+      "confirmclose": "Kaydetmeden kapat",
+      "title": "Resim editörü"
+    },
+    "import3d": {
+      "importing": "",
+      "noprocessesserver": ""
+    },
+    "importlayer": {
+      "addfailed": "Katman ekleme başarısız",
+      "addlayer": "Katman ekle",
+      "asgroup": "",
+      "connect": "Bağlan",
+      "filter": "Filtre...",
+      "localfile": "Yerel dosya",
+      "nofeatures": "Herhangi bir obje içeriye aktarılamadı.",
+      "noresults": "Sonuç yok ya da geçersiz URL",
+      "notgeopdf": "Seçilen dosya GeoPDF gibi görünmüyor",
+      "shpreprojectionerror": "",
+      "supportedformats": "Desteklenen formatlar: KML, GeoJSON, GeoPDF, SHP (zip içinde)",
+      "unknownproj": "Seçilen GeoPDF bilinmeyen projeksiyon kullanıyor: {0}.",
+      "unsupportedfile": "",
+      "url": "URL",
+      "urlplaceholder": "WMS, WMTS, WFS Adresini giriniz..."
+    },
+    "infotool": {
+      "clickhelpPoint": "Haritadan bilgi almak için bir noktayı tıklayınız...",
+      "clickhelpPolygon": "Bilgi alınacak alanı poligon çizerek belirleyiniz...",
+      "clickhelpRadius": "Yarıçap belirleyip çevresinden bilgi almak için bir noktayı tıklayınız",
+      "radius": "Yarıçap"
+    },
+    "layercatalog": {
+      "windowtitle": "Katman kataloğu"
+    },
+    "layerinfo": {
+      "abstract": "Özet",
+      "attribution": "Özellikler",
+      "dataUrl": "Veri URL Adresi",
+      "keywords": "Anahtar Kelimeler",
+      "legend": "Gösterim",
+      "maxscale": "Max. görünürlük ölçeği",
+      "metadataUrl": "Öznitelik URL",
+      "minscale": "Min. görünürlük ölçeği",
+      "title": "Katman Bilgisi"
+    },
+    "layertree": {
+      "compare": "En üst katmanı karşılaştır",
+      "deletealllayers": "Tüm katmanları kaldır",
+      "hidealllayers": "",
+      "importlayer": "Katmanı içeri al",
+      "maptip": "Katman harita ipuçlarını göster",
+      "printlegend": "Yazdırma Lejandı",
+      "separator": "Ayırıcı",
+      "separatortooltip": "Ayırıcı ekle",
+      "togglegroup": "",
+      "transparency": "Şeffaflık",
+      "visiblefilter": "Görünmeyen katmanları filtrele",
+      "zoomtolayer": "Katman sınırlarına yaklaş"
+    },
+    "layertree3d": {
+      "customheight": "",
+      "import": "",
+      "importobjects": "",
+      "layers": "Katmanlar",
+      "objects": "Objeler",
+      "supportedformats": "",
+      "zoomtoobject": ""
+    },
+    "linkfeatureform": {
+      "drawhint": "Haritada bir obje çiziniz...",
+      "pickhint": "Haritadan bir obje seçiniz..."
+    },
+    "locate": {
+      "feetUnit": "feet",
+      "metersUnit": "metre",
+      "popup": "Bu noktadan {distance} {unit} uzaktasınız",
+      "statustooltip": {
+        "DISABLED": "Konum: geçersiz",
+        "ENABLED": "Konum: geçerli",
+        "FOLLOWING": "Konum: Takip ediliyor",
+        "LOCATING": "Konum: bulunuyor...",
+        "PERMISSION_DENIED": "Konum: izin verilmedi"
+      }
+    },
+    "locationrecorder": {
+      "record": "",
+      "stop": ""
+    },
+    "map": {
+      "loading": "Yükleniyor...",
+      "resetrotation": "Dönüklüğü sıfırla"
+    },
+    "map3d": {
+      "terrain": "Arazi",
+      "title": "3 Boyutlu görünüm"
+    },
+    "mapexport": {
+      "configuration": "Yapılandırma",
+      "projection": "",
+      "scale": "Ölçek",
+      "size": "Boyut",
+      "usersize": "Haritadan seç..."
+    },
+    "mapfilter": {
+      "addcustomfilter": "Özel filtre ekle",
+      "brokenrendering": "Geçersiz filtre ifadesi sebebiyle harita görüntüleme başarısız olabilir",
+      "geomfilter": "Geometri",
+      "hidefiltergeom": "Geometrileri gizle",
+      "invalidfilter": "Geçersiz filtre ifadesi",
+      "timefilter": "Zaman",
+      "timefrom": "Başlangıç",
+      "timeto": "Bitiş"
+    },
+    "mapinfotooltip": {
+      "elevation": "Yükseklik",
+      "title": "Konum"
+    },
+    "maplegend": {
+      "bboxdependent": "Harita sınırlarına bağlı lejant",
+      "onlyvisible": "Sadece görünen katmanlar",
+      "scaledependent": "Harita ölçeğine bağlı",
+      "windowtitle": "Lejant"
+    },
+    "maplight3d": {
+      "animationstep": "",
+      "date": "",
+      "dayspersec": "",
+      "helpersVisible": "",
+      "minspersec": "",
+      "moonLightIntensity": "",
+      "normalBias": "",
+      "shadowBias": "",
+      "shadowMapSize": "",
+      "shadowType": "",
+      "shadowVolumeFar": "",
+      "shadowVolumeNear": "",
+      "shadowintensity": "",
+      "shadows": "",
+      "showadvanced": "",
+      "sunLightIntensity": "",
+      "time": "",
+      "zFactor": ""
+    },
+    "measureComponent": {
+      "absolute": "Ortalama yükseklik(m)",
+      "areaLabel": "Alan",
+      "bearingLabel": "Doğrultu",
+      "ground": "İrtifa (m)",
+      "heightDiffLabel": "",
+      "imperial": "Imperial",
+      "lengthLabel": "Uzunluk",
+      "metric": "Metrik",
+      "pointLabel": "Konum",
+      "showmeasurements": "Ölçüleri göster"
+    },
+    "misc": {
+      "ctrlclickhint": "Ctrl+Click ile aç"
+    },
+    "navbar": {
+      "next": "",
+      "perpage": "sayfa başına",
+      "prev": ""
+    },
+    "newspopup": {
+      "dontshowagain": "Tekrar gösterme",
+      "title": "Haberler"
+    },
+    "numericinput": {
+      "angle": "Açı",
+      "featureunsupported": "Sayısal değer bu geometri için kullanılamaz",
+      "height": "Yükseklik",
+      "nofeatureormultiple": "",
+      "side": "Taraf",
+      "width": "Genişlik",
+      "windowtitle": "Sayısal giriş"
+    },
+    "obliqueview": {
+      "nodataset": "",
+      "title": ""
+    },
+    "oereb": {
+      "concernedThemes": "",
+      "fundationdatastate": "",
+      "fundations": "",
+      "generalInformation": "",
+      "generalinfo": "",
+      "hidefulllegend": "",
+      "hints": "",
+      "legalbasis": "",
+      "notConcernedThemes": "",
+      "nrpoints": "",
+      "perc": "",
+      "regulations": "",
+      "responsibleauthority": "",
+      "responsibleoffice": "",
+      "share": "",
+      "showfulllegend": "",
+      "themeWithoutData": "",
+      "type": "",
+      "title": "",
+      "failed": ""
+    },
+    "panoramax": {
+      "notfound": "",
+      "title": ""
+    },
+    "pickfeature": {
+      "querying": "Sorgulanıyor..."
+    },
+    "plotinfotool": {
+      "failed": "",
+      "loading": ""
+    },
+    "portal": {
+      "filter": "Temaları filtrele...",
+      "menulabel": "Menü"
+    },
+    "print": {
+      "atlasfeature": "Atlas Objesi",
+      "download_as_onepdf": "tek PDF olarak",
+      "download_as_onezip": "ZIP olarak",
+      "download_as_single": "tekil dosyalar",
+      "grid": "Karelaj",
+      "layout": "Yazdırma düzeni",
+      "legend": "Lejant",
+      "nolayouts": "Seçili tema yazdırma işlemini desteklemiyor",
+      "notheme": "Tema seçilmedi",
+      "output": "Yazıcı çıktısı",
+      "overlap": "Bindirme",
+      "pickatlasfeature": "Katmandan seçiniz: {0}...",
+      "rotation": "Döndürme",
+      "scale": "Ölçek:",
+      "series": "Yazdırma serileri",
+      "submit": "Yazdır"
+    },
+    "qtdesignerform": {
+      "loading": "Form yükleniyor..."
+    },
+    "redlining": {
+      "attributes": "",
+      "buffer": "Tampon",
+      "buffercompute": "Hesapla",
+      "bufferdistance": "Mesafe",
+      "bufferlayer": "Hedef",
+      "bufferlayername": "Tampon",
+      "bufferselectfeature": "Tampon atılacak bir obje seçiniz...",
+      "ctrlhint": "",
+      "draw": "Çiz",
+      "edit": "Düzenle",
+      "freehand": "Serbest çizim",
+      "label": "Etiket",
+      "layer": "Katman",
+      "layertitle": "Eskiz",
+      "markers": "İşaretçiler",
+      "numericinput": "Sayısal giriş panelini göster",
+      "size": "Boyut",
+      "transform": "Dönüşüm"
+    },
+    "reports": {
+      "region": "Bölge seçiniz",
+      "selectlayer": "Rapor katmanını seçiniz..."
+    },
+    "routing": {
+      "add": "Nokta ekle",
+      "addlayer": "",
+      "addviapoint": "Burası üzerinden",
+      "arriveat": "Varış noktası",
+      "computefailed": "Hesaplama başarısız",
+      "computing": "Hesaplanıyor...",
+      "excludepolygons": "Alanları hariç tut",
+      "fastest": "En hızlı",
+      "fromhere": "Buradan",
+      "importerror": "İçeri alma başarısız. Dosya içeriği noktalardan oluşan GeoJSON FeatureCollection olmalı.",
+      "importhint": "GeoJSON nokta objeleri kolleksiyonu",
+      "importpoints": "İçeri al",
+      "iso_intervals": "Zaman aralığı",
+      "iso_mode": "Mod",
+      "iso_mode_distance": "Mesafe",
+      "iso_mode_time": "Zaman",
+      "isocenter": "Merkez",
+      "isoextracenter": "İlave merkez",
+      "leaveat": "Çıkış zamanı",
+      "leavenow": "Şimdi çık",
+      "maxspeed": "Maksimum hız",
+      "method": "Metot",
+      "mode_auto": "Araba",
+      "mode_bicycle": "Bisiklet",
+      "mode_heavyvehicle": "Ağır vasıta",
+      "mode_transit": "Transit",
+      "mode_walking": "Yaya",
+      "optimized_route": "Optimize edilmiş rota",
+      "reachability": "Erişilebilirlik",
+      "roundtrip": "Gidiş",
+      "route": "Rota",
+      "shortest": "En kısa",
+      "tohere": "Buraya",
+      "useferries": "Feribot kullan",
+      "usehighways": "Otoyolları kullan",
+      "usetollways": "Ücretli Yolları kullan",
+      "windowtitle": "Navigasyon"
+    },
+    "scratchdrawing": {
+      "finish": "Bitir"
+    },
+    "serviceinfo": {
+      "abstract": "Özet",
+      "contactEmail": "Email",
+      "contactOrganization": "Organizasyon",
+      "contactPerson": "İletişim kişisi",
+      "contactPhone": "Telefon",
+      "contactPosition": "Konum",
+      "keywords": "Anahtar kelimeler",
+      "onlineResource": "Çevrimiçi kaynaklar",
+      "title": "Tema bilgisi"
+    },
+    "settings": {
+      "bookmarks": "Yer işaretleri",
+      "colorscheme": "Renk şeması",
+      "confirmlang": "Dil değişikliği için uygulama yeniden yüklenecek. Devam edilsin mi?",
+      "default": "Varsayılan",
+      "defaulttheme": "Varsayılan tema",
+      "defaultthemefailed": "Varsayılan tema yüklenemedi: {0}",
+      "language": "Dil",
+      "systemlang": "Sistem dili",
+      "themes": "Temalar"
+    },
+    "settings3d": {
+      "fov": "",
+      "quality": ""
+    },
+    "share": {
+      "QRCodeLinkTitle": "Karekod",
+      "directLinkTitle": "Doğrudan bağlantı yolu ile",
+      "expires": "Bu bağlantı {0} zamanına kadar geçerlidir",
+      "norestriction": "",
+      "refresh": "Bağlantı oluştur",
+      "restricttogroup": "",
+      "shareTitle": "QWC2",
+      "showpin": "Pini göster",
+      "socialIntro": "Favori sosyal ağınıza"
+    },
+    "snapping": {
+      "edge": "Kenarları yakala",
+      "loading": "Yakalanan geometriler yükleniyor...",
+      "snappingenabled": "Yakalama",
+      "vertex": "Kırık noktalarını yakala"
+    },
+    "themelayerslist": {
+      "addanyway": "",
+      "addlayer": "Katman ekle",
+      "addlayerstotheme": "Geçerli haritaya katman ekle",
+      "addselectedlayers": "Seçili katmanları ekle",
+      "existinglayers": "Belirtilen katmanlar zaten haritada mevcut"
+    },
+    "themeswitcher": {
+      "addlayerstotheme": "Geçerli haritaya katmanları ekle",
+      "addtotheme": "Geçerli temaya ekle",
+      "changedefaulttheme": "Bu temayı varsayılan yap",
+      "confirmswitch": "Tema değiştirildiğinde temaya ait olmayan katmanlar kaldırılacaktır. Devam edilsin mi?",
+      "filter": "Filtre...",
+      "match": {
+        "abstract": "Özet",
+        "keywords": "Anahtar kelimeler",
+        "title": "Başlık"
+      },
+      "openintab": "Sekmede aç",
+      "restrictedthemeinfo": "Bu temayı görmeye yetkiniz yok"
+    },
+    "timemanager": {
+      "animationinterval": "Animasyon süresi",
+      "classify": "Sınıflandırma özelliği",
+      "classifynone": "Yok",
+      "displayfeatures": "Objeler ile birlikte zaman akışı",
+      "displaylayers": "Katmanlar ile birlikte zaman akışı",
+      "displayminimal": "Sadece zaman akışı",
+      "edit": "Düzenle",
+      "endtime": "Son",
+      "filterwarning": "Harita filtreleri aktif",
+      "future": "Gelecek",
+      "group": "Gruplama özelliği",
+      "groupnone": "Yok",
+      "home": "Zaman akışını sıfırla",
+      "loop": "Döngü",
+      "markers": "İşaretçiler",
+      "notemporaldata": "Haritada görünür geçici katman yok",
+      "now": "Şimdi",
+      "past": "Geçmiş",
+      "play": "Oynat",
+      "playrev": "Geriye oynat",
+      "rewind": "Geri sarma",
+      "starttime": "Başlangıç",
+      "stepback": "Geri adım",
+      "stepfwd": "İleri adım",
+      "stepsize": "Adım boyutu",
+      "stop": "Dur",
+      "timeline": "Zaman akışı",
+      "timeline_fixed": "Sabit",
+      "timeline_infinite": "Sonsuz",
+      "timelinedisplay": "Göster",
+      "timelinescale": "Zaman ölçeği (doğrusal olmayan)",
+      "title": "Zaman Yöneticisi",
+      "toggle": "Geçici navigasyon",
+      "unit": {
+        "century": "yüzyıllar",
+        "days": "günler",
+        "decade": "onyıllar",
+        "hours": "saatler",
+        "milliseconds": "milisaniyeler",
+        "minutes": "dakikalar",
+        "months": "aylar",
+        "seconds": "saniyeler",
+        "years": "yıllar"
+      }
+    },
+    "tooltip": {
+      "background": "Arkaplanı değiştir",
+      "fullscreendisable": "Tam ekran görünümünden çık",
+      "fullscreenenable": "Tam ekran görünümü",
+      "home": "Haritanın tamamını göster"
+    },
+    "tourguide": {
+      "done": "",
+      "next": "",
+      "previous": ""
+    },
+    "valuetool": {
+      "allbands": "",
+      "alllayers": "",
+      "bands": "",
+      "graph": "",
+      "layer": "",
+      "nodata": "",
+      "options": "",
+      "selectedbands": "",
+      "selectedlayers": "",
+      "selectlayersbands": "",
+      "showbands": "",
+      "showlayers": "",
+      "table": "",
+      "title": "",
+      "visiblelayers": "",
+      "ymax": "",
+      "ymin": ""
+    },
+    "vectorlayerpicker": {
+      "none": "Yok",
+      "prompt": "Katman adı giriniz"
+    },
+    "view3d": {
+      "storingstate": ""
+    },
+    "window": {
+      "detach": "Çöz",
+      "dock": "Sabitle",
+      "embed": "Yerleştir",
+      "maximize": "Maksimize",
+      "minimize": "Minimize",
+      "undock": "Çöz",
+      "unmaximize": "Eski haline getir",
+      "unminimize": "Küçültmeyi kaldır"
+    },
+    "plotdescr": {
+      "title": "",
+      "requestPdf": ""
+    }
+  }
+}
