@@ -149,3 +149,29 @@ def test_atomic_write_text_replaces_target_atomically(tmp_path):
     # No leftover .tmp files
     leftovers = [p.name for p in tmp_path.iterdir() if p.name != "out.txt"]
     assert leftovers == []
+
+
+def test_write_project_writes_one_qgs_per_gpkg(tmp_path):
+    main_gpkg = tmp_path / "territories_draft.gpkg"
+    debug_gpkg = tmp_path / "debug.gpkg"
+    _make_minimal_gpkg(main_gpkg, layer_name="territories")
+    _make_minimal_gpkg(debug_gpkg, layer_name="step_500_addresses")
+
+    out_dir = tmp_path / "projects"
+    out_dir.mkdir()
+
+    gen.write_project(main_gpkg, out_dir / "territories_draft.qgs")
+    gen.write_project(debug_gpkg, out_dir / "debug.qgs")
+
+    assert (out_dir / "territories_draft.qgs").exists()
+    assert (out_dir / "debug.qgs").exists()
+
+    main_root = ET.fromstring((out_dir / "territories_draft.qgs").read_text())
+    main_names = {ml.findtext("layername")
+                  for ml in main_root.findall("./projectlayers/maplayer")}
+    debug_root = ET.fromstring((out_dir / "debug.qgs").read_text())
+    debug_names = {ml.findtext("layername")
+                   for ml in debug_root.findall("./projectlayers/maplayer")}
+
+    assert main_names == {"territories"}
+    assert debug_names == {"step_500_addresses"}

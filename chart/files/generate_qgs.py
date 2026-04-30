@@ -648,6 +648,15 @@ def render_qgs(layers: list[Layer], project_crs_authid: str = "EPSG:3857") -> st
     )
 
 
+def write_project(gpkg: Path, out: Path,
+                  project_crs_authid: str = "EPSG:3857") -> None:
+    """Generate the .qgs for a single gpkg and write it atomically to *out*."""
+    layers = introspect_gpkg(gpkg)
+    if not layers:
+        raise ValueError(f"no feature-table layers in {gpkg}")
+    atomic_write_text(out, render_qgs(layers, project_crs_authid))
+
+
 # ---------------------------------------------------------------------------
 # Discovery + CLI
 # ---------------------------------------------------------------------------
