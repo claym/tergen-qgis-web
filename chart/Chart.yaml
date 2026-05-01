@@ -1,13 +1,14 @@
 apiVersion: v2
 name: qgis
-description: QGIS Server on k3s with thin Leaflet viewer
+description: QGIS Server on k3s with QWC2 web client and a watcher that regenerates project files from gpkg changes
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "3.34"
 keywords:
   - qgis
   - geo
   - wms
+  - qwc2
 maintainers:
   - name: clay
     email: clay@pfd.net

@@ -1,22 +1,19 @@
 namespace: qgis
 
-# Host path on the node where the gpkg files and project.qgs live.
-# This is mounted via a hostPath PV. Files outside data/ on this path are
-# never written by the chart except for project.qgs (written by the
-# project-generator Job).
+# Host path on the node where gpkg files, generated project files, and the
+# qwc2 dist live. Mounted via a hostPath PV.
 hostPath: /srv/qgis
 
 ingress:
   className: traefik
   # Hostname must resolve to the cluster's external IP.
-  # Wildcard *.devbox resolution is handled by the host's dnsmasq
-  # (see /srv/gis/tergen-qgis-web/dnsmasq/).
+  # Wildcard *.devbox resolution is handled by the host's dnsmasq.
   host: qgis.devbox
 
 image:
   qgisServer: camptocamp/qgis-server:3.34
   viewer: nginx:1.27-alpine
-  generator: python:3.12-slim
+  generator: python:3.12-slim   # also used by the watcher Deployment
   pullPolicy: IfNotPresent
 
 resources:
@@ -26,14 +23,18 @@ resources:
   viewer:
     requests: { cpu: 10m,  memory: 32Mi  }
     limits:   { cpu: 100m, memory: 128Mi }
-  generator:
+  watcher:
     requests: { cpu: 50m,  memory: 64Mi  }
     limits:   { cpu: 500m, memory: 256Mi }
 
-# Set generator.enabled=false to keep a hand-edited project.qgs across upgrades.
-generator:
+# Filesystem watcher that regenerates per-gpkg .qgs and themesConfig.json
+# whenever a gpkg in /srv/qgis/data/ changes.
+# Set watcher.enabled=false for fully hand-managed installs (you regenerate
+# project files on the host yourself).
+watcher:
   enabled: true
+  debounceSeconds: 1
 
-# Path inside the qgis-server container where the project file lives.
-# Must match where the generator writes it.
-projectFile: /srv/qgis/project.qgs
+# Theme id (gpkg stem, no .gpkg suffix) marked as default in themesConfig.json.
+# Unset → first alphabetical theme opens by default.
+defaultTheme: territories_draft
