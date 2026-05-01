@@ -17,6 +17,25 @@ spec:
         {{- include "qgis.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: viewer
     spec:
+      initContainers:
+        # Refuse to start nginx if /srv/qgis/web/ is empty — that means the
+        # operator never ran `make install-client`, and the viewer would just
+        # serve 403s.
+        - name: wait-for-dist
+          image: {{ .Values.image.viewer }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - >
+              until [ -f /usr/share/nginx/html/index.html ];
+              do echo "waiting for /srv/qgis/web/ — run \`make install-client\` on the host"; sleep 5; done;
+              echo "qwc2 dist present"
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/nginx/html
+              subPath: web
+              readOnly: true
       containers:
         - name: nginx
           image: {{ .Values.image.viewer }}
@@ -24,20 +43,29 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: html
+            - name: data
               mountPath: /usr/share/nginx/html
+              subPath: web
+              readOnly: true
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
               readOnly: true
           readinessProbe:
-            httpGet: { path: /, port: 80 }
+            httpGet: { path: /index.html, port: 80 }
             initialDelaySeconds: 2
             periodSeconds: 5
           livenessProbe:
-            httpGet: { path: /, port: 80 }
+            httpGet: { path: /index.html, port: 80 }
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             {{- toYaml .Values.resources.viewer | nindent 12 }}
       volumes:
-        - name: html
+        - name: data
+          persistentVolumeClaim:
+            claimName: qgis-data
+            readOnly: true
+        - name: nginx-conf
           configMap:
-            name: viewer-html
+            name: viewer-nginx
