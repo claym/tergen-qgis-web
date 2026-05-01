@@ -17,6 +17,21 @@ spec:
         {{- include "qgis.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: qgis-server
     spec:
+      initContainers:
+        - name: wait-for-projects
+          image: {{ .Values.image.viewer }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - >
+              until ls /srv/qgis/projects/*.qgs >/dev/null 2>&1;
+              do echo "waiting for project files..."; sleep 2; done;
+              echo "found:"; ls /srv/qgis/projects/*.qgs
+          volumeMounts:
+            - name: data
+              mountPath: /srv/qgis
+              readOnly: true
       containers:
         - name: qgis-server
           image: {{ .Values.image.qgisServer }}
@@ -27,14 +42,14 @@ spec:
           env:
             - name: QGIS_SERVER_LOG_LEVEL
               value: "0"
-            - name: QGIS_PROJECT_FILE
-              value: {{ .Values.projectFile | quote }}
           volumeMounts:
             - name: data
               mountPath: /srv/qgis
               readOnly: true
-          # Probes hit the pod directly (bypassing Traefik / stripPrefix),
-          # so they use the in-pod path "/", not "/ows/".
+          # Probes hit qgis-server directly (bypassing Traefik) so they use
+          # the in-pod path "/", not "/ows/".  GetCapabilities without a MAP
+          # parameter returns 200 with an empty service description — that's
+          # all we need to confirm liveness.
           readinessProbe:
             httpGet:
               path: /?SERVICE=WMS&REQUEST=GetCapabilities
