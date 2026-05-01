@@ -1,0 +1,95 @@
+{{- if .Values.watcher.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-watcher
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "qgis.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "qgis.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: project-watcher
+  template:
+    metadata:
+      labels:
+        {{- include "qgis.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: project-watcher
+      annotations:
+        # Force a pod restart when the script content changes.
+        checksum/script: {{ .Files.Get "files/generate_qgs.py" | sha256sum }}
+    spec:
+      initContainers:
+        - name: install-watchdog
+          image: {{ .Values.image.generator }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - pip install --no-cache-dir --target=/deps watchdog
+          volumeMounts:
+            - name: deps
+              mountPath: /deps
+          resources:
+            {{- toYaml .Values.resources.watcher | nindent 12 }}
+      containers:
+        - name: watcher
+          image: {{ .Values.image.generator }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PYTHONPATH
+              value: /deps
+          command:
+            - python
+            - /scripts/generate_qgs.py
+            - --watch
+            - --data-dir
+            - /srv/qgis/data
+            - --projects-dir
+            - /srv/qgis/projects
+            - --web-dir
+            - /srv/qgis/web
+            - --debounce-seconds
+            - {{ .Values.watcher.debounceSeconds | quote }}
+            {{- if .Values.defaultTheme }}
+            - --default-theme
+            - {{ .Values.defaultTheme | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /srv/qgis
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+            - name: deps
+              mountPath: /deps
+          readinessProbe:
+            exec:
+              command: [sh, -c, "test -f /tmp/ready"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "test -f /tmp/heartbeat && [ $(($(date +%s) - $(stat -c %Y /tmp/heartbeat))) -lt 120 ]"
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.resources.watcher | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: qgis-data
+        - name: scripts
+          configMap:
+            name: project-watcher
+            defaultMode: 0555
+        - name: deps
+          emptyDir: {}
+{{- end -}}

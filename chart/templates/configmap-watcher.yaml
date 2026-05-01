@@ -1,10 +1,12 @@
+{{- if .Values.watcher.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: project-generator
+  name: project-watcher
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "qgis.labels" . | nindent 4 }}
 data:
   generate_qgs.py: |-
 {{ .Files.Get "files/generate_qgs.py" | indent 4 }}
+{{- end -}}
