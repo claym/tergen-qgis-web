@@ -43,6 +43,8 @@ spec:
           env:
             - name: PYTHONPATH
               value: /deps
+            - name: PYTHONUNBUFFERED
+              value: "1"
           command:
             - python
             - /scripts/generate_qgs.py
