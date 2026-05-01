@@ -46,20 +46,17 @@ spec:
             - name: data
               mountPath: /srv/qgis
               readOnly: true
-          # Probes hit qgis-server directly (bypassing Traefik) so they use
-          # the in-pod path "/", not "/ows/".  GetCapabilities without a MAP
-          # parameter returns 200 with an empty service description — that's
-          # all we need to confirm liveness.
+          # qgis-server returns HTTP 500 for any request without a MAP param,
+          # so an httpGet probe would always fail. Confirm liveness by checking
+          # the TCP listener instead — that's enough to know the process is up.
           readinessProbe:
-            httpGet:
-              path: /?SERVICE=WMS&REQUEST=GetCapabilities
+            tcpSocket:
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
           livenessProbe:
-            httpGet:
-              path: /?SERVICE=WMS&REQUEST=GetCapabilities
+            tcpSocket:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 30
