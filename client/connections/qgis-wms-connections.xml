@@ -1,0 +1,40 @@
+<!DOCTYPE connections>
+<!--
+  QGIS Desktop WMS connections for the qgis.devbox stack.
+  Import via: Browser panel -> right-click "WMS/WMTS" -> "Load Connections..."
+  or: Layer -> Data Source Manager -> WMS/WMTS -> Load.
+
+  The URL embeds MAP=, and ignoreGetMapURI=1 / ignoreGetFeatureInfoURI=1 force
+  QGIS Desktop to use this URL (not the OnlineResource the server advertises)
+  for follow-up GetMap / GetFeatureInfo / GetLegendGraphic calls. This is
+  required because QGIS_SERVER_SERVICE_URL strips the MAP query param from
+  the advertised URL, which would otherwise 500 on follow-up requests.
+-->
+<qgsWMSConnections version="1.0">
+  <wms name="Territories Draft (qgis.devbox)"
+       url="http://qgis.devbox/ows/?MAP=/srv/qgis/projects/territories_draft.qgs"
+       version="auto"
+       ignoreGetMapURI="1"
+       ignoreGetFeatureInfoURI="1"
+       smoothPixmapTransform="0"
+       ignoreAxisOrientation="0"
+       invertAxisOrientation="0"
+       dpiMode="7"
+       referer=""
+       authcfg=""
+       username=""
+       password=""/>
+  <wms name="Debug (qgis.devbox)"
+       url="http://qgis.devbox/ows/?MAP=/srv/qgis/projects/debug.qgs"
+       version="auto"
+       ignoreGetMapURI="1"
+       ignoreGetFeatureInfoURI="1"
+       smoothPixmapTransform="0"
+       ignoreAxisOrientation="0"
+       invertAxisOrientation="0"
+       dpiMode="7"
+       referer=""
+       authcfg=""
+       username=""
+       password=""/>
+</qgsWMSConnections>
