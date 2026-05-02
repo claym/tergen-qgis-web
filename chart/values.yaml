@@ -10,6 +10,14 @@ ingress:
   # Wildcard *.devbox resolution is handled by the host's dnsmasq.
   host: qgis.devbox
 
+# Public base URL that QGIS Server advertises in WMS/WFS GetCapabilities
+# (the OnlineResource element). Must match what external QGIS Desktop clients
+# use, or follow-up requests like GetMap will hit the wrong path.
+# The Traefik ingress strips the /ows prefix before proxying, so without this
+# override QGIS Server reports the rewritten URL (no /ows) and clients break.
+# Empty string -> derived as http://<ingress.host>/ows.
+serviceUrl: ""
+
 image:
   qgisServer: camptocamp/qgis-server:3.34
   viewer: nginx:1.27-alpine

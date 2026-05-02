@@ -644,6 +644,14 @@ def render_qgs(layers: list[Layer], project_crs_authid: str = "EPSG:3857") -> st
     wms_layers = ET.SubElement(props, "WMSRestrictedLayers")
     wms_layers.set("type", "QStringList")
 
+    # WFS publication — list every layer's id so QGIS Server advertises
+    # FeatureTypes in WFS GetCapabilities. Without this, WFS clients see the
+    # connection but no layers.
+    wfs_layers = ET.SubElement(props, "WFSLayers")
+    wfs_layers.set("type", "QStringList")
+    for layer in layers:
+        ET.SubElement(wfs_layers, "value").text = layer.layer_id
+
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(
         root, encoding="unicode"
     )

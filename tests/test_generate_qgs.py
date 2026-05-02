@@ -103,6 +103,20 @@ def test_render_qgs_produces_valid_xml_with_one_maplayer_per_layer(tmp_path):
     assert len(maplayers) == 1
 
 
+def test_render_qgs_publishes_every_layer_via_wfs(tmp_path):
+    main_gpkg = tmp_path / "main.gpkg"
+    debug_gpkg = tmp_path / "debug.gpkg"
+    _make_minimal_gpkg(main_gpkg, layer_name="territories")
+    _make_minimal_gpkg(debug_gpkg, layer_name="step_500_addresses")
+
+    layers = gen.introspect_gpkg(main_gpkg) + gen.introspect_gpkg(debug_gpkg)
+    xml_str = gen.render_qgs(layers, project_crs_authid="EPSG:3857")
+
+    root = ET.fromstring(xml_str)
+    wfs_ids = {v.text for v in root.findall("./properties/WFSLayers/value")}
+    assert wfs_ids == {l.layer_id for l in layers}
+
+
 def test_render_qgs_marks_territories_visible_step_layers_hidden(tmp_path):
     main_gpkg = tmp_path / "main.gpkg"
     debug_gpkg = tmp_path / "debug.gpkg"

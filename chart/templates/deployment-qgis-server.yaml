@@ -42,6 +42,8 @@ spec:
           env:
             - name: QGIS_SERVER_LOG_LEVEL
               value: "0"
+            - name: QGIS_SERVER_SERVICE_URL
+              value: {{ .Values.serviceUrl | default (printf "http://%s/ows" .Values.ingress.host) | quote }}
           volumeMounts:
             - name: data
               mountPath: /srv/qgis
