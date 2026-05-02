@@ -22,7 +22,12 @@ QGIS Server via the `qgis.devbox` Traefik ingress.
    - For Tailscale-only clients: add an entry pointing `qgis.devbox` to the
      host's Tailscale IP (`tailscale status` on the host shows it).
 
-Verify with: `curl -I http://qgis.devbox/ows/?MAP=/srv/qgis/projects/debug.qgs&SERVICE=WMS&REQUEST=GetCapabilities`
+Verify with (note the quotes — `&` is a shell metacharacter):
+
+```bash
+curl -I 'http://qgis.devbox/ows/?MAP=/srv/qgis/projects/debug.qgs&SERVICE=WMS&REQUEST=GetCapabilities'
+```
+
 should return `HTTP/1.1 200 OK`.
 
 ## Import in QGIS Desktop
@@ -36,6 +41,19 @@ In the **Browser panel** on the left:
 
 Each project then appears as an expandable connection in the Browser; drag
 layers onto the canvas.
+
+## Picking up data updates
+
+The server reads each GeoPackage on every request, so **row-level changes
+appear immediately** on the next pan/zoom or attribute query. No client
+action required.
+
+After a **schema change** (a new layer, a renamed column), the
+server-side `.qgs` is regenerated automatically by the watcher — but
+QGIS Desktop caches the connection's layer list locally. To refresh:
+
+- In the Browser panel, right-click the connection → *Refresh*, or
+- Collapse and re-expand the connection.
 
 ## Why `ignoreGetMapURI=1` is set on WMS
 
