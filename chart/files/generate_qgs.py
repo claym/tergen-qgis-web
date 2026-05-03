@@ -620,10 +620,26 @@ def _build_layer_tree(layers: Iterable[Layer]) -> ET.Element:
     return tree
 
 
-def render_qgs(layers: list[Layer], project_crs_authid: str = "EPSG:3857") -> str:
-    """Render the .qgs XML for the given layers."""
+def render_qgs(
+    layers: list[Layer],
+    project_crs_authid: str = "EPSG:3857",
+    *,
+    project_name: str = "qgis",
+    project_title: str | None = None,
+) -> str:
+    """Render the .qgs XML for the given layers.
+
+    ``project_name`` is the WMS root layer Name (and the qgs ``projectname``
+    attribute). ``project_title`` is the WMS service Title; defaults to
+    ``project_name`` if not set. Without these, QGIS Server reports the root
+    layer as nameless / "Untitled", which leaves QWC2 with an empty theme
+    name and confuses the layer tree.
+    """
+    if project_title is None:
+        project_title = project_name
+
     root = ET.Element("qgis", attrib={
-        "version": "3.34", "projectname": "qgis",
+        "version": "3.34", "projectname": project_name,
     })
 
     # Project CRS — full spatialrefsys block
@@ -639,8 +655,18 @@ def render_qgs(layers: list[Layer], project_crs_authid: str = "EPSG:3857") -> st
     for layer in layers:
         pl.append(_build_maplayer(layer))
 
-    # WMS service settings — make every layer queryable
+    # Project + WMS service properties.
     props = ET.SubElement(root, "properties")
+
+    wms_root_name = ET.SubElement(props, "WMSRootName")
+    wms_root_name.set("type", "QString")
+    wms_root_name.text = project_name
+
+    wms_service_title = ET.SubElement(props, "WMSServiceTitle")
+    wms_service_title.set("type", "QString")
+    wms_service_title.text = project_title
+
+    # Empty restricted-layers list = publish everything via WMS.
     wms_layers = ET.SubElement(props, "WMSRestrictedLayers")
     wms_layers.set("type", "QStringList")
 
@@ -663,7 +689,11 @@ def write_project(gpkg: Path, out: Path,
     layers = introspect_gpkg(gpkg)
     if not layers:
         raise ValueError(f"no feature-table layers in {gpkg}")
-    atomic_write_text(out, render_qgs(layers, project_crs_authid))
+    atomic_write_text(out, render_qgs(
+        layers, project_crs_authid,
+        project_name=gpkg.stem,
+        project_title=_theme_title(gpkg),
+    ))
 
 
 # ---------------------------------------------------------------------------

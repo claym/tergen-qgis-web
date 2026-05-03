@@ -103,6 +103,23 @@ def test_render_qgs_produces_valid_xml_with_one_maplayer_per_layer(tmp_path):
     assert len(maplayers) == 1
 
 
+def test_render_qgs_sets_wms_root_name_and_service_title(tmp_path):
+    """QGIS Server takes the WMS root layer Name from <WMSRootName>; without
+    it the root is nameless and QWC2 ends up with an empty theme name."""
+    gpkg = tmp_path / "tiny.gpkg"
+    _make_minimal_gpkg(gpkg)
+    layers = gen.introspect_gpkg(gpkg)
+
+    xml_str = gen.render_qgs(
+        layers, project_crs_authid="EPSG:3857",
+        project_name="tiny", project_title="Tiny",
+    )
+    root = ET.fromstring(xml_str)
+    assert root.get("projectname") == "tiny"
+    assert root.findtext("./properties/WMSRootName") == "tiny"
+    assert root.findtext("./properties/WMSServiceTitle") == "Tiny"
+
+
 def test_render_qgs_publishes_every_layer_via_wfs(tmp_path):
     main_gpkg = tmp_path / "main.gpkg"
     debug_gpkg = tmp_path / "debug.gpkg"
