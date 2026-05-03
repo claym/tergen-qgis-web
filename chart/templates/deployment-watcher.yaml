@@ -20,8 +20,8 @@ spec:
         {{- include "qgis.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: project-watcher
       annotations:
-        # Force a pod restart when the script content changes.
-        checksum/script: {{ .Files.Get "files/generate_qgs.py" | sha256sum }}
+        # Force a pod restart when any script in the configmap changes.
+        checksum/script: {{ printf "%s%s" (.Files.Get "files/generate_qgs.py") (.Files.Get "files/themesConfig.py") | sha256sum }}
     spec:
       initContainers:
         - name: install-watchdog
@@ -57,6 +57,10 @@ spec:
             - /srv/qgis/web
             - --debounce-seconds
             - {{ .Values.watcher.debounceSeconds | quote }}
+            - --bake-scripts-dir
+            - /scripts
+            - --bake-internal-base-url
+            - http://qgis-server.{{ .Values.namespace }}.svc.cluster.local
             {{- if .Values.defaultTheme }}
             - --default-theme
             - {{ .Values.defaultTheme | quote }}

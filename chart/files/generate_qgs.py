@@ -774,27 +774,110 @@ def write_themes_config(
             ],
             "searchProviders": _search_providers_for(gpkg),
             "backgroundLayers": [{"name": "osm", "visibility": True}],
-            "thumbnail": "img/mapthumbs/default.jpg",
+            # Just the basename: themesConfig.py looks under
+            # <qwc2_path>/static/assets/img/mapthumbs/<thumbnail>. A path with
+            # subdirs would double-prefix and miss the file, falling through
+            # to a slow WMS GetMap fallback we don't want.
+            "thumbnail": "default.jpg",
         })
 
+    # themesConfig.py expects:
+    #   - defaultScales at top level (required)
+    #   - backgroundLayers / pluginData / themeInfoLinks / externalLayers
+    #     nested under "themes", not at top level.
     config = {
-        "themes": {"title": "Themes", "items": items},
-        "backgroundLayers": [
-            {
-                "name": "osm",
-                "title": "OpenStreetMap",
-                "type": "osm",
-                "source": "osm",
-                "thumbnail": "img/mapthumbs/mapnik.png",
-            }
+        "defaultScales": [
+            4000000, 2000000, 1000000, 500000, 250000, 100000,
+            50000, 25000, 10000, 5000, 2500, 1000, 500, 250, 100,
         ],
         "defaultMapCrs": "EPSG:3857",
         "defaultBackgroundLayers": ["osm"],
         "defaultSearchProviders": [],
-        "pluginData": {},
+        "defaultTheme": default_theme,
+        "themes": {
+            "title": "Themes",
+            "items": items,
+            "backgroundLayers": [
+                {
+                    "name": "osm",
+                    "title": "OpenStreetMap",
+                    "type": "osm",
+                    "source": "osm",
+                    "thumbnail": "img/mapthumbs/mapnik.png",
+                }
+            ],
+            "pluginData": {},
+        },
     }
 
     atomic_write_text(out, _json.dumps(config, indent=2) + "\n")
+
+
+def bake_themes_json(
+    themes_config: Path,
+    out: Path,
+    *,
+    scripts_dir: Path,
+    web_dir: Path,
+    internal_base_url: str,
+) -> int:
+    """Bake themes.json from themesConfig.json by invoking QWC2's themesConfig.py.
+
+    The bake step runs in-cluster against the qgis-server Service directly
+    (not through the ingress), so it doesn't depend on qgis.devbox resolving
+    inside the cluster. Theme item URLs are temporarily stripped of their
+    "/ows" prefix for the capabilities fetch (qgis-server only handles "/")
+    and restored to the original "/ows/?MAP=..." form in the output, so the
+    runtime URLs the browser uses are unchanged.
+    """
+    import importlib.util as _iu
+    import shutil as _shutil
+    import tempfile as _tempfile
+
+    src = _json.loads(themes_config.read_text())
+
+    # Temp config: strip "/ows" so urljoin(internal_base_url, url) hits qgis-server
+    # at "/?MAP=..." (its actual path), then restore "/ows/..." in the output.
+    bake_cfg = _json.loads(_json.dumps(src))  # deep copy via json
+    url_map: dict[str, str] = {}
+    for item in bake_cfg["themes"].get("items", []):
+        orig = item.get("url", "")
+        if orig.startswith("/ows/?"):
+            rewritten = orig.replace("/ows/?", "/?", 1)
+            item["url"] = rewritten
+            url_map[rewritten] = orig
+
+    workdir = Path(_tempfile.mkdtemp(prefix="qwc2-bake-"))
+    try:
+        # themesConfig.py looks for <qwc2_path>/static/assets/img/mapthumbs/<file>.
+        # web_dir has the layout <web_dir>/assets/img/mapthumbs/, so make a
+        # `static` symlink that points at it.
+        (workdir / "static").symlink_to(web_dir)
+        tmp_cfg = workdir / "themesConfig.json"
+        tmp_cfg.write_text(_json.dumps(bake_cfg))
+
+        spec = _iu.spec_from_file_location(
+            "themesConfig", str(scripts_dir / "themesConfig.py")
+        )
+        mod = _iu.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        mod.baseUrl = internal_base_url
+        mod.qwc2_path = str(workdir)
+
+        themes = mod.genThemes(str(tmp_cfg))
+
+        for item in themes["themes"].get("items", []):
+            if item.get("url") in url_map:
+                item["url"] = url_map[item["url"]]
+
+        atomic_write_text(
+            out,
+            _json.dumps(themes, indent=2, sort_keys=True) + "\n",
+        )
+        return len(themes["themes"].get("items", []))
+    finally:
+        _shutil.rmtree(workdir, ignore_errors=True)
 
 
 @dataclass
@@ -819,11 +902,20 @@ def regen_all(
     projects_dir: Path,
     web_dir: Path,
     default_theme: str | None,
+    *,
+    bake_scripts_dir: Path | None = None,
+    bake_internal_base_url: str | None = None,
 ) -> RegenReport:
     """Idempotently rebuild all per-gpkg .qgs files and themesConfig.json.
 
     Honors a /srv/qgis/.no-regen marker (computed as data_dir.parent / ".no-regen"):
     if present, returns a RegenReport with skipped=True and writes nothing.
+
+    If both ``bake_scripts_dir`` and ``bake_internal_base_url`` are given, the
+    QWC2 themes.json is also baked from themesConfig.json after regeneration
+    (requires ``themesConfig.py`` next to ``generate_qgs.py`` and a reachable
+    qgis-server at the given URL). When omitted, the bake is skipped — useful
+    in tests and one-off CLI runs.
     """
     no_regen = data_dir.parent / ".no-regen"
     if no_regen.exists():
@@ -845,12 +937,26 @@ def regen_all(
 
     pruned = _prune_orphans(projects_dir, current_stems)
 
+    themes_config_path = web_dir / "themesConfig.json"
     write_themes_config(
         gpkgs=gpkgs,
         projects_dir=projects_dir,
-        out=web_dir / "themesConfig.json",
+        out=themes_config_path,
         default_theme=default_theme,
     )
+
+    if bake_scripts_dir and bake_internal_base_url:
+        try:
+            n = bake_themes_json(
+                themes_config_path,
+                web_dir / "themes.json",
+                scripts_dir=bake_scripts_dir,
+                web_dir=web_dir,
+                internal_base_url=bake_internal_base_url,
+            )
+            print(f"bake: wrote themes.json with {n} theme(s)")
+        except Exception as exc:
+            print(f"bake failed: {exc}", file=sys.stderr)
 
     return RegenReport(written_projects=written, pruned_projects=pruned)
 
@@ -883,18 +989,30 @@ def main(argv: list[str] | None = None) -> int:
                    help="Theme id (gpkg stem) marked as default in themesConfig.")
     p.add_argument("--debounce-seconds", type=float, default=1.0,
                    help="Watch-mode debounce window (default 1.0).")
+    p.add_argument("--bake-scripts-dir", default=None,
+                   help="Directory containing themesConfig.py. Required to bake "
+                        "themes.json; if omitted the bake step is skipped.")
+    p.add_argument("--bake-internal-base-url", default=None,
+                   help="Base URL for in-cluster qgis-server (e.g. "
+                        "http://qgis-server). Used to fetch GetProjectSettings "
+                        "during the bake; not exposed to clients.")
     args = p.parse_args(argv)
 
     data_dir = Path(args.data_dir)
     projects_dir = Path(args.projects_dir)
     web_dir = Path(args.web_dir)
+    bake_scripts_dir = Path(args.bake_scripts_dir) if args.bake_scripts_dir else None
 
     if not data_dir.is_dir():
         print(f"data_dir not found or not a directory: {data_dir}",
               file=sys.stderr)
         return 2
 
-    report = regen_all(data_dir, projects_dir, web_dir, args.default_theme)
+    report = regen_all(
+        data_dir, projects_dir, web_dir, args.default_theme,
+        bake_scripts_dir=bake_scripts_dir,
+        bake_internal_base_url=args.bake_internal_base_url,
+    )
     if report.skipped:
         print(".no-regen marker present; skipped initial regen", file=sys.stderr)
     else:
@@ -907,11 +1025,16 @@ def main(argv: list[str] | None = None) -> int:
     # --watch: enter the watch loop. Lazy-import watchdog so --once mode
     # works in environments without watchdog installed (the test suite).
     return _watch_loop(data_dir, projects_dir, web_dir,
-                      args.default_theme, args.debounce_seconds)
+                      args.default_theme, args.debounce_seconds,
+                      bake_scripts_dir=bake_scripts_dir,
+                      bake_internal_base_url=args.bake_internal_base_url)
 
 
 def _watch_loop(data_dir: Path, projects_dir: Path, web_dir: Path,
-                default_theme: str | None, debounce_seconds: float) -> int:
+                default_theme: str | None, debounce_seconds: float,
+                *,
+                bake_scripts_dir: Path | None = None,
+                bake_internal_base_url: str | None = None) -> int:
     from watchdog.events import PatternMatchingEventHandler
     from watchdog.observers import Observer
     import threading
@@ -942,7 +1065,11 @@ def _watch_loop(data_dir: Path, projects_dir: Path, web_dir: Path,
                 while pending.is_set():
                     pending.clear()
                     time.sleep(debounce_seconds)
-                report = regen_all(data_dir, projects_dir, web_dir, default_theme)
+                report = regen_all(
+                    data_dir, projects_dir, web_dir, default_theme,
+                    bake_scripts_dir=bake_scripts_dir,
+                    bake_internal_base_url=bake_internal_base_url,
+                )
                 if report.skipped:
                     print(".no-regen present; skipped")
                 else:

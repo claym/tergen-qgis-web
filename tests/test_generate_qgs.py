@@ -249,6 +249,28 @@ def test_write_themes_config_emits_one_theme_per_gpkg(tmp_path):
     assert len(by_id["territories_draft"]["bbox"]["bounds"]) == 4
 
 
+def test_themes_config_matches_qwc2_themesConfig_py_schema(tmp_path):
+    """themesConfig.py expects defaultScales at top level and a few keys
+    nested under "themes" (backgroundLayers, pluginData). If the writer ever
+    drifts back to the old layout the bake step silently breaks."""
+    gpkg = tmp_path / "x.gpkg"
+    _make_minimal_gpkg(gpkg, layer_name="things")
+    out = tmp_path / "themesConfig.json"
+
+    gen.write_themes_config(
+        gpkgs=[gpkg], projects_dir=Path("/srv/qgis/projects"),
+        out=out, default_theme="x",
+    )
+
+    cfg = json.loads(out.read_text())
+    assert isinstance(cfg.get("defaultScales"), list) and cfg["defaultScales"]
+    assert "backgroundLayers" in cfg["themes"]
+    assert "pluginData" in cfg["themes"]
+    # And the deprecated top-level layout is gone:
+    assert "backgroundLayers" not in cfg
+    assert "pluginData" not in cfg
+
+
 def _make_territories_gpkg(path: Path) -> None:
     """Make a gpkg with a layer named 'territories' and the curated columns."""
     con = sqlite3.connect(path)

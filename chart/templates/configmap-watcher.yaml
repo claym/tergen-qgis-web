@@ -9,4 +9,6 @@ metadata:
 data:
   generate_qgs.py: |-
 {{ .Files.Get "files/generate_qgs.py" | indent 4 }}
+  themesConfig.py: |-
+{{ .Files.Get "files/themesConfig.py" | indent 4 }}
 {{- end -}}

@@ -40,8 +40,15 @@ hand-edit them; they will be overwritten on the next watcher event.
 
 A `project-watcher` Deployment in the `qgis` namespace tails
 `/srv/qgis/data/` for `*.gpkg` filesystem events (inotify, 1s debounce) and
-re-runs `regen_all` from `chart/files/generate_qgs.py`. That rewrites
-`/srv/qgis/projects/*.qgs` and the QWC2 `themesConfig.json` atomically.
+re-runs `regen_all` from `chart/files/generate_qgs.py`. That, atomically:
+
+1. Rewrites `/srv/qgis/projects/*.qgs` (the QGIS Server projects).
+2. Rewrites `/srv/qgis/web/themesConfig.json` (the QWC2 *source* config).
+3. Bakes `/srv/qgis/web/themes.json` from that config by running
+   QWC2's `themesConfig.py` (vendored at `chart/files/`) against the
+   in-cluster qgis-server Service. This is the file the QWC2 frontend
+   actually reads at runtime — without this step the browser would keep
+   showing the layer tree from whenever the client was last built.
 
 Behavior, in practice:
 
