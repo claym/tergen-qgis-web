@@ -303,27 +303,115 @@ class Layer:
 # GeoPackage introspection
 # ---------------------------------------------------------------------------
 
-# Map between GeoPackage geometry types and QGIS WKB type integers.
-# Reference: QGIS QgsWkbTypes enum.
-_WKB_TYPE = {
-    "POINT": 1, "LINESTRING": 2, "POLYGON": 3,
-    "MULTIPOINT": 4, "MULTILINESTRING": 5, "MULTIPOLYGON": 6,
-    "GEOMETRY": 0, "GEOMETRYCOLLECTION": 7,
-}
-
-# Map WKB integer type -> canonical gpkg geometry type name
-_WKB_INT_TO_GEOM = {
+# Map between GeoPackage geometry type names and QGIS WKB type integers.
+# Reference: QGIS QgsWkbTypes enum / OGC ISO WKB encoding (base + 1000*Z + 2000*M).
+_WKB_BASE_NAME = {
     1: "POINT", 2: "LINESTRING", 3: "POLYGON",
     4: "MULTIPOINT", 5: "MULTILINESTRING", 6: "MULTIPOLYGON",
     7: "GEOMETRYCOLLECTION",
-    # 2D+Z/M variants — map to base type
-    1001: "POINT", 1002: "LINESTRING", 1003: "POLYGON",
-    1004: "MULTIPOINT", 1005: "MULTILINESTRING", 1006: "MULTIPOLYGON",
-    2001: "POINT", 2002: "LINESTRING", 2003: "POLYGON",
-    2004: "MULTIPOINT", 2005: "MULTILINESTRING", 2006: "MULTIPOLYGON",
-    3001: "POINT", 3002: "LINESTRING", 3003: "POLYGON",
-    3004: "MULTIPOINT", 3005: "MULTILINESTRING", 3006: "MULTIPOLYGON",
 }
+_WKB_BASE_INT = {v: k for k, v in _WKB_BASE_NAME.items()}
+
+
+def _wkb_int_to_canonical(wkb_type: int) -> str:
+    """Convert an ISO WKB type integer to a canonical gpkg-style name.
+
+    Examples: 3 -> 'POLYGON'; 1003 -> 'POLYGONZ'; 2006 -> 'MULTIPOLYGONM';
+    3001 -> 'POINTZM'. Unknown integers (including 0) map to 'GEOMETRY'.
+    """
+    if wkb_type < 1 or wkb_type >= 4000:
+        return "GEOMETRY"
+    base = wkb_type % 1000
+    if 1000 <= wkb_type < 2000:
+        suffix = "Z"
+    elif 2000 <= wkb_type < 3000:
+        suffix = "M"
+    elif 3000 <= wkb_type < 4000:
+        suffix = "ZM"
+    else:
+        suffix = ""
+    base_name = _WKB_BASE_NAME.get(base)
+    if base_name is None:
+        return "GEOMETRY"
+    return base_name + suffix
+
+
+def _layer_geometry_type_int(geom: str) -> int:
+    """Parse a canonical name (e.g. 'POLYGONZ') back to its WKB integer.
+
+    Inverse of :func:`_wkb_int_to_canonical`. Unknown names return 0.
+    """
+    g = geom.upper()
+    suffix_offset = 0
+    for suf, off in (("ZM", 3000), ("Z", 1000), ("M", 2000)):
+        if g.endswith(suf):
+            base_name = g[: -len(suf)]
+            if base_name in _WKB_BASE_INT:
+                suffix_offset = off
+                g = base_name
+            break
+    return _WKB_BASE_INT.get(g, 0) + suffix_offset
+
+
+_WKB_BASE_DISPLAY = {
+    "POINT": "Point",
+    "LINESTRING": "LineString",
+    "POLYGON": "Polygon",
+    "MULTIPOINT": "MultiPoint",
+    "MULTILINESTRING": "MultiLineString",
+    "MULTIPOLYGON": "MultiPolygon",
+    "GEOMETRY": "Geometry",
+    "GEOMETRYCOLLECTION": "GeometryCollection",
+}
+
+
+def _qgis_geometry_display(canonical: str) -> str:
+    """Convert a canonical name (e.g. 'POLYGONZ') to QGIS' camel-case form.
+
+    QGIS' <maplayer geometry="..."> attribute uses compound camel-case
+    names like 'MultiPolygon' and 'LineString'; the Z/M/ZM dimension
+    suffix is appended in its uppercase form.
+    """
+    upper = canonical.upper()
+    for suf in ("ZM", "Z", "M"):
+        if upper.endswith(suf) and upper[: -len(suf)] in _WKB_BASE_DISPLAY:
+            return _WKB_BASE_DISPLAY[upper[: -len(suf)]] + suf
+    return _WKB_BASE_DISPLAY.get(upper, upper.title())
+
+
+def _merge_wkb_types(types) -> int:
+    """Pick the most permissive WKB integer that covers all observed types.
+
+    Promotes single-geometry forms (Polygon/LineString/Point) to their
+    multi counterparts when both are present (a MultiPolygon-typed layer
+    can validly hold a single-polygon feature). Adds Z and/or M offsets
+    when any observed type carries them. Returns 7 (GeometryCollection)
+    when bases are heterogeneous (e.g. a layer mixing Point and Polygon).
+    Returns 0 when *types* is empty.
+    """
+    types = set(types)
+    if not types:
+        return 0
+    has_z = any(1000 <= t < 2000 or 3000 <= t < 4000 for t in types)
+    has_m = any(2000 <= t < 4000 for t in types)
+    bases = {t % 1000 for t in types}
+    multi_seen = bases & {4, 5, 6}
+    if multi_seen:
+        promote = {1: 4, 2: 5, 3: 6}
+        bases = {promote.get(b, b) for b in bases}
+    if 7 in bases or len(bases) > 1:
+        base = 7
+    else:
+        base = bases.pop()
+    if has_z and has_m:
+        offset = 3000
+    elif has_z:
+        offset = 1000
+    elif has_m:
+        offset = 2000
+    else:
+        offset = 0
+    return base + offset
 
 
 def _gpkg_envelope_size(flags: int) -> int:
@@ -360,27 +448,36 @@ def _wkb_type_from_blob(blob: bytes) -> int | None:
     return wkb_type
 
 
-def _detect_concrete_geometry(con: sqlite3.Connection, table: str, geom_col: str = "geom") -> str:
-    """Inspect the first non-null geometry in *table* to determine its type.
+def _scan_geometry_types(con: sqlite3.Connection, table: str, geom_col: str = "geom") -> int:
+    """Scan every non-null geometry in *table* and return the merged WKB type.
 
-    Returns the canonical gpkg geometry type string (e.g. 'POLYGON').
-    Falls back to 'GEOMETRY' if detection fails.
+    The returned integer covers all observed types: single-vs-multi
+    differences are resolved by promoting to the multi form, and Z/M
+    dimensions are added if any feature carries them. Returns 0 when the
+    table contains no readable geometries (caller should fall back to the
+    declared metadata or "GEOMETRY"). Heterogeneous bases (e.g. a layer
+    mixing Point and Polygon) collapse to GeometryCollection (7).
+
+    A previous implementation only inspected the first feature, which
+    produced a 2D wkbType for any layer whose first row happened to lack
+    Z values — so QGIS Server then served Z features against a 2D-declared
+    layer and QGIS Desktop warned on every Z feature.
     """
     try:
         cur = con.cursor()
         cur.execute(
-            f'SELECT "{geom_col}" FROM "{table}" WHERE "{geom_col}" IS NOT NULL LIMIT 1'
+            f'SELECT "{geom_col}" FROM "{table}" WHERE "{geom_col}" IS NOT NULL'
         )
-        row = cur.fetchone()
-        if row is None or row[0] is None:
-            return "GEOMETRY"
-        blob = bytes(row[0])
-        wkb_type = _wkb_type_from_blob(blob)
-        if wkb_type is None:
-            return "GEOMETRY"
-        return _WKB_INT_TO_GEOM.get(wkb_type, "GEOMETRY")
+        types: set[int] = set()
+        for (blob,) in cur:
+            if blob is None:
+                continue
+            wkb = _wkb_type_from_blob(bytes(blob))
+            if wkb is not None:
+                types.add(wkb)
+        return _merge_wkb_types(types)
     except sqlite3.Error:
-        return "GEOMETRY"
+        return 0
 
 
 def introspect_gpkg(path: Path) -> list[Layer]:
@@ -399,11 +496,16 @@ def introspect_gpkg(path: Path) -> list[Layer]:
         rows = cur.fetchall()
         layers: list[Layer] = []
         for table, geom_type, geom_col, srs_id, mnx, mny, mxx, mxy in rows:
-            geom_type = (geom_type or "GEOMETRY").upper()
-            # For generic GEOMETRY columns, inspect the first feature's WKB
-            # to determine the concrete type (wkbType=0 prevents rendering).
-            if geom_type == "GEOMETRY":
-                geom_type = _detect_concrete_geometry(con, table, geom_col)
+            declared = (geom_type or "GEOMETRY").upper()
+            # Scan every feature: the gpkg metadata's geometry_type_name is
+            # advisory (it can say "POLYGON" while features carry Z values
+            # or mix in MultiPolygons). Trust the actual data when present;
+            # fall back to the declared name only when the table is empty.
+            scanned = _scan_geometry_types(con, table, geom_col)
+            if scanned:
+                geom_type = _wkb_int_to_canonical(scanned)
+            else:
+                geom_type = declared
             cur.execute(f'PRAGMA table_info("{table}")')
             columns = [r[1] for r in cur.fetchall()]
             layers.append(
@@ -426,9 +528,6 @@ def introspect_gpkg(path: Path) -> list[Layer]:
 # Renderer helpers — produce a default symbol for each geometry type
 # ---------------------------------------------------------------------------
 
-def _layer_geometry_type_int(geom: str) -> int:
-    return _WKB_TYPE.get(geom.upper(), 0)
-
 
 def _build_default_symbol(geom_type: str) -> ET.Element:
     """Build a default <symbol> element for the given geometry type.
@@ -437,6 +536,13 @@ def _build_default_symbol(geom_type: str) -> ET.Element:
     any output. An empty renderer-v2 silently renders nothing.
     """
     g = geom_type.upper()
+    # Symbol selection only depends on the base shape, so strip any Z/M/ZM
+    # suffix before checking. Without this, "POLYGONZ" would fall through
+    # to the marker default and render every Z polygon as a point.
+    for suf in ("ZM", "Z", "M"):
+        if g.endswith(suf) and g[: -len(suf)] in _WKB_BASE_INT:
+            g = g[: -len(suf)]
+            break
     sym = ET.Element("symbol", attrib={
         "name": "0",
         "alpha": "1",
@@ -554,7 +660,7 @@ def _build_maplayer(layer: Layer) -> ET.Element:
     """Build the <maplayer> element for a single layer."""
     ml = ET.Element("maplayer", attrib={
         "type": "vector",
-        "geometry": layer.geometry_type.title(),
+        "geometry": _qgis_geometry_display(layer.geometry_type),
         "wkbType": str(_layer_geometry_type_int(layer.geometry_type)),
         "hasScaleBasedVisibilityFlag": "0",
     })

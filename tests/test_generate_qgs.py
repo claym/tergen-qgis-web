@@ -725,3 +725,161 @@ def test_regen_all_skips_connection_xmls_when_no_ingress_host(tmp_path):
 
     assert not (web_dir / "qgis-wms-connections.xml").exists()
     assert not (web_dir / "qgis-wfs-connections.xml").exists()
+
+
+# ---------------------------------------------------------------------------
+# Geometry-type detection — Z/M dimensions and single↔multi promotion
+# ---------------------------------------------------------------------------
+
+
+def _gpkg_geom_blob(wkb_type: int, srs_id: int = 2264) -> bytes:
+    """Construct a minimal gpkg geometry blob carrying the given WKB type integer.
+
+    Only the gpkg header + the WKB byte_order + wkbType bytes are populated;
+    the coordinate payload is omitted. That is enough for
+    ``_wkb_type_from_blob`` to extract the type, which is all our generator
+    inspects when classifying a layer.
+    """
+    header = b"GP\x00\x01" + srs_id.to_bytes(4, "little", signed=True)
+    wkb = b"\x01" + wkb_type.to_bytes(4, "little")
+    return header + wkb
+
+
+def _make_gpkg_with_geoms(path: Path, wkb_types: list[int],
+                          declared_type: str = "GEOMETRY",
+                          layer_name: str = "things") -> None:
+    """Create a gpkg whose feature table contains rows with the given WKB types."""
+    con = sqlite3.connect(path)
+    cur = con.cursor()
+    cur.executescript(
+        textwrap.dedent(
+            f"""
+            CREATE TABLE gpkg_contents (
+              table_name TEXT PRIMARY KEY, data_type TEXT NOT NULL,
+              identifier TEXT, description TEXT, last_change DATETIME,
+              min_x DOUBLE, min_y DOUBLE, max_x DOUBLE, max_y DOUBLE,
+              srs_id INTEGER
+            );
+            CREATE TABLE gpkg_geometry_columns (
+              table_name TEXT PRIMARY KEY, column_name TEXT NOT NULL,
+              geometry_type_name TEXT NOT NULL, srs_id INTEGER NOT NULL,
+              z TINYINT, m TINYINT
+            );
+            CREATE TABLE "{layer_name}" (
+              fid INTEGER PRIMARY KEY, geom BLOB, name TEXT
+            );
+            INSERT INTO gpkg_contents VALUES
+              ('{layer_name}', 'features', '{layer_name}', '', '2026-01-01',
+               0, 0, 1, 1, 2264);
+            INSERT INTO gpkg_geometry_columns VALUES
+              ('{layer_name}', 'geom', '{declared_type}', 2264, 2, 0);
+            """
+        )
+    )
+    for wkb_type in wkb_types:
+        cur.execute(
+            f'INSERT INTO "{layer_name}" (geom, name) VALUES (?, ?)',
+            (_gpkg_geom_blob(wkb_type), f"feat_{wkb_type}"),
+        )
+    con.commit()
+    con.close()
+
+
+@pytest.mark.parametrize("wkb_int,expected", [
+    (1, "POINT"), (3, "POLYGON"), (6, "MULTIPOLYGON"),
+    (1003, "POLYGONZ"), (1006, "MULTIPOLYGONZ"),
+    (2003, "POLYGONM"), (3003, "POLYGONZM"),
+    (0, "GEOMETRY"), (9999, "GEOMETRY"),
+])
+def test_wkb_int_to_canonical(wkb_int, expected):
+    assert gen._wkb_int_to_canonical(wkb_int) == expected
+
+
+@pytest.mark.parametrize("types,expected", [
+    # Single type — pass through.
+    ({3}, 3),
+    ({1003}, 1003),
+    # Single + multi → promote to multi.
+    ({3, 6}, 6),
+    ({2, 5}, 5),
+    ({1, 4}, 4),
+    # Single + multi + Z → promote and add Z.
+    ({3, 6, 1003}, 1006),
+    ({3, 6, 1003, 1006}, 1006),  # the territories case
+    # Z propagates from any source.
+    ({3, 1003}, 1003),
+    # M propagates.
+    ({3, 2003}, 2003),
+    # Both Z and M present → ZM.
+    ({1003, 2003}, 3003),
+    ({3003}, 3003),
+    # Heterogeneous bases → GeometryCollection (7).
+    ({1, 3}, 7),
+    ({4, 6}, 7),
+    # Empty input.
+    (set(), 0),
+])
+def test_merge_wkb_types(types, expected):
+    assert gen._merge_wkb_types(types) == expected
+
+
+@pytest.mark.parametrize("canonical,expected", [
+    ("POINT", "Point"),
+    ("LINESTRING", "LineString"),
+    ("POLYGON", "Polygon"),
+    ("MULTIPOLYGON", "MultiPolygon"),
+    ("POLYGONZ", "PolygonZ"),
+    ("MULTIPOLYGONZ", "MultiPolygonZ"),
+    ("POLYGONM", "PolygonM"),
+    ("POLYGONZM", "PolygonZM"),
+    ("GEOMETRY", "Geometry"),
+    ("GEOMETRYCOLLECTION", "GeometryCollection"),
+])
+def test_qgis_geometry_display(canonical, expected):
+    assert gen._qgis_geometry_display(canonical) == expected
+
+
+def test_introspect_picks_multipolygon_z_for_mixed_territories(tmp_path):
+    """Layer with a mix of Polygon, MultiPolygon, PolygonZ, MultiPolygonZ
+    should be classified as MultiPolygonZ — the most permissive type that
+    covers all observed features. This is the territories_draft case."""
+    gpkg = tmp_path / "mixed.gpkg"
+    _make_gpkg_with_geoms(gpkg, wkb_types=[3, 6, 1003, 1006],
+                          declared_type="GEOMETRY")
+    layers = gen.introspect_gpkg(gpkg)
+    assert len(layers) == 1
+    assert layers[0].geometry_type == "MULTIPOLYGONZ"
+
+
+def test_introspect_picks_polygon_z_when_z_present(tmp_path):
+    """A layer declared as POLYGON in metadata but with PolygonZ features
+    should be classified as PolygonZ — the scan trusts the data over the
+    declared metadata when features exist."""
+    gpkg = tmp_path / "z.gpkg"
+    _make_gpkg_with_geoms(gpkg, wkb_types=[1003], declared_type="POLYGON")
+    layers = gen.introspect_gpkg(gpkg)
+    assert layers[0].geometry_type == "POLYGONZ"
+
+
+def test_introspect_falls_back_to_declared_when_no_features(tmp_path):
+    """An empty feature table cannot be scanned — the declared
+    gpkg_geometry_columns.geometry_type_name is the fallback."""
+    gpkg = tmp_path / "empty.gpkg"
+    _make_minimal_gpkg(gpkg, layer_name="things")  # declared POINT, no rows
+    layers = gen.introspect_gpkg(gpkg)
+    assert layers[0].geometry_type == "POINT"
+
+
+def test_render_qgs_emits_z_aware_geometry_attributes(tmp_path):
+    """A PolygonZ layer must produce geometry='PolygonZ' and wkbType='1003'
+    on the <maplayer>, otherwise QGIS Desktop warns the WFS client about
+    Z values arriving for a 2D-declared layer."""
+    gpkg = tmp_path / "z.gpkg"
+    _make_gpkg_with_geoms(gpkg, wkb_types=[1003, 1006], declared_type="GEOMETRY")
+    layers = gen.introspect_gpkg(gpkg)
+    xml_str = gen.render_qgs(layers, project_crs_authid="EPSG:3857")
+    root = ET.fromstring(xml_str)
+    ml = root.find("./projectlayers/maplayer")
+    assert ml is not None
+    assert ml.get("geometry") == "MultiPolygonZ"
+    assert ml.get("wkbType") == "1006"
