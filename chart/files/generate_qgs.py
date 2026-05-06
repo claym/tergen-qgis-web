@@ -684,16 +684,26 @@ def render_qgs(
     )
 
 
-def write_project(gpkg: Path, out: Path,
-                  project_crs_authid: str = "EPSG:3857") -> None:
-    """Generate the .qgs for a single gpkg and write it atomically to *out*."""
+def write_project(
+    gpkg: Path,
+    out: Path,
+    *,
+    data_dir: Path,
+    project_crs_authid: str = "EPSG:3857",
+) -> None:
+    """Generate the .qgs for a single gpkg and write it atomically to *out*.
+
+    ``data_dir`` is required so that the project name and title can be
+    derived from the gpkg's path under the data root (folder-aware ids
+    avoid collisions on duplicated gpkg stems).
+    """
     layers = introspect_gpkg(gpkg)
     if not layers:
         raise ValueError(f"no feature-table layers in {gpkg}")
     atomic_write_text(out, render_qgs(
         layers, project_crs_authid,
-        project_name=gpkg.stem,
-        project_title=_smart_title(gpkg.stem.replace("_", " ").replace("-", " ")),
+        project_name=_project_id(gpkg, data_dir),
+        project_title=_project_title(gpkg, data_dir),
     ))
 
 
@@ -1021,17 +1031,21 @@ def regen_all(
     web_dir.mkdir(parents=True, exist_ok=True)
 
     gpkgs = discover_gpkgs(data_dir)
-    current_stems = {gpkg.stem for gpkg in gpkgs}
+    current_ids = {_project_id(gpkg, data_dir) for gpkg in gpkgs}
 
     written = 0
     for gpkg in gpkgs:
         try:
-            write_project(gpkg, projects_dir / f"{gpkg.stem}.qgs")
+            write_project(
+                gpkg,
+                projects_dir / f"{_project_id(gpkg, data_dir)}.qgs",
+                data_dir=data_dir,
+            )
             written += 1
         except Exception as exc:
             print(f"failed to render {gpkg.name}: {exc}", file=sys.stderr)
 
-    pruned = _prune_orphans(projects_dir, current_stems)
+    pruned = _prune_orphans(projects_dir, current_ids)
 
     themes_config_path = web_dir / "themesConfig.json"
     write_themes_config(

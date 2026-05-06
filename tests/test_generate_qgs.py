@@ -219,8 +219,8 @@ def test_write_project_writes_one_qgs_per_gpkg(tmp_path):
     out_dir = tmp_path / "projects"
     out_dir.mkdir()
 
-    gen.write_project(main_gpkg, out_dir / "territories_draft.qgs")
-    gen.write_project(debug_gpkg, out_dir / "debug.qgs")
+    gen.write_project(main_gpkg, out_dir / "territories_draft.qgs", data_dir=tmp_path)
+    gen.write_project(debug_gpkg, out_dir / "debug.qgs", data_dir=tmp_path)
 
     assert (out_dir / "territories_draft.qgs").exists()
     assert (out_dir / "debug.qgs").exists()
@@ -553,3 +553,33 @@ def test_write_themes_config_uses_path_aware_ids_for_nested_gpkgs(tmp_path):
     assert items[0]["url"] == (
         "/ows/?MAP=/srv/qgis/projects/Mecklenburg_Addresses__addresses.qgs"
     )
+
+
+def test_regen_all_renames_collision_qgs_files(tmp_path):
+    """When two gpkgs share a stem under different folders, both get distinct
+    .qgs files (no silent overwrite) and a stale single-stem .qgs from a
+    previous run is pruned."""
+    data_dir = tmp_path / "data"
+    projects_dir = tmp_path / "projects"
+    web_dir = tmp_path / "web"
+    projects_dir.mkdir(parents=True)
+    (data_dir / "clipped_data" / "Mecklenburg Addresses").mkdir(parents=True)
+    (data_dir / "clipped_data" / "NC Addresses").mkdir(parents=True)
+    _make_minimal_gpkg(
+        data_dir / "clipped_data" / "Mecklenburg Addresses" / "addresses.gpkg",
+        layer_name="addresses",
+    )
+    _make_minimal_gpkg(
+        data_dir / "clipped_data" / "NC Addresses" / "addresses.gpkg",
+        layer_name="addresses",
+    )
+
+    # Pretend a previous run wrote the old stem-based file.
+    (projects_dir / "addresses.qgs").write_text("<qgis/>")
+
+    gen.regen_all(data_dir, projects_dir, web_dir, default_theme=None)
+
+    qgs_files = sorted(p.name for p in projects_dir.glob("*.qgs"))
+    assert "addresses.qgs" not in qgs_files  # stale file pruned
+    assert "Mecklenburg_Addresses__addresses.qgs" in qgs_files
+    assert "NC_Addresses__addresses.qgs" in qgs_files
