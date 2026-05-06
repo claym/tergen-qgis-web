@@ -987,6 +987,8 @@ def write_connections(
         })
 
     prelude = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE connections>\n'
+    ET.indent(wms_root, space="  ")
+    ET.indent(wfs_root, space="  ")
     atomic_write_text(out_wms, prelude + ET.tostring(wms_root, encoding="unicode") + "\n")
     atomic_write_text(out_wfs, prelude + ET.tostring(wfs_root, encoding="unicode") + "\n")
 

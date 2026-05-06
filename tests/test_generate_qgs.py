@@ -637,3 +637,26 @@ def test_write_connections_emits_one_wms_and_one_wfs_per_gpkg(tmp_path):
         "http://qgis.devbox/ows/?MAP=/srv/qgis/projects/territories_draft.qgs"
     )
     assert wfs_entries[0].get("pagingEnabled") == "default"
+
+
+def test_write_connections_handles_empty_gpkg_list(tmp_path):
+    """A cold cluster with zero gpkgs should write valid but empty bundles
+    rather than crash. The XML must still parse; it just has no entries."""
+    out_wms = tmp_path / "qgis-wms-connections.xml"
+    out_wfs = tmp_path / "qgis-wfs-connections.xml"
+
+    gen.write_connections(
+        gpkgs=[],
+        projects_dir=Path("/srv/qgis/projects"),
+        data_dir=tmp_path,
+        out_wms=out_wms,
+        out_wfs=out_wfs,
+        ingress_host="qgis.devbox",
+    )
+
+    wms_root = ET.fromstring(out_wms.read_text())
+    wfs_root = ET.fromstring(out_wfs.read_text())
+    assert wms_root.tag == "qgsWMSConnections"
+    assert wms_root.findall("wms") == []
+    assert wfs_root.tag == "qgsWFSConnections"
+    assert wfs_root.findall("wfs") == []
