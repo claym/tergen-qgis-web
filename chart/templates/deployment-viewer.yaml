@@ -16,6 +16,11 @@ spec:
       labels:
         {{- include "qgis.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: viewer
+      annotations:
+        # Roll the viewer pod whenever the nginx config changes so new
+        # location blocks (e.g. for the connection bundles) take effect on
+        # `helm upgrade` without a manual rollout restart.
+        checksum/nginx-conf: {{ include (print $.Template.BasePath "/configmap-viewer-nginx.yaml") . | sha256sum }}
     spec:
       initContainers:
         # Refuse to start nginx if /srv/qgis/web/ is empty — that means the
