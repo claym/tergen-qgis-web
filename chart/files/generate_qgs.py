@@ -693,7 +693,7 @@ def write_project(gpkg: Path, out: Path,
     atomic_write_text(out, render_qgs(
         layers, project_crs_authid,
         project_name=gpkg.stem,
-        project_title=_theme_title(gpkg),
+        project_title=gpkg.stem.replace("_", " ").replace("-", " ").title(),
     ))
 
 
@@ -775,15 +775,6 @@ def _project_title(gpkg: Path, data_dir: Path) -> str:
     return f"{pretty(folder)} – {_smart_title(stem_pretty)}"
 
 
-def _theme_id(gpkg: Path) -> str:
-    """The theme id is the gpkg filename without extension."""
-    return gpkg.stem
-
-
-def _theme_title(gpkg: Path) -> str:
-    """Title-case the gpkg stem for display: territories_draft → Territories Draft."""
-    return gpkg.stem.replace("_", " ").replace("-", " ").title()
-
 
 def _gpkg_wgs84_bbox(
     gpkg: Path,
@@ -855,15 +846,17 @@ def write_themes_config(
     projects_dir: Path,
     out: Path,
     default_theme: str | None = None,
+    *,
+    data_dir: Path,
 ) -> None:
     """Write the qwc2 themesConfig.json from a list of gpkgs."""
     items = []
-    for gpkg in sorted(gpkgs, key=lambda p: p.stem):
-        tid = _theme_id(gpkg)
+    for gpkg in sorted(gpkgs, key=lambda p: _project_id(p, data_dir)):
+        tid = _project_id(gpkg, data_dir)
         w, s, e, n = _gpkg_wgs84_bbox(gpkg)
         items.append({
             "id": tid,
-            "title": _theme_title(gpkg),
+            "title": _project_title(gpkg, data_dir),
             "url": f"/ows/?MAP={projects_dir}/{tid}.qgs",
             "default": (default_theme == tid),
             "format": "image/png",
@@ -1047,6 +1040,7 @@ def regen_all(
         projects_dir=projects_dir,
         out=themes_config_path,
         default_theme=default_theme,
+        data_dir=data_dir,
     )
 
     if bake_scripts_dir and bake_internal_base_url:

@@ -249,6 +249,7 @@ def test_write_themes_config_emits_one_theme_per_gpkg(tmp_path):
         projects_dir=Path("/srv/qgis/projects"),
         out=out,
         default_theme="territories_draft",
+        data_dir=tmp_path,
     )
 
     cfg = json.loads(out.read_text())
@@ -277,6 +278,7 @@ def test_themes_config_matches_qwc2_themesConfig_py_schema(tmp_path):
     gen.write_themes_config(
         gpkgs=[gpkg], projects_dir=Path("/srv/qgis/projects"),
         out=out, default_theme="x",
+        data_dir=tmp_path,
     )
 
     cfg = json.loads(out.read_text())
@@ -341,6 +343,7 @@ def test_themes_config_includes_search_providers_for_territories(tmp_path):
         projects_dir=Path("/srv/qgis/projects"),
         out=out,
         default_theme="territories_draft",
+        data_dir=tmp_path,
     )
 
     cfg = json.loads(out.read_text())
@@ -365,6 +368,7 @@ def test_themes_config_no_search_providers_when_layer_missing(tmp_path):
         projects_dir=Path("/srv/qgis/projects"),
         out=out,
         default_theme=None,
+        data_dir=tmp_path,
     )
 
     cfg = json.loads(out.read_text())
@@ -522,3 +526,30 @@ def test_project_title_preserves_acronyms_in_territories_branch(tmp_path):
     gpkg = data_dir / "territories" / "NCDOT_things.gpkg"
     gpkg.touch()
     assert gen._project_title(gpkg, data_dir) == "NCDOT Things"
+
+
+def test_write_themes_config_uses_path_aware_ids_for_nested_gpkgs(tmp_path):
+    """Nested gpkgs (e.g. clipped_data/<Folder>/x.gpkg) get folder-prefixed
+    theme ids and folder-prefixed titles."""
+    data_dir = tmp_path / "data"
+    folder = data_dir / "clipped_data" / "Mecklenburg Addresses"
+    folder.mkdir(parents=True)
+    gpkg = folder / "addresses.gpkg"
+    _make_minimal_gpkg(gpkg, layer_name="addresses")
+
+    out = tmp_path / "themesConfig.json"
+    gen.write_themes_config(
+        gpkgs=[gpkg],
+        projects_dir=Path("/srv/qgis/projects"),
+        out=out,
+        default_theme=None,
+        data_dir=data_dir,
+    )
+    cfg = json.loads(out.read_text())
+    items = cfg["themes"]["items"]
+    assert len(items) == 1
+    assert items[0]["id"] == "Mecklenburg_Addresses__addresses"
+    assert items[0]["title"] == "Mecklenburg Addresses"
+    assert items[0]["url"] == (
+        "/ows/?MAP=/srv/qgis/projects/Mecklenburg_Addresses__addresses.qgs"
+    )
