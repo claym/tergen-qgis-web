@@ -61,6 +61,8 @@ spec:
             - /scripts
             - --bake-internal-base-url
             - http://qgis-server.{{ .Values.namespace }}.svc.cluster.local
+            - --ingress-host
+            - {{ .Values.ingress.host | quote }}
             {{- if .Values.defaultTheme }}
             - --default-theme
             - {{ .Values.defaultTheme | quote }}
