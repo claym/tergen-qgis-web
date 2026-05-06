@@ -79,15 +79,18 @@ the watcher matches `*.gpkg` only. Default rollback-journal mode is fine.
 
 ## Access from QGIS Desktop on other devices
 
-Pre-built import bundles live at `client/connections/`:
+The watcher writes WMS and WFS connection bundles into `/srv/qgis/web/`
+on every regen, served live by the cluster:
 
-- `qgis-wms-connections.xml` — rendered raster map with legends
-- `qgis-wfs-connections.xml` — editable vector features
+- `http://qgis.devbox/qgis-wms-connections.xml` — rendered raster map
+  with legends, one connection per gpkg
+- `http://qgis.devbox/qgis-wfs-connections.xml` — editable vector
+  features, one connection per gpkg
 
-See `client/connections/README.md` for DNS prereqs (LAN dnsmasq, hosts file,
-or Tailscale IP) and the import flow. Short version: copy the XML to the
-remote device, ensure `qgis.devbox` resolves, then in the Browser panel
-right-click WMS/WMTS or WFS → *Load Connections…*.
+See `client/connections/README.md` for DNS prereqs (LAN dnsmasq, hosts
+file, or Tailscale IP) and the import flow. Short version: `curl -O`
+the XMLs from the URLs above, ensure `qgis.devbox` resolves, then in the
+Browser panel right-click WMS/WMTS or WFS → *Load Connections…*.
 
 ## Service URL
 
