@@ -693,7 +693,7 @@ def write_project(gpkg: Path, out: Path,
     atomic_write_text(out, render_qgs(
         layers, project_crs_authid,
         project_name=gpkg.stem,
-        project_title=gpkg.stem.replace("_", " ").replace("-", " ").title(),
+        project_title=_smart_title(gpkg.stem.replace("_", " ").replace("-", " ")),
     ))
 
 
@@ -773,7 +773,6 @@ def _project_title(gpkg: Path, data_dir: Path) -> str:
     if _slug(stem_pretty).lower() in _slug(folder).lower():
         return folder
     return f"{pretty(folder)} – {_smart_title(stem_pretty)}"
-
 
 
 def _gpkg_wgs84_bbox(

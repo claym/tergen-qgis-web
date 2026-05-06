@@ -488,7 +488,7 @@ def test_project_id_slugs_unsafe_stem(tmp_path):
 
 
 @pytest.mark.parametrize("rel,expected", [
-    # Top-level / territories: same as the old _theme_title behavior
+    # Top-level / territories: smart-title the stem (same branch as _project_title)
     ("territories_draft.gpkg", "Territories Draft"),
     ("debug.gpkg", "Debug"),
     ("territories/territories_draft.gpkg", "Territories Draft"),
