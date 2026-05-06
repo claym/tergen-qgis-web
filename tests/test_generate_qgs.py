@@ -438,6 +438,7 @@ def test_regen_all_skips_when_no_regen_marker_present(tmp_path):
     ("clipped_data", "clipped_data"),
     ("plain", "plain"),
     ("with/slash", "with_slash"),
+    (r"with\backslash", "with_backslash"),
     ("two  spaces", "two_spaces"),
     ("trailing ", "trailing"),
 ])
