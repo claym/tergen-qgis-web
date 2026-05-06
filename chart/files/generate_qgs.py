@@ -993,11 +993,17 @@ class RegenReport:
     skipped: bool = False  # True if .no-regen marker present
 
 
-def _prune_orphans(projects_dir: Path, current_stems: set[str]) -> int:
-    """Delete any *.qgs in projects_dir whose stem is not in current_stems."""
+def _prune_orphans(projects_dir: Path, current_ids: set[str]) -> int:
+    """Delete any *.qgs in projects_dir whose stem is not in current_ids.
+
+    The set should contain project ids (the values produced by
+    :func:`_project_id`), which for nested gpkgs include a folder prefix
+    like ``Folder__stem``. Bare gpkg stems are NOT what _project_id produces
+    for clipped_data files, so passing a stem set here would over-prune.
+    """
     pruned = 0
     for qgs in projects_dir.glob("*.qgs"):
-        if qgs.stem not in current_stems:
+        if qgs.stem not in current_ids:
             qgs.unlink()
             pruned += 1
     return pruned
@@ -1097,7 +1103,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--web-dir", required=True,
                    help="Directory where themesConfig.json is written.")
     p.add_argument("--default-theme", default=None,
-                   help="Theme id (gpkg stem) marked as default in themesConfig.")
+                   help="Theme id (the value produced by _project_id) marked "
+                        "as default in themesConfig. For top-level / "
+                        "territories/ gpkgs this equals the bare stem; for "
+                        "clipped_data/<Folder>/x.gpkg it is "
+                        "'<Folder>__<x>'.")
     p.add_argument("--debounce-seconds", type=float, default=1.0,
                    help="Watch-mode debounce window (default 1.0).")
     p.add_argument("--bake-scripts-dir", default=None,
