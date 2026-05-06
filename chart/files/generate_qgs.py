@@ -734,31 +734,45 @@ def _project_id(gpkg: Path, data_dir: Path) -> str:
     return f"{_slug(parent.name)}__{_slug(gpkg.stem)}"
 
 
+def _smart_title(text: str) -> str:
+    """Title-case a string word-by-word, leaving acronyms and pre-cased names alone.
+
+    Splits on whitespace, then for each word: applies ``str.title()`` if the
+    word is all-lowercase, otherwise returns it unchanged. Preserves
+    "NCDOT", "NC", and "Mecklenburg" while normalizing "addresses_residential"
+    → "Addresses Residential".
+
+    Pre-replace underscores and hyphens with spaces if you want them split.
+    """
+    return " ".join(w.title() if w.islower() else w for w in text.split())
+
+
 def _project_title(gpkg: Path, data_dir: Path) -> str:
     """Return the human-facing title for *gpkg*.
 
     Used as the QGIS WMS service title, the QWC2 theme title, and the
     QGIS Desktop connection display name.
 
-    For top-level / ``territories/`` files, title-case the stem (current
-    behavior). For nested files, build ``"<folder> – <stem-titled>"``,
-    but drop the stem when its slug is a case-insensitive substring of
-    the folder slug (handles "Mecklenburg Greenways/Greenways.gpkg" →
-    "Mecklenburg Greenways").
+    For top-level / ``territories/`` files, smart-title the stem (current
+    behavior, but acronym-safe). For nested files, build
+    ``"<folder> – <stem-titled>"``, but drop the stem when its slug is a
+    case-insensitive substring of the folder slug (handles
+    "Mecklenburg Greenways/Greenways.gpkg" → "Mecklenburg Greenways").
+
+    Both folder and stem are smart-titled (see :func:`_smart_title`):
+    all-lowercase words get title-cased; pre-cased words like "Mecklenburg"
+    and acronyms like "NCDOT" are preserved.
     """
     parent = gpkg.parent
+    pretty = lambda s: _smart_title(s.replace("_", " ").replace("-", " "))
     if parent == data_dir or parent == data_dir / "territories":
-        return gpkg.stem.replace("_", " ").replace("-", " ").title()
+        return pretty(gpkg.stem)
 
     folder = parent.name
     stem_pretty = gpkg.stem.replace("_", " ").replace("-", " ")
     if _slug(stem_pretty).lower() in _slug(folder).lower():
         return folder
-    folder_words = folder.replace("_", " ").replace("-", " ").split()
-    folder_pretty = " ".join(w.title() if w.islower() else w for w in folder_words)
-    stem_words = stem_pretty.split()
-    stem_titled = " ".join(w.title() if w.islower() else w for w in stem_words)
-    return f"{folder_pretty} – {stem_titled}"
+    return f"{pretty(folder)} – {_smart_title(stem_pretty)}"
 
 
 def _theme_id(gpkg: Path) -> str:

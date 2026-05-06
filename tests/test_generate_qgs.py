@@ -512,3 +512,13 @@ def test_project_title_rule(tmp_path, rel, expected):
     gpkg.parent.mkdir(parents=True, exist_ok=True)
     gpkg.touch()
     assert gen._project_title(gpkg, data_dir) == expected
+
+
+def test_project_title_preserves_acronyms_in_territories_branch(tmp_path):
+    """The top-level / territories branch should also preserve acronyms,
+    not lowercase them like raw .title() would."""
+    data_dir = tmp_path
+    (data_dir / "territories").mkdir()
+    gpkg = data_dir / "territories" / "NCDOT_things.gpkg"
+    gpkg.touch()
+    assert gen._project_title(gpkg, data_dir) == "NCDOT Things"
