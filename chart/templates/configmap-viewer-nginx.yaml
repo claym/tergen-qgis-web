@@ -20,6 +20,17 @@ data:
             try_files $uri =404;
         }
 
+        # Connection bundles are rewritten by the watcher; never cache, and
+        # return a real 404 when missing instead of falling through to the SPA.
+        location = /qgis-wms-connections.xml {
+            add_header Cache-Control "no-cache" always;
+            try_files $uri =404;
+        }
+        location = /qgis-wfs-connections.xml {
+            add_header Cache-Control "no-cache" always;
+            try_files $uri =404;
+        }
+
         # Webpack-fingerprinted assets: long-cache safely.
         location ~* \.(js|css|woff2|png|jpg|svg)$ {
             try_files $uri =404;
