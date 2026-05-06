@@ -883,3 +883,36 @@ def test_render_qgs_emits_z_aware_geometry_attributes(tmp_path):
     assert ml is not None
     assert ml.get("geometry") == "MultiPolygonZ"
     assert ml.get("wkbType") == "1006"
+
+
+def test_render_qgs_writes_layer_extent_at_full_float_precision(tmp_path):
+    """The <extent> block must round-trip the gpkg bbox exactly. Rounding
+    to 6 decimal places (the previous behavior) could shift a corner inward
+    by ~0.0000003 ft, putting some feature geometries technically outside
+    the declared bbox — which makes QGIS Desktop's WFS client warn that
+    'layer extent reported by the server is not correct.'"""
+    from generate_qgs import Layer
+
+    tricky_bbox = (
+        1482144.212770017,
+        484293.8955637069,   # rounds UP to 484293.895564 with :.6f — above actual min
+        1529509.751623909,
+        521397.7081439918,
+    )
+    layer = Layer(
+        name="things",
+        source_path=tmp_path / "x.gpkg",
+        geometry_type="POLYGON",
+        srs_id=2264,
+        columns=["fid", "geom"],
+        bbox=tricky_bbox,
+    )
+
+    xml_str = gen.render_qgs([layer], project_crs_authid="EPSG:3857")
+    root = ET.fromstring(xml_str)
+    ext = root.find("./projectlayers/maplayer/extent")
+    assert ext is not None
+    assert float(ext.findtext("xmin")) == tricky_bbox[0]
+    assert float(ext.findtext("ymin")) == tricky_bbox[1]
+    assert float(ext.findtext("xmax")) == tricky_bbox[2]
+    assert float(ext.findtext("ymax")) == tricky_bbox[3]

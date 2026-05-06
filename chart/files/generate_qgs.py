@@ -675,23 +675,28 @@ def _build_maplayer(layer: Layer) -> ET.Element:
     srs = ET.SubElement(ml, "srs")
     srs.append(_build_spatialrefsys(layer.srs_id))
 
-    # Extent in source CRS
+    # Extent in source CRS — write at full float64 precision via repr().
+    # f"{x:.6f}" rounds to 6 decimal places, which can round inward (e.g.
+    # ymin 484293.8955637069 → 484293.895564, slightly ABOVE the actual
+    # minimum). QGIS Desktop's WFS client then sees a feature outside the
+    # declared bbox and warns "Layer extent reported by the server is not
+    # correct." repr(x) is round-trip exact for all float64 values.
     mnx, mny, mxx, mxy = layer.bbox
     extent_el = ET.SubElement(ml, "extent")
-    ET.SubElement(extent_el, "xmin").text = f"{mnx:.6f}"
-    ET.SubElement(extent_el, "ymin").text = f"{mny:.6f}"
-    ET.SubElement(extent_el, "xmax").text = f"{mxx:.6f}"
-    ET.SubElement(extent_el, "ymax").text = f"{mxy:.6f}"
+    ET.SubElement(extent_el, "xmin").text = repr(mnx)
+    ET.SubElement(extent_el, "ymin").text = repr(mny)
+    ET.SubElement(extent_el, "xmax").text = repr(mxx)
+    ET.SubElement(extent_el, "ymax").text = repr(mxy)
 
     # WGS84 extent — QGIS Server uses this for GetCapabilities bounding boxes
     wgs84 = _bbox_to_wgs84(mnx, mny, mxx, mxy, layer.srs_id)
     if wgs84 is not None:
         w, s, e, n = wgs84
         wgs_el = ET.SubElement(ml, "wgs84extent")
-        ET.SubElement(wgs_el, "xmin").text = f"{w:.6f}"
-        ET.SubElement(wgs_el, "ymin").text = f"{s:.6f}"
-        ET.SubElement(wgs_el, "xmax").text = f"{e:.6f}"
-        ET.SubElement(wgs_el, "ymax").text = f"{n:.6f}"
+        ET.SubElement(wgs_el, "xmin").text = repr(w)
+        ET.SubElement(wgs_el, "ymin").text = repr(s)
+        ET.SubElement(wgs_el, "xmax").text = repr(e)
+        ET.SubElement(wgs_el, "ymax").text = repr(n)
 
     # Provider
     ET.SubElement(ml, "provider").text = "ogr"
