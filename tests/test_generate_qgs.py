@@ -528,6 +528,18 @@ def test_project_title_preserves_acronyms_in_territories_branch(tmp_path):
     assert gen._project_title(gpkg, data_dir) == "NCDOT Things"
 
 
+def test_project_title_smart_titles_folder_in_redundant_stem_branch(tmp_path):
+    """When the stem is a substring of the folder, the title is just the
+    folder — but it must still be smart-titled, not raw, so a folder named
+    in lowercase (e.g. dropped in by hand) renders properly."""
+    data_dir = tmp_path
+    folder = data_dir / "clipped_data" / "mecklenburg greenways"
+    folder.mkdir(parents=True)
+    gpkg = folder / "Greenways.gpkg"
+    gpkg.touch()
+    assert gen._project_title(gpkg, data_dir) == "Mecklenburg Greenways"
+
+
 def test_write_themes_config_uses_path_aware_ids_for_nested_gpkgs(tmp_path):
     """Nested gpkgs (e.g. clipped_data/<Folder>/x.gpkg) get folder-prefixed
     theme ids and folder-prefixed titles."""

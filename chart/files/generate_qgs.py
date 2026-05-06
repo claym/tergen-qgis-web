@@ -781,7 +781,7 @@ def _project_title(gpkg: Path, data_dir: Path) -> str:
     folder = parent.name
     stem_pretty = gpkg.stem.replace("_", " ").replace("-", " ")
     if _slug(stem_pretty).lower() in _slug(folder).lower():
-        return folder
+        return pretty(folder)
     return f"{pretty(folder)} – {_smart_title(stem_pretty)}"
 
 

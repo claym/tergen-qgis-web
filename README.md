@@ -11,7 +11,7 @@ and importable connection bundles for QGIS Desktop clients.
 - `data/territories/` — source GeoPackage files (gpkg). Authoritative.
 - `dnsmasq/` — host-level wildcard DNS for `*.devbox` (shared infra, not part of the chart)
 - `chart/` — helm chart for the qgis app (qgis-server + viewer + project generator)
-- `client/connections/` — WMS/WFS connection XML for QGIS Desktop clients
+- `client/connections/` — docs for the QGIS Desktop connection import flow (the bundles themselves are served live by the cluster)
 - `docs/` — design and plan documents
 
 ## Quick start
