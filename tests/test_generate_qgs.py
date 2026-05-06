@@ -470,3 +470,14 @@ def test_project_id_rule(tmp_path, rel, expected):
     gpkg.parent.mkdir(parents=True, exist_ok=True)
     gpkg.touch()
     assert gen._project_id(gpkg, data_dir) == expected
+
+
+def test_project_id_slugs_unsafe_stem(tmp_path):
+    """A gpkg stem with whitespace should be slugged on the way into the id —
+    otherwise it would produce a malformed .qgs filename and MAP= URL."""
+    data_dir = tmp_path
+    folder = data_dir / "clipped_data" / "Weird Folder"
+    folder.mkdir(parents=True)
+    gpkg = folder / "weird name.gpkg"
+    gpkg.touch()
+    assert gen._project_id(gpkg, data_dir) == "Weird_Folder__weird_name"

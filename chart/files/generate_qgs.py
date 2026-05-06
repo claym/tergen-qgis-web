@@ -726,9 +726,12 @@ def _project_id(gpkg: Path, data_dir: Path) -> str:
     Meck/NC/Union folders).
     """
     parent = gpkg.parent
+    # "territories" is a case-sensitive literal — matches the on-disk
+    # directory under /srv/qgis/data/. Renaming that folder would
+    # change project ids and is a deliberate breaking change.
     if parent == data_dir or parent == data_dir / "territories":
         return gpkg.stem
-    return f"{_slug(parent.name)}__{gpkg.stem}"
+    return f"{_slug(parent.name)}__{_slug(gpkg.stem)}"
 
 
 def _theme_id(gpkg: Path) -> str:
