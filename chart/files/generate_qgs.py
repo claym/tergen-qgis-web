@@ -939,6 +939,8 @@ def write_connections(
     on follow-up requests instead of falling back to the bare service
     URL advertised by ``QGIS_SERVER_SERVICE_URL`` (which lacks ``MAP=``).
     """
+    if not ingress_host:
+        raise ValueError("ingress_host must be a non-empty string")
     entries = []
     for gpkg in gpkgs:
         pid = _project_id(gpkg, data_dir)
@@ -1137,7 +1139,7 @@ def regen_all(
         data_dir=data_dir,
     )
 
-    if ingress_host:
+    if ingress_host is not None:
         write_connections(
             gpkgs=gpkgs,
             projects_dir=projects_dir,

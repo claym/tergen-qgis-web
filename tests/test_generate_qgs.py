@@ -662,6 +662,22 @@ def test_write_connections_handles_empty_gpkg_list(tmp_path):
     assert wfs_root.findall("wfs") == []
 
 
+def test_write_connections_rejects_empty_ingress_host(tmp_path):
+    """An empty ingress_host would produce a malformed http:// URL.
+    Fail fast rather than silently emit broken bundles."""
+    out_wms = tmp_path / "qgis-wms-connections.xml"
+    out_wfs = tmp_path / "qgis-wfs-connections.xml"
+    with pytest.raises(ValueError, match="ingress_host"):
+        gen.write_connections(
+            gpkgs=[],
+            projects_dir=Path("/srv/qgis/projects"),
+            data_dir=tmp_path,
+            out_wms=out_wms,
+            out_wfs=out_wfs,
+            ingress_host="",
+        )
+
+
 def test_regen_all_writes_connection_xmls_when_ingress_host_set(tmp_path):
     data_dir = tmp_path / "data"
     projects_dir = tmp_path / "projects"
