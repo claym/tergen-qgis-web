@@ -444,3 +444,29 @@ def test_regen_all_skips_when_no_regen_marker_present(tmp_path):
 ])
 def test_slug_collapses_spaces_and_slashes(raw, expected):
     assert gen._slug(raw) == expected
+
+
+@pytest.mark.parametrize("rel,expected", [
+    # Top-level files keep their bare stem
+    ("territories_draft.gpkg", "territories_draft"),
+    ("debug.gpkg", "debug"),
+    # territories/ is treated as if it were top-level
+    ("territories/territories_draft.gpkg", "territories_draft"),
+    ("territories/debug.gpkg", "debug"),
+    # clipped_data top-level: parent is "clipped_data"
+    ("clipped_data/addresses_residential.gpkg",
+     "clipped_data__addresses_residential"),
+    # Nested folders use the folder slug as the prefix
+    ("clipped_data/Mecklenburg Addresses/addresses.gpkg",
+     "Mecklenburg_Addresses__addresses"),
+    ("clipped_data/NC Parcels/parcels_pt.gpkg",
+     "NC_Parcels__parcels_pt"),
+    ("clipped_data/Union Subdivisions/Union_Subdivisions.gpkg",
+     "Union_Subdivisions__Union_Subdivisions"),
+])
+def test_project_id_rule(tmp_path, rel, expected):
+    data_dir = tmp_path
+    gpkg = data_dir / rel
+    gpkg.parent.mkdir(parents=True, exist_ok=True)
+    gpkg.touch()
+    assert gen._project_id(gpkg, data_dir) == expected

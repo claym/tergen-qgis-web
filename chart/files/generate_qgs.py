@@ -715,6 +715,22 @@ def _slug(s: str) -> str:
     return s.strip("_")
 
 
+def _project_id(gpkg: Path, data_dir: Path) -> str:
+    """Return the canonical id for *gpkg* — the .qgs stem and the MAP= value.
+
+    Files directly under *data_dir* and files under ``data_dir/territories/``
+    keep their bare gpkg stem (preserves the existing ``territories_draft``
+    and ``debug`` ids). Anything else is prefixed with the slugified parent
+    folder name and a ``__`` separator. This avoids collisions across
+    duplicated stems (e.g. three ``addresses.gpkg`` files in different
+    Meck/NC/Union folders).
+    """
+    parent = gpkg.parent
+    if parent == data_dir or parent == data_dir / "territories":
+        return gpkg.stem
+    return f"{_slug(parent.name)}__{gpkg.stem}"
+
+
 def _theme_id(gpkg: Path) -> str:
     """The theme id is the gpkg filename without extension."""
     return gpkg.stem
