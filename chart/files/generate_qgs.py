@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json as _json
 import math
+import re as _re
 import sqlite3
 import struct
 import sys
@@ -699,6 +700,19 @@ def write_project(gpkg: Path, out: Path,
 # ---------------------------------------------------------------------------
 # QWC2 themesConfig.json generation
 # ---------------------------------------------------------------------------
+
+
+def _slug(s: str) -> str:
+    """Convert a path component into an underscore-safe id fragment.
+
+    Replaces runs of whitespace and the path separators '/' '\\' with a single
+    underscore, strips leading/trailing whitespace and underscores, and leaves
+    everything else alone. The result is suitable for use as a filename stem
+    or URL path segment.
+    """
+    s = s.strip()
+    s = _re.sub(r"[\s/\\]+", "_", s)
+    return s.strip("_")
 
 
 def _theme_id(gpkg: Path) -> str:

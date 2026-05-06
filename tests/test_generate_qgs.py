@@ -430,3 +430,16 @@ def test_regen_all_skips_when_no_regen_marker_present(tmp_path):
     assert report.written_projects == 0
     assert list(projects.iterdir()) == []
     assert not (web / "themesConfig.json").exists()
+
+
+@pytest.mark.parametrize("raw,expected", [
+    ("Mecklenburg Addresses", "Mecklenburg_Addresses"),
+    ("NC Streams", "NC_Streams"),
+    ("clipped_data", "clipped_data"),
+    ("plain", "plain"),
+    ("with/slash", "with_slash"),
+    ("two  spaces", "two_spaces"),
+    ("trailing ", "trailing"),
+])
+def test_slug_collapses_spaces_and_slashes(raw, expected):
+    assert gen._slug(raw) == expected
