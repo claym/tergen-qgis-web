@@ -481,3 +481,34 @@ def test_project_id_slugs_unsafe_stem(tmp_path):
     gpkg = folder / "weird name.gpkg"
     gpkg.touch()
     assert gen._project_id(gpkg, data_dir) == "Weird_Folder__weird_name"
+
+
+@pytest.mark.parametrize("rel,expected", [
+    # Top-level / territories: same as the old _theme_title behavior
+    ("territories_draft.gpkg", "Territories Draft"),
+    ("debug.gpkg", "Debug"),
+    ("territories/territories_draft.gpkg", "Territories Draft"),
+    # clipped_data root: folder + stem (no redundancy)
+    ("clipped_data/addresses_residential.gpkg",
+     "Clipped Data – Addresses Residential"),
+    # Stem-substring-of-folder cases drop the stem (smart redundancy rule)
+    ("clipped_data/Mecklenburg Addresses/addresses.gpkg",
+     "Mecklenburg Addresses"),
+    ("clipped_data/Mecklenburg Greenways/Greenways.gpkg",
+     "Mecklenburg Greenways"),
+    ("clipped_data/Union Subdivisions/Union_Subdivisions.gpkg",
+     "Union Subdivisions"),
+    # Stem NOT a substring of folder: keep folder + stem with en-dash
+    ("clipped_data/NC Parcels/parcels_pt.gpkg",
+     "NC Parcels – Parcels Pt"),
+    ("clipped_data/Mecklenburg Streams/Creeks_Streams.gpkg",
+     "Mecklenburg Streams – Creeks Streams"),
+    ("clipped_data/NC Roads/NCDOT_State_Maintained_Roads.gpkg",
+     "NC Roads – NCDOT State Maintained Roads"),
+])
+def test_project_title_rule(tmp_path, rel, expected):
+    data_dir = tmp_path
+    gpkg = data_dir / rel
+    gpkg.parent.mkdir(parents=True, exist_ok=True)
+    gpkg.touch()
+    assert gen._project_title(gpkg, data_dir) == expected

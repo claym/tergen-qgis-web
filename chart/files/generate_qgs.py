@@ -734,6 +734,33 @@ def _project_id(gpkg: Path, data_dir: Path) -> str:
     return f"{_slug(parent.name)}__{_slug(gpkg.stem)}"
 
 
+def _project_title(gpkg: Path, data_dir: Path) -> str:
+    """Return the human-facing title for *gpkg*.
+
+    Used as the QGIS WMS service title, the QWC2 theme title, and the
+    QGIS Desktop connection display name.
+
+    For top-level / ``territories/`` files, title-case the stem (current
+    behavior). For nested files, build ``"<folder> – <stem-titled>"``,
+    but drop the stem when its slug is a case-insensitive substring of
+    the folder slug (handles "Mecklenburg Greenways/Greenways.gpkg" →
+    "Mecklenburg Greenways").
+    """
+    parent = gpkg.parent
+    if parent == data_dir or parent == data_dir / "territories":
+        return gpkg.stem.replace("_", " ").replace("-", " ").title()
+
+    folder = parent.name
+    stem_pretty = gpkg.stem.replace("_", " ").replace("-", " ")
+    if _slug(stem_pretty).lower() in _slug(folder).lower():
+        return folder
+    folder_words = folder.replace("_", " ").replace("-", " ").split()
+    folder_pretty = " ".join(w.title() if w.islower() else w for w in folder_words)
+    stem_words = stem_pretty.split()
+    stem_titled = " ".join(w.title() if w.islower() else w for w in stem_words)
+    return f"{folder_pretty} – {stem_titled}"
+
+
 def _theme_id(gpkg: Path) -> str:
     """The theme id is the gpkg filename without extension."""
     return gpkg.stem
