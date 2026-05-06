@@ -583,3 +583,57 @@ def test_regen_all_renames_collision_qgs_files(tmp_path):
     assert "addresses.qgs" not in qgs_files  # stale file pruned
     assert "Mecklenburg_Addresses__addresses.qgs" in qgs_files
     assert "NC_Addresses__addresses.qgs" in qgs_files
+
+
+def test_write_connections_emits_one_wms_and_one_wfs_per_gpkg(tmp_path):
+    data_dir = tmp_path / "data"
+    projects_dir = Path("/srv/qgis/projects")
+    (data_dir / "territories").mkdir(parents=True)
+    (data_dir / "clipped_data" / "Mecklenburg Addresses").mkdir(parents=True)
+    _make_minimal_gpkg(data_dir / "territories" / "territories_draft.gpkg")
+    _make_minimal_gpkg(
+        data_dir / "clipped_data" / "Mecklenburg Addresses" / "addresses.gpkg",
+        layer_name="addresses",
+    )
+
+    out_wms = tmp_path / "qgis-wms-connections.xml"
+    out_wfs = tmp_path / "qgis-wfs-connections.xml"
+
+    gen.write_connections(
+        gpkgs=[
+            data_dir / "clipped_data" / "Mecklenburg Addresses" / "addresses.gpkg",
+            data_dir / "territories" / "territories_draft.gpkg",
+        ],
+        projects_dir=projects_dir,
+        data_dir=data_dir,
+        out_wms=out_wms,
+        out_wfs=out_wfs,
+        ingress_host="qgis.devbox",
+    )
+
+    wms_root = ET.fromstring(out_wms.read_text())
+    assert wms_root.tag == "qgsWMSConnections"
+    wms_entries = wms_root.findall("wms")
+    assert [e.get("name") for e in wms_entries] == [
+        "Mecklenburg Addresses (qgis.devbox)",
+        "Territories Draft (qgis.devbox)",
+    ]
+    assert wms_entries[0].get("url") == (
+        "http://qgis.devbox/ows/?MAP="
+        "/srv/qgis/projects/Mecklenburg_Addresses__addresses.qgs"
+    )
+    assert wms_entries[0].get("ignoreGetMapURI") == "1"
+    assert wms_entries[0].get("ignoreGetFeatureInfoURI") == "1"
+    assert wms_entries[0].get("dpiMode") == "7"
+
+    wfs_root = ET.fromstring(out_wfs.read_text())
+    assert wfs_root.tag == "qgsWFSConnections"
+    wfs_entries = wfs_root.findall("wfs")
+    assert [e.get("name") for e in wfs_entries] == [
+        "Mecklenburg Addresses (qgis.devbox)",
+        "Territories Draft (qgis.devbox)",
+    ]
+    assert wfs_entries[1].get("url") == (
+        "http://qgis.devbox/ows/?MAP=/srv/qgis/projects/territories_draft.qgs"
+    )
+    assert wfs_entries[0].get("pagingEnabled") == "default"

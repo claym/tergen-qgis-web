@@ -919,6 +919,78 @@ def write_themes_config(
     atomic_write_text(out, _json.dumps(config, indent=2) + "\n")
 
 
+def write_connections(
+    gpkgs: list[Path],
+    projects_dir: Path,
+    data_dir: Path,
+    out_wms: Path,
+    out_wfs: Path,
+    ingress_host: str,
+) -> None:
+    """Write QGIS Desktop WMS and WFS connection bundles.
+
+    Emits one ``<wms>`` element per gpkg into *out_wms* and one ``<wfs>``
+    element per gpkg into *out_wfs*. Entries are sorted by title for
+    deterministic output across regen runs.
+
+    The ``url`` attribute is the in-cluster MAP= URL through the public
+    ingress (``http://<ingress_host>/ows/?MAP=...``). ``ignoreGetMapURI`` /
+    ``ignoreGetFeatureInfoURI`` force QGIS Desktop to keep using this URL
+    on follow-up requests instead of falling back to the bare service
+    URL advertised by ``QGIS_SERVER_SERVICE_URL`` (which lacks ``MAP=``).
+    """
+    entries = []
+    for gpkg in gpkgs:
+        pid = _project_id(gpkg, data_dir)
+        title = _project_title(gpkg, data_dir)
+        entries.append((
+            title,
+            f"{title} ({ingress_host})",
+            f"http://{ingress_host}/ows/?MAP={projects_dir}/{pid}.qgs",
+        ))
+    entries.sort(key=lambda t: t[0].lower())
+
+    wms_root = ET.Element("qgsWMSConnections", attrib={"version": "1.0"})
+    for _title, name, url in entries:
+        ET.SubElement(wms_root, "wms", attrib={
+            "name": name,
+            "url": url,
+            "version": "auto",
+            "ignoreGetMapURI": "1",
+            "ignoreGetFeatureInfoURI": "1",
+            "smoothPixmapTransform": "0",
+            "ignoreAxisOrientation": "0",
+            "invertAxisOrientation": "0",
+            "dpiMode": "7",
+            "referer": "",
+            "authcfg": "",
+            "username": "",
+            "password": "",
+        })
+
+    wfs_root = ET.Element("qgsWFSConnections", attrib={"version": "1.0"})
+    for _title, name, url in entries:
+        ET.SubElement(wfs_root, "wfs", attrib={
+            "name": name,
+            "url": url,
+            "version": "auto",
+            "maxnumfeatures": "",
+            "pagesize": "",
+            "pagingEnabled": "default",
+            "featurePaging": "default",
+            "ignoreAxisOrientation": "0",
+            "invertAxisOrientation": "0",
+            "referer": "",
+            "authcfg": "",
+            "username": "",
+            "password": "",
+        })
+
+    prelude = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE connections>\n'
+    atomic_write_text(out_wms, prelude + ET.tostring(wms_root, encoding="unicode") + "\n")
+    atomic_write_text(out_wfs, prelude + ET.tostring(wfs_root, encoding="unicode") + "\n")
+
+
 def bake_themes_json(
     themes_config: Path,
     out: Path,
