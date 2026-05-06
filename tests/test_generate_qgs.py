@@ -660,3 +660,40 @@ def test_write_connections_handles_empty_gpkg_list(tmp_path):
     assert wms_root.findall("wms") == []
     assert wfs_root.tag == "qgsWFSConnections"
     assert wfs_root.findall("wfs") == []
+
+
+def test_regen_all_writes_connection_xmls_when_ingress_host_set(tmp_path):
+    data_dir = tmp_path / "data"
+    projects_dir = tmp_path / "projects"
+    web_dir = tmp_path / "web"
+    (data_dir / "clipped_data" / "Mecklenburg Addresses").mkdir(parents=True)
+    _make_minimal_gpkg(
+        data_dir / "clipped_data" / "Mecklenburg Addresses" / "addresses.gpkg",
+        layer_name="addresses",
+    )
+
+    gen.regen_all(
+        data_dir, projects_dir, web_dir, default_theme=None,
+        ingress_host="qgis.devbox",
+    )
+
+    wms = (web_dir / "qgis-wms-connections.xml").read_text()
+    wfs = (web_dir / "qgis-wfs-connections.xml").read_text()
+    assert "Mecklenburg Addresses (qgis.devbox)" in wms
+    assert "Mecklenburg Addresses (qgis.devbox)" in wfs
+    assert "MAP=" + str(projects_dir) + "/Mecklenburg_Addresses__addresses.qgs" in wms
+
+
+def test_regen_all_skips_connection_xmls_when_no_ingress_host(tmp_path):
+    """Parallel to how the themes.json bake is opt-in; tests and one-off CLI
+    runs that don't pass --ingress-host should not produce stray XML files."""
+    data_dir = tmp_path / "data"
+    projects_dir = tmp_path / "projects"
+    web_dir = tmp_path / "web"
+    (data_dir).mkdir(parents=True)
+    _make_minimal_gpkg(data_dir / "thing.gpkg", layer_name="things")
+
+    gen.regen_all(data_dir, projects_dir, web_dir, default_theme=None)
+
+    assert not (web_dir / "qgis-wms-connections.xml").exists()
+    assert not (web_dir / "qgis-wfs-connections.xml").exists()

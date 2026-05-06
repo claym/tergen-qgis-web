@@ -1091,6 +1091,7 @@ def regen_all(
     *,
     bake_scripts_dir: Path | None = None,
     bake_internal_base_url: str | None = None,
+    ingress_host: str | None = None,
 ) -> RegenReport:
     """Idempotently rebuild all per-gpkg .qgs files and themesConfig.json.
 
@@ -1135,6 +1136,16 @@ def regen_all(
         default_theme=default_theme,
         data_dir=data_dir,
     )
+
+    if ingress_host:
+        write_connections(
+            gpkgs=gpkgs,
+            projects_dir=projects_dir,
+            data_dir=data_dir,
+            out_wms=web_dir / "qgis-wms-connections.xml",
+            out_wfs=web_dir / "qgis-wfs-connections.xml",
+            ingress_host=ingress_host,
+        )
 
     if bake_scripts_dir and bake_internal_base_url:
         try:
@@ -1191,6 +1202,11 @@ def main(argv: list[str] | None = None) -> int:
                    help="Base URL for in-cluster qgis-server (e.g. "
                         "http://qgis-server). Used to fetch GetProjectSettings "
                         "during the bake; not exposed to clients.")
+    p.add_argument("--ingress-host", default=None,
+                   help="Public hostname for the QGIS WMS/WFS connection "
+                        "bundles (e.g. 'qgis.devbox'). Required to write "
+                        "qgis-wms-connections.xml and qgis-wfs-connections.xml; "
+                        "if omitted those files are not written.")
     args = p.parse_args(argv)
 
     data_dir = Path(args.data_dir)
@@ -1207,6 +1223,7 @@ def main(argv: list[str] | None = None) -> int:
         data_dir, projects_dir, web_dir, args.default_theme,
         bake_scripts_dir=bake_scripts_dir,
         bake_internal_base_url=args.bake_internal_base_url,
+        ingress_host=args.ingress_host,
     )
     if report.skipped:
         print(".no-regen marker present; skipped initial regen", file=sys.stderr)
@@ -1222,14 +1239,16 @@ def main(argv: list[str] | None = None) -> int:
     return _watch_loop(data_dir, projects_dir, web_dir,
                       args.default_theme, args.debounce_seconds,
                       bake_scripts_dir=bake_scripts_dir,
-                      bake_internal_base_url=args.bake_internal_base_url)
+                      bake_internal_base_url=args.bake_internal_base_url,
+                      ingress_host=args.ingress_host)
 
 
 def _watch_loop(data_dir: Path, projects_dir: Path, web_dir: Path,
                 default_theme: str | None, debounce_seconds: float,
                 *,
                 bake_scripts_dir: Path | None = None,
-                bake_internal_base_url: str | None = None) -> int:
+                bake_internal_base_url: str | None = None,
+                ingress_host: str | None = None) -> int:
     from watchdog.events import PatternMatchingEventHandler
     from watchdog.observers import Observer
     import threading
@@ -1264,6 +1283,7 @@ def _watch_loop(data_dir: Path, projects_dir: Path, web_dir: Path,
                     data_dir, projects_dir, web_dir, default_theme,
                     bake_scripts_dir=bake_scripts_dir,
                     bake_internal_base_url=bake_internal_base_url,
+                    ingress_host=ingress_host,
                 )
                 if report.skipped:
                     print(".no-regen present; skipped")
