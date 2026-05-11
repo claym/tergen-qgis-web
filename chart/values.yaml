@@ -7,7 +7,7 @@ hostPath: /srv/qgis
 ingress:
   className: traefik
   # Hostname must resolve to the cluster's external IP.
-  # Wildcard *.devbox resolution is handled by the host's dnsmasq.
+  # Wildcard *.devbox resolution is served by the dns Helm chart (/srv/dns).
   host: qgis.devbox
 
 # Public base URL that QGIS Server advertises in WMS/WFS GetCapabilities
