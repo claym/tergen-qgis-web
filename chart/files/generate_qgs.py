@@ -801,16 +801,22 @@ def write_project(
     *,
     data_dir: Path,
     project_crs_authid: str = "EPSG:3857",
+    extra_layers: list["Layer"] | None = None,
 ) -> None:
     """Generate the .qgs for a single gpkg and write it atomically to *out*.
 
     ``data_dir`` is required so that the project name and title can be
     derived from the gpkg's path under the data root (folder-aware ids
     avoid collisions on duplicated gpkg stems).
+
+    ``extra_layers`` are appended after the gpkg's own layers (e.g. debug
+    overlay layers from a companion GeoPackage).
     """
     layers = introspect_gpkg(gpkg)
     if not layers:
         raise ValueError(f"no feature-table layers in {gpkg}")
+    if extra_layers:
+        layers = layers + extra_layers
     atomic_write_text(out, render_qgs(
         layers, project_crs_authid,
         project_name=_project_id(gpkg, data_dir),
@@ -1227,13 +1233,34 @@ def regen_all(
     gpkgs = discover_gpkgs(data_dir)
     current_ids = {_project_id(gpkg, data_dir) for gpkg in gpkgs}
 
+    # Load address/parcel layers from debug.gpkg once; inject them into
+    # territories_draft so both datasets are browsable in the same project.
+    _debug_gpkg = data_dir / "territories" / "debug.gpkg"
+    _addr_parcel_layers: list[Layer] = []
+    if _debug_gpkg.exists():
+        try:
+            _addr_parcel_layers = [
+                l for l in introspect_gpkg(_debug_gpkg)
+                if l.name in {
+                    "step_500_addresses",
+                    "step_501_parcels",
+                    "step_502_supplemental_addresses",
+                    "step_503_supplemental_parcels",
+                }
+            ]
+        except Exception as exc:
+            print(f"warning: could not load debug layers: {exc}", file=sys.stderr)
+
     written = 0
     for gpkg in gpkgs:
         try:
+            project_id = _project_id(gpkg, data_dir)
+            extra = _addr_parcel_layers if project_id == "territories_draft" else []
             write_project(
                 gpkg,
-                projects_dir / f"{_project_id(gpkg, data_dir)}.qgs",
+                projects_dir / f"{project_id}.qgs",
                 data_dir=data_dir,
+                extra_layers=extra,
             )
             written += 1
         except Exception as exc:

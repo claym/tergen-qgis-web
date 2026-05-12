@@ -23,6 +23,11 @@ spec:
         # Force a pod restart when any script in the configmap changes.
         checksum/script: {{ printf "%s%s" (.Files.Get "files/generate_qgs.py") (.Files.Get "files/themesConfig.py") | sha256sum }}
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
       initContainers:
         - name: install-watchdog
           image: {{ .Values.image.generator }}
