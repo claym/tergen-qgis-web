@@ -885,6 +885,82 @@ def test_render_qgs_emits_z_aware_geometry_attributes(tmp_path):
     assert ml.get("wkbType") == "1006"
 
 
+def _make_territories_gpkg_with_rows(path: Path, terr_ids: list[str]) -> None:
+    """Like _make_territories_gpkg but with actual rows so terr_id values exist."""
+    _make_territories_gpkg(path)
+    con = sqlite3.connect(path)
+    cur = con.cursor()
+    for i, tid in enumerate(terr_ids):
+        cur.execute(
+            "INSERT INTO territories (fid, geom, terr_id) VALUES (?, NULL, ?)",
+            (i + 1, tid),
+        )
+    con.commit()
+    con.close()
+
+
+def test_categorized_renderer_has_one_symbol_and_category_per_value(tmp_path):
+    values = ["T001", "T002", "T003"]
+    rv = gen._build_categorized_renderer("terr_id", values)
+    assert rv.get("type") == "categorizedSymbol"
+    assert rv.get("attr") == "terr_id"
+    assert len(rv.findall("symbols/symbol")) == 3
+    cats = rv.findall("categories/category")
+    assert [c.get("value") for c in cats] == values
+    assert [c.get("symbol") for c in cats] == ["0", "1", "2"]
+
+
+def test_categorized_renderer_symbols_have_distinct_colors(tmp_path):
+    values = [f"T{i:03d}" for i in range(10)]
+    rv = gen._build_categorized_renderer("terr_id", values)
+    colors = [
+        sym.find(".//Option[@name='color']").get("value")
+        for sym in rv.findall("symbols/symbol")
+    ]
+    assert len(set(colors)) == len(values), "every category must have a unique color"
+
+
+def test_regen_all_territories_draft_uses_categorized_renderer(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    terr_gpkg = data / "territories_draft.gpkg"
+    _make_territories_gpkg_with_rows(terr_gpkg, ["T001", "T002", "T003"])
+    _make_minimal_gpkg(data / "debug.gpkg", layer_name="step_500")
+
+    projects = tmp_path / "projects"
+    web = tmp_path / "web"
+    projects.mkdir()
+    web.mkdir()
+
+    gen.regen_all(data, projects, web, default_theme="territories_draft")
+
+    qgs = ET.fromstring((projects / "territories_draft.qgs").read_text())
+    rv = qgs.find(".//maplayer[layername='territories']/renderer-v2")
+    assert rv is not None
+    assert rv.get("type") == "categorizedSymbol"
+    assert rv.get("attr") == "terr_id"
+    assert len(rv.findall("categories/category")) == 3
+
+
+def test_regen_all_territories_draft_falls_back_to_single_symbol_when_no_rows(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    _make_territories_gpkg(data / "territories_draft.gpkg")  # no rows → no terr_ids
+    _make_minimal_gpkg(data / "debug.gpkg", layer_name="step_500")
+
+    projects = tmp_path / "projects"
+    web = tmp_path / "web"
+    projects.mkdir()
+    web.mkdir()
+
+    gen.regen_all(data, projects, web, default_theme="territories_draft")
+
+    qgs = ET.fromstring((projects / "territories_draft.qgs").read_text())
+    rv = qgs.find(".//maplayer[layername='territories']/renderer-v2")
+    assert rv is not None
+    assert rv.get("type") == "singleSymbol"
+
+
 def test_render_qgs_writes_layer_extent_at_full_float_precision(tmp_path):
     """The <extent> block must round-trip the gpkg bbox exactly. Rounding
     to 6 decimal places (the previous behavior) could shift a corner inward

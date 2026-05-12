@@ -22,6 +22,7 @@ with `step_` are emitted but hidden. Anything else is visible.
 from __future__ import annotations
 
 import argparse
+import colorsys
 import json as _json
 import math
 import re as _re
@@ -524,6 +525,22 @@ def introspect_gpkg(path: Path) -> list[Layer]:
         con.close()
 
 
+def _query_distinct_values(gpkg: Path, table: str, column: str) -> list[str]:
+    """Return sorted distinct non-null string values of *column* in *table*."""
+    con = sqlite3.connect(gpkg)
+    try:
+        cur = con.cursor()
+        cur.execute(
+            f'SELECT DISTINCT "{column}" FROM "{table}"'
+            f' WHERE "{column}" IS NOT NULL ORDER BY "{column}"'
+        )
+        return [str(r[0]) for r in cur.fetchall()]
+    except Exception:
+        return []
+    finally:
+        con.close()
+
+
 # ---------------------------------------------------------------------------
 # Renderer helpers — produce a default symbol for each geometry type
 # ---------------------------------------------------------------------------
@@ -643,6 +660,75 @@ def _build_renderer(geom_type: str) -> ET.Element:
     return rv
 
 
+def _palette_color(idx: int) -> str:
+    """Return an 'R,G,B,255' color string for category *idx*.
+
+    Golden-ratio hue spacing (phi * idx % 1) maximises perceptual distance
+    between adjacent category colors regardless of total count.
+    """
+    hue = (idx * 0.618033988749895) % 1.0
+    r, g, b = colorsys.hsv_to_rgb(hue, 0.65, 0.85)
+    return f"{int(r * 255)},{int(g * 255)},{int(b * 255)},255"
+
+
+def _build_categorized_renderer(attr: str, values: list[str]) -> ET.Element:
+    """Build a categorized <renderer-v2> element keyed on *attr*.
+
+    Each value gets a fill symbol colored by golden-ratio HSV spacing.
+    """
+    rv = ET.Element("renderer-v2", attrib={
+        "type": "categorizedSymbol",
+        "attr": attr,
+        "symbollevels": "0",
+        "enableorderby": "0",
+        "forceraster": "0",
+    })
+    symbols_el = ET.SubElement(rv, "symbols")
+    for i, _ in enumerate(values):
+        color = _palette_color(i)
+        sym = ET.Element("symbol", attrib={
+            "name": str(i), "alpha": "1",
+            "clip_to_extent": "1", "force_rhr": "0", "type": "fill",
+        })
+        data_defined = ET.SubElement(sym, "data_defined_properties")
+        ET.SubElement(data_defined, "Option", attrib={"type": "Map"})
+        layer_el = ET.SubElement(sym, "layer", attrib={
+            "class": "SimpleFill", "enabled": "1", "pass": "0",
+        })
+        opt = ET.SubElement(layer_el, "Option", attrib={"type": "Map"})
+        for k, v in [
+            ("border_width_map_unit_scale", "3x:0,0,0,0,0,0"),
+            ("color", color),
+            ("joinstyle", "miter"),
+            ("offset", "0,0"),
+            ("offset_map_unit_scale", "3x:0,0,0,0,0,0"),
+            ("offset_unit", "MM"),
+            ("outline_color", "35,35,35,255"),
+            ("outline_style", "solid"),
+            ("outline_width", "0.26"),
+            ("outline_width_unit", "MM"),
+            ("style", "solid"),
+        ]:
+            ET.SubElement(opt, "Option", attrib={"name": k, "value": v, "type": "QString"})
+        ET.SubElement(layer_el, "data_defined_properties").append(
+            ET.Element("Option", attrib={"type": "Map"})
+        )
+        ET.SubElement(layer_el, "effect")
+        ET.SubElement(layer_el, "orderByClause")
+        symbols_el.append(sym)
+
+    categories_el = ET.SubElement(rv, "categories")
+    for i, value in enumerate(values):
+        ET.SubElement(categories_el, "category", attrib={
+            "value": value, "label": value,
+            "symbol": str(i), "render": "true",
+        })
+
+    ET.SubElement(rv, "rotation")
+    ET.SubElement(rv, "sizescale")
+    return rv
+
+
 # ---------------------------------------------------------------------------
 # Project XML assembly
 # ---------------------------------------------------------------------------
@@ -656,7 +742,7 @@ def _is_visible_by_default(layer_name: str) -> bool:
     return True
 
 
-def _build_maplayer(layer: Layer) -> ET.Element:
+def _build_maplayer(layer: Layer, renderer: ET.Element | None = None) -> ET.Element:
     """Build the <maplayer> element for a single layer."""
     ml = ET.Element("maplayer", attrib={
         "type": "vector",
@@ -702,7 +788,7 @@ def _build_maplayer(layer: Layer) -> ET.Element:
     ET.SubElement(ml, "provider").text = "ogr"
 
     # Renderer with default symbol
-    ml.append(_build_renderer(layer.geometry_type))
+    ml.append(renderer if renderer is not None else _build_renderer(layer.geometry_type))
 
     # Flags — make layer identifiable/queryable
     flags = ET.SubElement(ml, "flags")
@@ -738,6 +824,7 @@ def render_qgs(
     *,
     project_name: str = "qgis",
     project_title: str | None = None,
+    layer_renderers: dict[str, ET.Element] | None = None,
 ) -> str:
     """Render the .qgs XML for the given layers.
 
@@ -765,7 +852,7 @@ def render_qgs(
     # Map layers (the actual definitions)
     pl = ET.SubElement(root, "projectlayers")
     for layer in layers:
-        pl.append(_build_maplayer(layer))
+        pl.append(_build_maplayer(layer, renderer=(layer_renderers or {}).get(layer.name)))
 
     # Project + WMS service properties.
     props = ET.SubElement(root, "properties")
@@ -802,6 +889,7 @@ def write_project(
     data_dir: Path,
     project_crs_authid: str = "EPSG:3857",
     extra_layers: list["Layer"] | None = None,
+    layer_renderers: dict[str, ET.Element] | None = None,
 ) -> None:
     """Generate the .qgs for a single gpkg and write it atomically to *out*.
 
@@ -811,6 +899,9 @@ def write_project(
 
     ``extra_layers`` are appended after the gpkg's own layers (e.g. debug
     overlay layers from a companion GeoPackage).
+
+    ``layer_renderers`` maps layer names to pre-built <renderer-v2> elements,
+    overriding the default single-symbol renderer for those layers.
     """
     layers = introspect_gpkg(gpkg)
     if not layers:
@@ -821,6 +912,7 @@ def write_project(
         layers, project_crs_authid,
         project_name=_project_id(gpkg, data_dir),
         project_title=_project_title(gpkg, data_dir),
+        layer_renderers=layer_renderers,
     ))
 
 
@@ -1256,11 +1348,19 @@ def regen_all(
         try:
             project_id = _project_id(gpkg, data_dir)
             extra = _addr_parcel_layers if project_id == "territories_draft" else []
+            layer_renderers = None
+            if project_id == "territories_draft":
+                terr_ids = _query_distinct_values(gpkg, "territories", "terr_id")
+                if terr_ids:
+                    layer_renderers = {
+                        "territories": _build_categorized_renderer("terr_id", terr_ids)
+                    }
             write_project(
                 gpkg,
                 projects_dir / f"{project_id}.qgs",
                 data_dir=data_dir,
                 extra_layers=extra,
+                layer_renderers=layer_renderers,
             )
             written += 1
         except Exception as exc:
